@@ -1,0 +1,174 @@
+
+body{
+    font-family: 'Qc-reg';
+}
+
+.container {
+    max-width: 1400px; /* Atur sesuai kebutuhan */
+    /* Properti lain yang ingin Anda ubah */
+}
+
+/* -------------------------------------------------------------------- */
+/*                              Navbar                                  */
+/* -------------------------------------------------------------------- */
+nav {
+    box-shadow: 0 10px 20px rgba(0,0,0,.19),0 6px 6px rgba(0,0,0,.23);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: #e7e7e7;
+}
+
+nav #nav_section_1 {
+    padding: 20px 0;
+}
+
+nav #nav_section_2 {
+    background-color: #27419C;
+}
+
+nav #nav_section_2 a {
+    margin: 0 15px;
+    outline: none;
+}
+
+nav #logo_wraper .img_prov_dki {
+    width: 50px;
+}
+
+nav #logo_wraper .img_dinsos_dki {
+    width: 50px;
+}
+
+nav #logo_wraper .logo_title {
+    text-align: center;
+    font-weight: bold;
+    padding: 0 15px;
+}
+
+nav #logo_wraper .logo_title span {
+    font-family: "Rc-reg";
+    font-size: 40px;
+    color: #27419C;
+}
+
+@media (max-width: 728px) {
+    nav #logo_wraper .img_prov_dki {
+        width: 35px;
+    }
+
+    nav #logo_wraper .img_dinsos_dki {
+        width: 35px;
+    }
+
+    nav #logo_wraper .logo_title span {
+        font-size: 30px;
+    }
+
+    nav #nav_section_1 {
+        padding: 10px 0;
+    }
+
+    nav #nav_section_2 a {
+        font-size: 12px;
+        margin: 0 10px;
+    }
+}
+
+/* -------------------------------------------------------------------- */
+/*                              Daftar terbaru                          */
+/* -------------------------------------------------------------------- */
+#daftar_berita {
+    padding: 60px 0;
+    background-color: #092457;
+    min-height: 87%;
+}
+
+#daftar_berita a{
+    color: #27419C;
+}
+
+#daftar_berita .active .page-link{
+    background-color: #27419C;
+    border-color: #e7e7e7;
+}
+
+#daftar_berita p{
+    margin: 0;
+}
+
+#daftar_berita #title{
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    color: #e7e7e7;
+    font-family: 'Rc-reg';
+    text-align: left;
+    border-bottom: 2px solid #e7e7e7;
+    padding-bottom: 10px;
+}
+
+#daftar_berita #title a{
+    color: #e7e7e7;
+    font-size: 15px;
+}
+
+#daftar_berita .card_title_news{
+    padding: 20px 20px 0 20px;
+    text-decoration: none;
+}
+
+#daftar_berita .card_title_news p{
+    color: rgba(9, 36, 87, 0.8);
+    font-size: 14px;
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+}
+
+#daftar_berita .hr_wraper {
+    padding: 0 20px;
+}
+
+#daftar_berita .creator_releasedate {
+    padding: 0 20px;
+    color: rgba(9, 36, 87, 0.8);
+    font-size: 12px;
+}
+
+#daftar_berita .card_excerpt_news{
+    margin-top: 13px;
+    padding: 0 20px 0 20px;
+}
+
+#daftar_berita .card_excerpt_news p{
+    color: rgba(9, 36, 87, 0.8);
+    font-size: 14px;
+}
+
+#daftar_berita .detail_link {
+    font-weight: bold;
+    font-size: 14px;
+    text-decoration: none;
+    padding: 10px 20px 20px 20px;
+}
+
+@media (max-width: 728px) {
+    #berita_terbaru #title{
+        flex-direction: column;
+        align-items: start;
+    }
+}
+
+/* -------------------------------------------------------------------- */
+/*                              Footer                                  */
+/* -------------------------------------------------------------------- */
+footer #section_2 {
+    background-color: #e7e7e7;
+    color: #27419C;
+}
+
+footer #section_2 a{
+    font-weight: bolder;
+    color: #27419C;
+}

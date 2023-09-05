@@ -1,0 +1,326 @@
+
+body{
+    font-family: 'Qc-reg';
+}
+
+.container {
+    max-width: 1400px; /* Atur sesuai kebutuhan */
+    /* Properti lain yang ingin Anda ubah */
+}
+
+/* -------------------------------------------------------------------- */
+/*                              Navbar                                  */
+/* -------------------------------------------------------------------- */
+nav {
+    box-shadow: 0 10px 20px rgba(0,0,0,.19),0 6px 6px rgba(0,0,0,.23);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: #e7e7e7;
+}
+
+nav #nav_section_1 {
+    padding: 20px 0;
+}
+
+nav #nav_section_2 {
+    background-color: #27419C;
+}
+
+nav #nav_section_2 a {
+    margin: 0 15px;
+    outline: none;
+}
+
+nav #logo_wraper .img_prov_dki {
+    width: 50px;
+}
+
+nav #logo_wraper .img_dinsos_dki {
+    width: 50px;
+}
+
+nav #logo_wraper .logo_title {
+    text-align: center;
+    font-weight: bold;
+    padding: 0 15px;
+}
+
+nav #logo_wraper .logo_title span {
+    font-family: "Rc-reg";
+    font-size: 40px;
+    color: #27419C;
+}
+
+@media (max-width: 728px) {
+    nav #logo_wraper .img_prov_dki {
+        width: 35px;
+    }
+
+    nav #logo_wraper .img_dinsos_dki {
+        width: 35px;
+    }
+
+    nav #logo_wraper .logo_title span {
+        font-size: 30px;
+    }
+
+    nav #nav_section_1 {
+        padding: 10px 0;
+    }
+
+    nav #nav_section_2 a {
+        font-size: 12px;
+        margin: 0 10px;
+    }
+}
+
+/* -------------------------------------------------------------------- */
+/*                             Carousel                                 */
+/* -------------------------------------------------------------------- */
+#carousel_container {
+    height: 87%;
+    overflow: hidden;
+    position: relative;
+}
+
+#carousel_container .carousel {
+    z-index: 1;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#carousel_container .carousel-item, #carousel_container .active {
+    height: 100%;
+}
+
+#carousel_container .carousel-inner {
+    height: 100%;
+}
+
+#carousel_container .fill {
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+#carousel_bg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 10;
+    flex-direction: column;
+    padding: 0 3rem;
+}
+
+#carousel_bg h1:nth-child(1) {
+    text-align: center;
+    font-family: 'Rc-reg';
+    font-size: 3.5rem;
+    margin-bottom: 2rem;
+    text-transform: capitalize;
+    color: #e7e7e7;
+    opacity: 0.8;
+}
+
+#carousel_bg h1:nth-child(2) {
+    text-align: center;
+    font-family: 'Rc-reg';
+    text-shadow: 1px 1px 2px #e7e7e7;
+    font-size: 4.5rem;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    color: #27419C;
+}
+
+#carousel_bg h1:nth-child(3) {
+    text-align: center;
+    color: #e7e7e7;
+    font-size: 1.2rem;
+    max-width: 900px;
+    margin-bottom: 4rem;
+}
+
+@media (max-width: 728px) {
+    #carousel_bg {
+        padding: 0 1rem;
+    }
+
+    #carousel_bg h1:nth-child(1) {
+        font-size: 2.4rem;
+        margin-bottom: 1.2rem;
+    }
+
+    #carousel_bg h1:nth-child(2) {
+        text-shadow: 1px 1px 2px #e7e7e7;
+        font-size: 3rem;
+        margin-bottom: 1.2rem;
+    }
+
+    #carousel_bg h1:nth-child(3) {
+        font-size: 0.8rem;
+        margin-bottom: 2.2rem;
+    }
+}
+
+@media (max-width: 460px) {
+    #carousel_bg h1:nth-child(1) {
+        font-size: 2rem;
+        margin-bottom: 1.2rem;
+    }
+
+    #carousel_bg h1:nth-child(2) {
+        font-size: 2.2rem;
+        margin-bottom: 1.2rem;
+    }
+
+    #carousel_bg h1:nth-child(3) {
+        font-size: 0.65rem;
+        margin-bottom: 2.2rem;
+    }
+}
+
+/* -------------------------------------------------------------------- */
+/*                               Pilar                                  */
+/* -------------------------------------------------------------------- */
+#pilar_container {
+    padding: 60px 0;
+    background-color: #092457;
+}
+
+#pilar_container .logo_wraper{
+}
+
+#pilar_container .logo_pilar{
+    width: 150px;
+    height: min-content;
+}
+
+#pilar_container .title_wraper{
+    margin-top: 25px;
+}
+
+#pilar_container .title_wraper h1 {
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'Rc-reg';
+    color: rgb(39, 65, 156);
+}
+
+#pilar_container .desc_wraper{
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+#pilar_container p{
+    margin: 0;
+}
+
+#pilar_container hr.overlay {
+    margin: 30px 0px;
+}
+
+.shadow {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* -------------------------------------------------------------------- */
+/*                              Berita terbaru                          */
+/* -------------------------------------------------------------------- */
+#berita_terbaru {
+    padding: 60px 0;
+    background-color: #e7e7e7;
+}
+
+#berita_terbaru a{
+    color: #27419C;
+}
+
+#berita_terbaru p{
+    margin: 0;
+}
+
+#berita_terbaru #title{
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    color: #092457;
+    font-family: 'Rc-reg';
+    text-align: left;
+    border-bottom: 2px solid #092457;
+    padding-bottom: 10px;
+}
+
+#berita_terbaru #title a{
+    color: #092457;
+    font-size: 15px;
+}
+
+#berita_terbaru .card_title_news{
+    padding: 20px 20px 0 20px;
+    text-decoration: none;
+}
+
+#berita_terbaru .card_title_news p{
+    color: rgba(9, 36, 87, 0.8);
+    font-size: 14px;
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+}
+
+#berita_terbaru .hr_wraper {
+    padding: 0 20px;
+}
+
+#berita_terbaru .creator_releasedate {
+    padding: 0 20px;
+    color: rgba(9, 36, 87, 0.8);
+    font-size: 12px;
+}
+
+#berita_terbaru .card_excerpt_news{
+    margin-top: 13px;
+    padding: 0 20px 0 20px;
+}
+
+#berita_terbaru .card_excerpt_news p{
+    color: rgba(9, 36, 87, 0.8);
+    font-size: 14px;
+}
+
+#berita_terbaru .detail_link {
+    font-weight: bold;
+    font-size: 14px;
+    text-decoration: none;
+    padding: 10px 20px 20px 20px;
+}
+
+@media (max-width: 728px) {
+    #berita_terbaru #title{
+        flex-direction: column;
+        align-items: start;
+    }
+}
+
+/* -------------------------------------------------------------------- */
+/*                              Footer                                  */
+/* -------------------------------------------------------------------- */
+footer #section_2 {
+    background-color: #092457;
+    color: #e7e7e7;
+}
+
+footer #section_2 a{
+    font-weight: bolder;
+    color: #e7e7e7;
+}

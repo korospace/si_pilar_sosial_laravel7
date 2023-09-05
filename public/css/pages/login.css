@@ -1,0 +1,24 @@
+.content {
+    background: gainsboro;
+    height: 100vh;
+}
+
+.logo-wraper img {
+    width: 75px;
+}
+
+.card {
+    width: 100%;
+    max-width: 520px;
+    padding-bottom: 20px;
+}
+
+.card .card-title {
+    text-align: center;
+    width: 100%;
+    font-size: 28px;
+}
+
+.card .card-footer button {
+    width: 100%;
+}
