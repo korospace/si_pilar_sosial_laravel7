@@ -40,25 +40,28 @@ initialDataTableTksk();
 /**
  * Get Info Status
  */
-$.ajax({
-    type: "GET",
-    url: `${BASE_URL}/api/v1/tksk/info_status`,
-    headers		: {
-        'token': $.cookie("jwt_token"),
-    },
-    success:function(data) {
-        let infoStatus = data[0];
+function getInfoStatus() {
+    $.ajax({
+        type: "GET",
+        url: `${BASE_URL}/api/v1/tksk/info_status`,
+        headers		: {
+            'token': $.cookie("jwt_token"),
+        },
+        success:function(data) {
+            let infoStatus = data[0];
 
-        for (const key in infoStatus) {
-            $(`#status_${key}`).html(infoStatus[key])
+            for (const key in infoStatus) {
+                $(`#status_${key}`).html(infoStatus[key])
+            }
+        },
+        error:function(data) {
+            if (data.status >= 500) {
+                showToast('gagal menampilkan <b>info status</b>','danger');
+            }
         }
-    },
-    error:function(data) {
-        if (data.status >= 500) {
-            showToast('gagal menampilkan <b>info status</b>','danger');
-        }
-    }
-});
+    });
+}
+getInfoStatus();
 
 /**
  * Auto Complete - Site
@@ -209,11 +212,13 @@ function saveImport() {
             success:function(data) {
                 hideLoadingSpinner();
                 $("#formImportTksk input").val('');
+                $("#formImportTksk select").val('').change();
 
                 $("#formImportTksk .alert span").html(data.message);
                 $("#formImportTksk .alert").show();
 
                 initialDataTableTksk();
+                getInfoStatus();
             },
             error:function(data) {
                 hideLoadingSpinner();

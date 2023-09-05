@@ -215,6 +215,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="alamat_kelurahan"><small><b>Kelurahan</b></small></label>
+                                <input type="text" id="alamat_kelurahan_hide" name="alamat_kelurahan_hide" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;" value="{{ $tksk != null ? $tksk->alamat_kelurahan : '' }}">
                                 <input type="text" class="form-control" id="alamat_kelurahan" name="alamat_kelurahan" value="{{ $tksk != null ? $tksk->alamat_kelurahan : '' }}">
                                 <span id="alamat_kelurahan-error" class="invalid-feedback"></span>
                             </div>
@@ -247,6 +248,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="nama_bank"><small><b>Nama Bank</b></small></label>
+                                <input type="text" id="nama_bank_hide" name="nama_bank_hide" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;" value="{{ $tksk != null ? $tksk->nama_bank : '' }}">
                                 <input type="text" class="form-control" id="nama_bank" name="nama_bank" value="{{ $tksk != null ? $tksk->nama_bank : '' }}">
                                 <span id="nama_bank-error" class="invalid-feedback"></span>
                             </div>

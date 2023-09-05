@@ -212,6 +212,7 @@ function saveImport() {
             success:function(data) {
                 hideLoadingSpinner();
                 $("#formImportLks input").val('');
+                $("#formImportLks select").val('').change();
 
                 $("#formImportLks .alert span").html(data.message);
                 $("#formImportLks .alert").show();

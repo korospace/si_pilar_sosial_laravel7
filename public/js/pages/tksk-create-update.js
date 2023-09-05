@@ -162,6 +162,16 @@ $("#formCreateUpdateTksk #alamat_kelurahan").autoComplete({
     },
 });
 
+$('#formCreateUpdateTksk #alamat_kelurahan').on('input', function () {
+    $('#formCreateUpdateTksk #alamat_kelurahan_hide').val('')
+});
+
+$('#formCreateUpdateTksk #alamat_kelurahan').on('autocomplete.select', function (evt, item) {
+    $('#formCreateUpdateTksk #alamat_kelurahan_hide').val(item.text)
+
+    autoComplete = true;
+});
+
 /**
  * Auto Complete - Bank
  */
@@ -183,6 +193,16 @@ $("#formCreateUpdateTksk #nama_bank").autoComplete({
             });
         },
     },
+});
+
+$('#formCreateUpdateTksk #nama_bank').on('input', function () {
+    $('#formCreateUpdateTksk #nama_bank_hide').val('')
+});
+
+$('#formCreateUpdateTksk #nama_bank').on('autocomplete.select', function (evt, item) {
+    $('#formCreateUpdateTksk #nama_bank_hide').val(item.text)
+
+    autoComplete = true;
 });
 
 /**
@@ -256,7 +276,7 @@ $('#formCreateUpdateTksk').validate({
         alamat_rw: {
             required: true
         },
-        alamat_kelurahan: {
+        alamat_kelurahan_hide: {
             required: true
         },
         nama_di_rekening: {
@@ -265,7 +285,7 @@ $('#formCreateUpdateTksk').validate({
         no_rekening: {
             required: true
         },
-        nama_bank: {
+        nama_bank_hide: {
             required: true
         },
         tahun_pengangkatan_pertama: {
@@ -336,8 +356,8 @@ $('#formCreateUpdateTksk').validate({
         alamat_rw: {
             required: "Alamat RW harus diisi"
         },
-        alamat_kelurahan: {
-            required: "Alamat Kelurahan harus diisi"
+        alamat_kelurahan_hide: {
+            required: "Kelurahan tidak valid"
         },
         nama_di_rekening: {
             required: "Nama Di Rekening harus diisi"
@@ -345,8 +365,8 @@ $('#formCreateUpdateTksk').validate({
         no_rekening: {
             required: "No. Rekening harus diisi"
         },
-        nama_bank: {
-            required: "Nama Bank harus diisi"
+        nama_bank_hide: {
+            required: "Nama Bank tidak valid"
         },
         tahun_pengangkatan_pertama: {
             required: "Tahun Pengangkatan Pertama harus diisi"
@@ -382,8 +402,14 @@ $('#formCreateUpdateTksk').validate({
         if ($(element).attr('name') == "site_id") {
             $('#formCreateUpdateTksk #site').addClass('is-invalid');
         }
-        if ($(element).attr('name') == "tempat_tugas_hide") {
+        else if ($(element).attr('name') == "tempat_tugas_hide") {
             $('#formCreateUpdateTksk #tempat_tugas').addClass('is-invalid');
+        }
+        else if ($(element).attr('name') == "alamat_kelurahan_hide") {
+            $('#formCreateUpdateTksk #alamat_kelurahan').addClass('is-invalid');
+        }
+        else if ($(element).attr('name') == "nama_bank_hide") {
+            $('#formCreateUpdateTksk #nama_bank').addClass('is-invalid');
         }
         else {
             $(element).addClass('is-invalid');
@@ -395,6 +421,12 @@ $('#formCreateUpdateTksk').validate({
         }
         else if ($(element).attr('name') == "tempat_tugas_hide") {
             $('#formCreateUpdateTksk #tempat_tugas').removeClass('is-invalid');
+        }
+        else if ($(element).attr('name') == "alamat_kelurahan_hide") {
+            $('#formCreateUpdateTksk #alamat_kelurahan').removeClass('is-invalid');
+        }
+        else if ($(element).attr('name') == "nama_bank_hide") {
+            $('#formCreateUpdateTksk #nama_bank').removeClass('is-invalid');
         }
         else {
             $(element).removeClass('is-invalid');

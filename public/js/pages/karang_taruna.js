@@ -211,12 +211,13 @@ function saveImport() {
             success:function(data) {
                 hideLoadingSpinner();
                 $("#formImportKarangTaruna input").val('');
+                $("#formImportKarangTaruna select").val('').change();
 
                 $("#formImportKarangTaruna .alert span").html(data.message);
                 $("#formImportKarangTaruna .alert").show();
 
                 initialDataTableKarangTaruna();
-                getInfoStatus()
+                getInfoStatus();
             },
             error:function(data) {
                 hideLoadingSpinner();
