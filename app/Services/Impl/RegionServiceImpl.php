@@ -34,7 +34,7 @@ class RegionServiceImpl implements RegionService
                 }
             }
 
-            $regions = $regions->orderBy('name', 'ASC')->get();
+            $regions = $regions->orderBy('name', 'ASC')->limit(20)->get();
 
             // mapping
             foreach ($regions as $region) {
