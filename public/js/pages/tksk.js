@@ -194,6 +194,8 @@ $(document).on('keydown', function(event) {
 });
 
 function saveImport() {
+    $("#formImportTksk .alert").hide();
+
     if ($('#formImportTksk').valid()) {
         showLoadingSpinner();
 

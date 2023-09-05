@@ -193,6 +193,8 @@ $(document).on('keydown', function(event) {
 });
 
 function saveImport() {
+    $("#formImportKarangTaruna .alert").hide();
+
     if ($('#formImportKarangTaruna').valid()) {
         showLoadingSpinner();
 

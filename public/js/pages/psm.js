@@ -193,6 +193,8 @@ $(document).on('keydown', function(event) {
 });
 
 function saveImport() {
+    $("#formImportPsm .alert").hide();
+
     if ($('#formImportPsm').valid()) {
         showLoadingSpinner();
 

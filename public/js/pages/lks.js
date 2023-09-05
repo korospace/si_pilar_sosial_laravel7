@@ -194,6 +194,8 @@ $(document).on('keydown', function(event) {
 });
 
 function saveImport() {
+    $("#formImportLks .alert").hide();
+
     if ($('#formImportLks').valid()) {
         showLoadingSpinner();
 
