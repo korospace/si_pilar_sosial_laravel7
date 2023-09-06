@@ -17,10 +17,10 @@ class NotificationServiceImpl implements NotificationService
         try {
             $user = User::where('email', $request->email)->first();
 
+            Notification::send($user, new ForgorPasswordEmail($user, Crypt::decrypt($user->password)));
+
             $user->password = Crypt::encrypt(uniqid());
             $user->save();
-
-            Notification::send($user, new ForgorPasswordEmail($user, Crypt::decrypt($user->password)));
 
             return response()->json(
                 [
