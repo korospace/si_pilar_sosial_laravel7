@@ -21,7 +21,7 @@ function initialDataTableUser(params) {
             { data: 'name' },
             { data: 'email' },
             { data: 'user_level.name' },
-            { data: 'site.name' },
+            { data: 'site' },
             { data: 'action', width: '15%' },
         ],
         "columnDefs": [

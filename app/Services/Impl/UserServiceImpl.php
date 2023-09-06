@@ -22,6 +22,9 @@ class UserServiceImpl implements UserService
                 ->addColumn('no', function ($row) use (&$no) {
                     return $no++;
                 })
+                ->addColumn('site', function ($row) use (&$no) {
+                    return $row->site ? $row->site->name : '-';
+                })
                 ->addColumn('action', function ($row) {
                     $html = '
                         <a href="'.route('user.update', $row->id).'" class="btn_edit btn btn-sm bg-warning mb-2">

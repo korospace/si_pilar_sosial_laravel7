@@ -31,7 +31,7 @@ class UserRequest extends FormRequest
                 'name'     => 'required|max:255',
                 'email'    => 'required|email|unique:users,email,' . $this->input('id'),
                 'level_id' => 'required|exists:user_levels,id',
-                'site_id'  => in_array($this->input('id'), [1]) ? '' : 'required|exists:sites,id',
+                'site_id'  => in_array($this->input('level_id'), [1]) ? '' : 'required|exists:sites,id',
                 'password' => 'required|max:20',
             ];
         }
@@ -41,7 +41,7 @@ class UserRequest extends FormRequest
                 'name'     => 'required|max:255',
                 'email'    => 'required|email|unique:users,email,' . $this->input('id'),
                 'level_id' => 'required|exists:user_levels,id',
-                'site_id'  => in_array($this->input('id'), [1]) ? '' : 'required|exists:sites,id',
+                'site_id'  => in_array($this->input('level_id'), [1]) ? '' : 'required|exists:sites,id',
                 'new_password' => 'max:20',
             ];
         }
