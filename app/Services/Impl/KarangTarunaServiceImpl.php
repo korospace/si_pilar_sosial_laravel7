@@ -265,11 +265,11 @@ class KarangTarunaServiceImpl implements KarangTarunaService
                 'verifier'                      => $verifier,
             ];
 
-            if ($karangTaruna->no_urut == null && $karangTaruna->status == 'diperiksa' && $request->status == 'diterima') {
-                $data['no_urut'] = $this->generateNoUrut($request->site_id);
-            }
             if ($karangTaruna->no_urut && $karangTaruna->status == 'diterima' && $request->status == 'ditolak') {
                 throw new GeneralException('data sudah diterima, status tidak dapat diubah', 409);
+            }
+            if ($karangTaruna->no_urut == null && $request->status == 'diterima') {
+                $data['no_urut'] = $this->generateNoUrut($request->site_id);
             }
 
             KarangTaruna::where("id", $request->id)->update($data);

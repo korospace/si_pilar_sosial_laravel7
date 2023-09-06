@@ -295,11 +295,11 @@ class TkskServiceImpl implements TkskService
                 'verifier'                      => $verifier,
             ];
 
-            if ($TKSK->no_urut == null && $TKSK->status == 'diperiksa' && $request->status == 'diterima') {
-                $data['no_urut'] = $this->generateNoUrut($request->site_id);
-            }
             if ($TKSK->no_urut && $TKSK->status == 'diterima' && $request->status == 'ditolak') {
                 throw new GeneralException('data sudah diterima, status tidak dapat diubah', 409);
+            }
+            if ($TKSK->no_urut == null && $request->status == 'diterima') {
+                $data['no_urut'] = $this->generateNoUrut($request->site_id);
             }
 
             $newTksk = Tksk::where("id", $request->id)->update($data);

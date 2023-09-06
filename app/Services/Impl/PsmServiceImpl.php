@@ -303,7 +303,7 @@ class PsmServiceImpl implements PsmService
             if ($PSM->no_urut && $PSM->status == 'diterima' && $request->status == 'ditolak') {
                 throw new GeneralException('data sudah diterima, status tidak dapat diubah', 409);
             }
-            if ($PSM->no_urut == null && $PSM->status == 'diperiksa' && $request->status == 'diterima') {
+            if ($PSM->no_urut == null && $request->status == 'diterima') {
                 $data['no_urut'] = $this->generateNoUrut($request->site_id, $PSM->tempat_tugas_kecamatan, $PSM->tempat_tugas_kelurahan);
             }
 

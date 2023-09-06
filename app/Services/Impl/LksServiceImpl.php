@@ -332,11 +332,11 @@ class LksServiceImpl implements LksService
                 'verifier'                          => $verifier,
             ];
 
-            if ($LKS->no_urut == null && $LKS->status == 'diperiksa' && $request->status == 'diterima') {
-                $data['no_urut'] = $this->generateNoUrut($request->site_id);
-            }
             if ($LKS->no_urut && $LKS->status == 'diterima' && $request->status == 'ditolak') {
                 throw new GeneralException('data sudah diterima, status tidak dapat diubah', 409);
+            }
+            if ($LKS->no_urut == null && $request->status == 'diterima') {
+                $data['no_urut'] = $this->generateNoUrut($request->site_id);
             }
 
             $newLks = Lks::where("id", $request->id)->update($data);
