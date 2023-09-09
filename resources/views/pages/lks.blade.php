@@ -81,7 +81,7 @@
                 </div>
 				<div class="col-md-10">
                     <div class="card card-secondary card-outline">
-						<div class="card-header">
+						<div class="card-header" style="overflow-x: auto">
 							<table id="tableLks" class="table table-bordered table-hover">
 								<thead>
 									<tr>

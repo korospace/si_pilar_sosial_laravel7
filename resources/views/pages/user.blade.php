@@ -30,7 +30,7 @@
             <div class="row px-2">
 				<div class="col-12">
                     <div class="card card-secondary card-outline">
-						<div class="card-header">
+						<div class="card-header" style="overflow-x: auto">
 							<table id="tableUser" class="table table-bordered table-hover">
 								<thead>
 									<tr>
