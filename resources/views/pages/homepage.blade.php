@@ -170,7 +170,7 @@
     {{-- ---------------- End Berita terbatu ------------ --}}
 
     <footer>
-        <div id="section_2" class="py-4 text-center">
+        <div id="section_2" class="py-4 px-3 text-center">
             Copyright @ 2023. <a href="https://dinsos.jakarta.go.id/">Dinas Sosial DKI Jakarta</a>. All Right Reserved
         </div>
     </footer>
