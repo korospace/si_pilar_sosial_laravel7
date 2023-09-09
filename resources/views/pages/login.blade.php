@@ -49,7 +49,7 @@
                                 <input type="password" name="password" class="form-control" id="password" placeholder="Password">
                             </div>
                         </div>
-                        <div class="card-footer">
+                        <div class="card-footer bg-white">
                             <button type="submit" class="btn btn-primary">login</button>
                         </div>
                         <div class="text-center mt-3 pb-4">
