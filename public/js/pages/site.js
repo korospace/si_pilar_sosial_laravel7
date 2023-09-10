@@ -8,6 +8,8 @@ function initialDataTableSite(params) {
         "bDestroy": true,
         "serverSide": true,
         "processing": true,
+        "responsive": true,
+        "autoWidth": false,
         "pageLength": 10,
         "order": [[0, 'asc']],
         "ajax": {
@@ -24,7 +26,11 @@ function initialDataTableSite(params) {
         "columnDefs": [
             {
                 "targets": [0,2],
-                "className": "text-center",
+                "className": "align-middle text-center",
+            },
+            {
+                "targets": [1],
+                "className": "align-middle",
             },
         ],
     }).buttons().container().appendTo('#tableSite_wrapper .col-md-6:eq(0)');

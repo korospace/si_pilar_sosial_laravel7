@@ -8,6 +8,8 @@ function initialDataTableBank(params) {
         "bDestroy": true,
         "serverSide": true,
         "processing": true,
+        "responsive": true,
+        "autoWidth": false,
         "pageLength": 10,
         "order": [[0, 'asc']],
         "ajax": {
@@ -25,11 +27,11 @@ function initialDataTableBank(params) {
         "columnDefs": [
             {
                 "targets": [0,2,3],
-                "className": "text-center vertical-center",
+                "className": "align-middle text-center",
             },
             {
                 "targets": [1],
-                "className": "text-left vertical-center",
+                "className": "align-middle text-left",
             },
         ],
     }).buttons().container().appendTo('#tableBank_wrapper .col-md-6:eq(0)');

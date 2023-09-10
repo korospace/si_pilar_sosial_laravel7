@@ -8,6 +8,8 @@ function initialDataTableArticle(params) {
         "bDestroy": true,
         "serverSide": true,
         "processing": true,
+        "responsive": true,
+        "autoWidth": false,
         "pageLength": 10,
         "order": [[0, 'asc']],
         "ajax": {
@@ -26,8 +28,12 @@ function initialDataTableArticle(params) {
         ],
         "columnDefs": [
             {
-                "targets": [0,1,3,4,5],
+                "targets": [1,3,4,5],
                 "className": "text-center",
+            },
+            {
+                "targets": [0],
+                "className": "align-middle text-center",
             },
         ],
     }).buttons().container().appendTo('#tableArticle_wrapper .col-md-6:eq(0)');

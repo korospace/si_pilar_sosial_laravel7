@@ -8,6 +8,8 @@ function initialDataTableTksk(params) {
         "bDestroy": true,
         "serverSide": true,
         "processing": true,
+        "responsive": true,
+        "autoWidth": false,
         "pageLength": 10,
         "order": [[0, 'asc']],
         "ajax": {
@@ -29,7 +31,7 @@ function initialDataTableTksk(params) {
         "columnDefs": [
             {
                 "targets": [0,1,2,3,4,5,6,7],
-                "className": "text-center vertical-center",
+                "className": "text-center align-middle",
             },
         ],
     }).buttons().container().appendTo('#tableTksk_wrapper .col-md-6:eq(0)');

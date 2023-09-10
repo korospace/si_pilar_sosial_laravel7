@@ -8,6 +8,8 @@ function initialDataTableAkreditasiLks(params) {
         "bDestroy": true,
         "serverSide": true,
         "processing": true,
+        "responsive": true,
+        "autoWidth": false,
         "pageLength": 10,
         "order": [[0, 'asc']],
         "ajax": {
@@ -24,7 +26,7 @@ function initialDataTableAkreditasiLks(params) {
         "columnDefs": [
             {
                 "targets": [0,1,2],
-                "className": "text-center vertical-center",
+                "className": "align-middle text-center",
             },
         ],
     }).buttons().container().appendTo('#tableAkreditasiLks_wrapper .col-md-6:eq(0)');

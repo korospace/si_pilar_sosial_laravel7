@@ -25,9 +25,6 @@
             body, html {
 			    height: 100%;
 		    }
-            .vertical-center {
-                vertical-align: middle !important;
-            }
             hr.overlay {
                 height: 1px;
                 background-image: linear-gradient(to right,rgba(39, 65, 156, 0),rgba(39, 65, 156, 0.4),rgba(39, 65, 156, 0));

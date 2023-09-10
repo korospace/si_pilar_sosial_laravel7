@@ -9,6 +9,7 @@
 @push('dashboard-wraper.jscript')
     <script src="{{ asset('js/plugins/datatable/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/plugins/datatable/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/datatable/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('js/plugins/datatable/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('js/pages/crud-article.js') }}"></script>
 @endpush

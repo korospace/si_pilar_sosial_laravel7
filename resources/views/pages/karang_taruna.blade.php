@@ -11,6 +11,7 @@
 @push('dashboard-wraper.jscript')
     <script src="{{ asset('js/plugins/datatable/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/plugins/datatable/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/datatable/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('js/plugins/datatable/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('js/plugins/jquery-validation/additional-methods.min.js') }}"></script>
@@ -82,29 +83,29 @@
                 </div>
 				<div class="col-md-10">
                     <div class="card card-secondary card-outline">
-						<div class="card-header" style="overflow-x: auto">
+						<div class="card-header">
 							<table id="tableKarangTaruna" class="table table-bordered table-hover">
 								<thead>
 									<tr>
-										<th class="vertical-center">
+										<th class="align-middle">
 											No
 										</th>
-										<th class="vertical-center">
+										<th class="align-middle">
 											No Urut
 										</th>
-										<th class="vertical-center">
+										<th class="align-middle">
 											Nama
 										</th>
-										<th class="vertical-center">
+										<th class="align-middle">
 											Nama Ketua
 										</th>
-                                        <th class="vertical-center">
+                                        <th class="align-middle">
 											Program Unggulan
 										</th>
-										<th class="vertical-center">
+										<th class="align-middle">
 											Status
 										</th>
-										<th class="vertical-center">
+										<th class="align-middle">
 											Aksi
 										</th>
 									</tr>

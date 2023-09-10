@@ -4,16 +4,12 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/datatable/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/datatable/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/datatable/buttons.bootstrap4.min.css') }}">
-    <style>
-        .vertical-center {
-            vertical-align: middle !important;
-        }
-    </style>
 @endpush
 
 @push('dashboard-wraper.jscript')
     <script src="{{ asset('js/plugins/datatable/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/plugins/datatable/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/datatable/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('js/plugins/datatable/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('js/pages/akreditasi_lks.js') }}"></script>
 @endpush
@@ -35,7 +31,7 @@
             <div class="row px-2">
 				<div class="col-12">
                     <div class="card card-secondary card-outline">
-						<div class="card-header" style="overflow-x: auto">
+						<div class="card-header">
 							<table id="tableAkreditasiLks" class="table table-bordered table-hover">
 								<thead>
 									<tr>
