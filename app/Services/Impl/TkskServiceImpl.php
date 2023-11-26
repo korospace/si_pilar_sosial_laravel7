@@ -33,6 +33,9 @@ class TkskServiceImpl implements TkskService
 
                     return $html;
                 })
+                ->addColumn('tempat_tugas', function ($row) {
+                    return $row->site->name . " - " . $row->tempat_tugas;
+                })
                 ->addColumn('status', function ($row) use ($request) {
                     $statusClass = "";
                     $statusText  = "";
