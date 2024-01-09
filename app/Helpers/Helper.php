@@ -88,3 +88,53 @@ function _methodParser(string $variableName): void
     $GLOBALS[ $variableName ] = $data;
     return;
 }
+
+/**
+ * Transalte Date To English
+ *
+ * @param string $stringDate
+ */
+function MonthToEnglish($stringDate)
+{
+    $bulan_indonesia = [
+        'Januari', 'Februari', 'Maret', 'April',
+        'Mei', 'Juni', 'Juli', 'Agustus',
+        'September', 'Oktober', 'November', 'Desember'
+    ];
+
+    $bulan_inggris = [
+        'January', 'February', 'March', 'April',
+        'May', 'June', 'July', 'August',
+        'September', 'October', 'November', 'December'
+    ];
+
+    $tanggal_baru = str_replace($bulan_indonesia, $bulan_inggris, $stringDate);
+    $tanggal_baru = strtr($stringDate, array_combine($bulan_indonesia, $bulan_inggris));
+
+    return $tanggal_baru;
+}
+
+/**
+ * Transalte Date To Indonesia
+ *
+ * @param string $stringDate
+ */
+function MonthToIndonesia($stringDate)
+{
+    $bulan_indonesia = [
+        'Januari', 'Februari', 'Maret', 'April',
+        'Mei', 'Juni', 'Juli', 'Agustus',
+        'September', 'Oktober', 'November', 'Desember'
+    ];
+
+    $bulan_inggris = [
+        'January', 'February', 'March', 'April',
+        'May', 'June', 'July', 'August',
+        'September', 'October', 'November', 'December'
+    ];
+
+    $tanggal_baru = str_replace($bulan_inggris, $bulan_indonesia, $stringDate);
+    $tanggal_baru = strtr($stringDate, array_combine($bulan_inggris, $bulan_indonesia));
+
+    return $tanggal_baru;
+}

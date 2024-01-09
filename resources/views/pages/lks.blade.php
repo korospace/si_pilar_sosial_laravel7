@@ -150,7 +150,7 @@
                                 <select id="year" name="year" class="custom-select select2bs4">
                                     <option value="">-- pilih --</option>
 
-                                    @for ($year = 2000; $year <= date('Y'); $year++)
+                                    @for ($year = date('Y'); $year >= 2000; $year--)
                                         <option value="{{ $year }}">{{ $year }}</option>
                                     @endfor
                                 </select>

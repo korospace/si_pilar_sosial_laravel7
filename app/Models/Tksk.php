@@ -22,6 +22,14 @@ class Tksk extends Model
         return $this->belongsTo(Site::class,'site_id','id');
     }
 
+    /**
+     * POJO
+     * ===================================================
+     */
+    public function getTanggalLahirAttribute($value) {
+        return MonthToIndonesia(date("d F Y", strtotime($value)));
+    }
+
     // public static function boot()
     // {
     //     parent::boot();

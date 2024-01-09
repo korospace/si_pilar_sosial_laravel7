@@ -42,7 +42,7 @@ class PsmServiceImpl implements PsmService
                     return $html;
                 })
                 ->addColumn('tempat_tugas', function ($row) {
-                    $html = $row->tempat_tugas_kelurahan.", ".$row->tempat_tugas_kecamatan;
+                    $html = $row->tempat_tugas_kelurahan.", ".$row->tempat_tugas_kecamatan.", ".$row->site->name;
 
                     return $html;
                 })
@@ -125,7 +125,7 @@ class PsmServiceImpl implements PsmService
     {
         try {
             $siteId   = $request->user->level_id === 1 ? $request->site_id : $request->user->site_id;
-            $tglLahir = date("d-m-Y", strtotime($request->tanggal_lahir));
+            $tglLahir = date("d-m-Y", strtotime(MonthToEnglish($request->tanggal_lahir)));
             $status   = $request->user->level_id === 1 ? $request->status : 'diperiksa';
             $noUrut   = $request->user->level_id === 1 && $request->status == 'diterima' ? $this->generateNoUrut($siteId, $request->tempat_tugas_kecamatan, $request->tempat_tugas_kelurahan) : null;
             $verifier = $request->user->level_id === 1 && $request->status == 'diterima' ? $request->user->id : null;
@@ -266,7 +266,7 @@ class PsmServiceImpl implements PsmService
     public function updatePsm(PsmRequest $request): JsonResponse
     {
         try {
-            $tglLahir = date("d-m-Y", strtotime($request->tanggal_lahir));
+            $tglLahir = date("d-m-Y", strtotime(MonthToEnglish($request->tanggal_lahir)));
             $verifier = $request->status == 'diproses' ? null : $request->user->id;
 
             $site = Site::where("id", $request->site_id)->first();

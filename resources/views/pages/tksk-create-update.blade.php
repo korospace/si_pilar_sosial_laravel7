@@ -144,7 +144,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="tanggal_lahir"><small><b>Tanggal Lahir</b></small></label>
-                                <input type="text" class="form-control" id="tanggal_lahir" name="tanggal_lahir" value="{{ $tksk != null ? strftime('%d %B %Y', strtotime($tksk->tanggal_lahir)) : '' }}">
+                                <input type="text" class="form-control" id="tanggal_lahir" name="tanggal_lahir" value="{{ $tksk != null ? $tksk->tanggal_lahir : '' }}">
                                 <span id="tanggal_lahir-error" class="invalid-feedback"></span>
                             </div>
                         </div>
