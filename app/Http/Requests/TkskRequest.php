@@ -33,13 +33,14 @@ class TkskRequest extends FormRequest
         else if ($this->method() == 'POST' && $this->route()->getActionMethod() == 'importTksk') {
             return [
                 'site_id'                       => 'required|exists:sites,id',
-                'year'                          => 'required',
+                'year'                          => 'required|date_format:Y',
                 'file_tksk'                     => 'required|mimes:xls,xlsx',
             ];
         }
         else if ($this->method() == 'POST') {
             return [
                 'site_id'                       => $this->user->level_id == 1 ? 'required|exists:sites,id' : '',
+                'year'                          => 'required|date_format:Y',
                 'no_induk_anggota'              => 'required|max:255',
                 'tempat_tugas'                  => 'required|max:255',
                 'nama'                          => 'required|max:255',
@@ -77,6 +78,7 @@ class TkskRequest extends FormRequest
             return [
                 'id'                            => 'required|exists:tksk,id',
                 'site_id'                       => 'required|exists:sites,id',
+                'year'                          => 'required|date_format:Y',
                 'no_induk_anggota'              => 'required|max:255',
                 'tempat_tugas'                  => 'required|max:255',
                 'nama'                          => 'required|max:255',

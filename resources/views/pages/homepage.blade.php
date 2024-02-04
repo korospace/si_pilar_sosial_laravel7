@@ -7,7 +7,6 @@
 @endpush
 
 @push('jscript')
-    <script src="{{ asset('js/plugins/jquery.min.js') }}"></script>
     <script src="{{ asset('js/plugins/bootstrap/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/plugins/moment/moment-with-locales.min.js') }}"></script>
     <script src="{{ asset('js/pages/homepage.js') }}"></script>

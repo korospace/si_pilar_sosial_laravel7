@@ -234,6 +234,9 @@ $("#formCreateUpdateTksk select").on('change', function () {
 // form submit
 $('#formCreateUpdateTksk').validate({
     rules: {
+        year: {
+            required: true
+        },
         no_induk_anggota: {
             required: true
         },
@@ -314,6 +317,9 @@ $('#formCreateUpdateTksk').validate({
         }
     },
     messages: {
+        year: {
+            required: "Data tahun harus disi"
+        },
         no_induk_anggota: {
             required: "No. Induk Anggota harus diisi"
         },

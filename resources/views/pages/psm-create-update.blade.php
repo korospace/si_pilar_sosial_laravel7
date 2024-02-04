@@ -63,6 +63,23 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
+                                <label for="year"><small><b>Data Tahun</b></small></label>
+                                <select id="year" name="year" class="custom-select select2bs4">
+                                    <option value="">-- pilih --</option>
+
+                                    @for ($year = date('Y'); $year >= 2000; $year--)
+                                        @if ($psm != null)
+                                            <option value="{{ $year }}" {{ $year == $psm->year ? 'selected' : '' }}>{{ $year }}</option>
+                                        @else
+                                            <option value="{{ $year }}" {{ $year == date('Y') ? 'selected' : '' }}>{{ $year }}</option>
+                                        @endif
+                                    @endfor
+                                </select>
+                                <span id="year-error" class="invalid-feedback"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
                                 <label for="status"><small><b>Status</b></small></label>
                                 <select id="status" name="status" class="custom-select select2bs4" value="{{ $psm != null ? $psm->status : '' }}">
                                     <option value="">-- pilih --</option>

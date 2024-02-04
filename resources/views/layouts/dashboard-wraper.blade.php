@@ -33,9 +33,7 @@
 @endpush
 
 @push('jscript')
-    <script src="{{ asset('js/plugins/jquery.min.js') }}"></script>
     <script src="{{ asset('js/plugins/bootstrap/bootstrap.bundle.min.js') }}"></script>
-    {{-- <script src="{{ asset('js/plugins/overlayScrollbars/jquery.overlayScrollbars.min.js') }}"></script> --}}
     <script src="{{ asset('js/plugins/adminlte/adminlte.min.js') }}"></script>
     <script src="{{ asset('js/plugins/jquery.cookie.min.js') }}"></script>
     <script src="{{ asset('js/plugins/sweetalert2.min.js') }}"></script>

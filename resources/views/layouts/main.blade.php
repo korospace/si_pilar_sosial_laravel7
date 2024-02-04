@@ -22,16 +22,9 @@
                 font-family: "Qc-sb";
                 src: url({{ asset('fonts/Quicksand-SemiBold.ttf') }}) format("truetype");
             }
-            body, html {
-			    height: 100%;
-		    }
-            hr.overlay {
-                height: 1px;
-                background-image: linear-gradient(to right,rgba(39, 65, 156, 0),rgba(39, 65, 156, 0.4),rgba(39, 65, 156, 0));
-                opacity: 0.7;
-            }
         </style>
 
+        <link rel="stylesheet" href="{{ asset('css/layouts/main.css') }}">
         @stack('css')
     </head>
     <body>
@@ -42,6 +35,8 @@
             var BASE_URL = "{{ url('/') }}";
         </script>
 
+        <script src="{{ asset('js/plugins/jquery.min.js') }}"></script>
+        <script src="{{ asset('js/layouts/main.js') }}"></script>
         @stack('jscript')
     </body>
 </html>

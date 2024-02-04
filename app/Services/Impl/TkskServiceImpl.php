@@ -18,11 +18,21 @@ class TkskServiceImpl implements TkskService
             $no = 1;
             $tkskRows = Tksk::query();
 
+            // filter
             if ($request->user->site) {
                 $tkskRows->where('site_id', $request->user->site_id);
             }
+            if ($request->year) {
+                $tkskRows->where("year", $request->year);
+            }
+            if ($request->site_id) {
+                $tkskRows->where('site_id', $request->site_id);
+            }
+            if ($request->status) {
+                $tkskRows->where('status', $request->status);
+            }
 
-            $tkskRows = $tkskRows->select('id', 'site_id', 'no_urut', 'no_induk_anggota', 'nama', 'tempat_tugas', 'jenis_kelamin', 'status')->orderBy('id', 'DESC')->with('site')->get();
+            $tkskRows = $tkskRows->select('id', 'year', 'site_id', 'no_urut', 'no_induk_anggota', 'nama', 'tempat_tugas', 'jenis_kelamin', 'status')->orderBy('id', 'DESC')->with('site')->get();
 
             return datatables()->of($tkskRows)
                 ->addColumn('no', function ($row) use (&$no) {
@@ -122,6 +132,7 @@ class TkskServiceImpl implements TkskService
 
             $newTksk = Tksk::create([
                 'site_id'                       => $siteId,
+                'year'                          => $request->year,
                 'no_urut'                       => $noUrut,
                 'no_induk_anggota'              => $request->no_induk_anggota,
                 'tempat_tugas'                  => $request->tempat_tugas,
@@ -185,6 +196,7 @@ class TkskServiceImpl implements TkskService
                 if ($rowCount > 2) {
                     Tksk::create([
                         'site_id'                       => $request->site_id,
+                        'year'                          => $request->year,
                         'no_urut'                       => $this->generateNoUrut($request->site_id),
                         'no_induk_anggota'              => $row[1],
                         'tempat_tugas'                  => $row[2],
@@ -213,7 +225,6 @@ class TkskServiceImpl implements TkskService
                         'status'                        => 'diterima',
                         'inputter'                      => $request->user->id,
                         'verifier'                      => $request->user->id,
-                        'created_at'                    => $request->year."-01-01 00:00:00",
                     ]);
 
                     $rowAdded++;
@@ -270,6 +281,7 @@ class TkskServiceImpl implements TkskService
             $TKSK = Tksk::where("id", $request->id)->first();
             $data = [
                 'site_id'                       => $request->site_id,
+                'year'                          => $request->year,
                 'no_induk_anggota'              => $request->no_induk_anggota,
                 'tempat_tugas'                  => $request->tempat_tugas,
                 'nama'                          => $request->nama,

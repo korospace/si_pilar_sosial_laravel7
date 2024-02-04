@@ -199,6 +199,9 @@ $(`#formCreateUpdatePsm .col-sertifikasi`).hide();
 // form submit
 $('#formCreateUpdatePsm').validate({
     rules: {
+        year: {
+            required: true
+        },
         site_id: {
             required: true,
         },
@@ -255,6 +258,9 @@ $('#formCreateUpdatePsm').validate({
         },
     },
     messages: {
+        year: {
+            required: "Data tahun harus disi"
+        },
         site_id: {
             required: "Site harus diisi",
         },

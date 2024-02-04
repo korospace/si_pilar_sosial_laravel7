@@ -46,7 +46,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="password">Password</label>
-                                <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+                                <div class="with-icon">
+                                    <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+                                    <i class="pass_hide nav-icon fa fa-eye opacity-07"></i>
+                                    <i class="pass_show nav-icon fa fa-eye-slash opacity-07"></i>
+                                </div>
                             </div>
                         </div>
                         <div class="card-footer bg-white">

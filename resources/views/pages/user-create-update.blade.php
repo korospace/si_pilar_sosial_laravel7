@@ -54,12 +54,20 @@
                     @if($userEdit == null)
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" name="password">
+                            <div class="with-icon">
+                                <input type="password" class="form-control" id="password" name="password">
+                                <i class="pass_hide nav-icon fa fa-eye opacity-07"></i>
+                                <i class="pass_show nav-icon fa fa-eye-slash opacity-07"></i>
+                            </div>
                         </div>
                     @else
                         <div class="form-group">
                             <label for="new_password">Password Baru <small>(opsional)</small></label>
-                            <input type="password" class="form-control" id="new_password" name="new_password">
+                            <div class="with-icon">
+                                <input type="password" class="form-control" id="new_password" name="new_password">
+                                <i class="pass_hide nav-icon fa fa-eye opacity-07"></i>
+                                <i class="pass_show nav-icon fa fa-eye-slash opacity-07"></i>
+                            </div>
                         </div>
                     @endif
 

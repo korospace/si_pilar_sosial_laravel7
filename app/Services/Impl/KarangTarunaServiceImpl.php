@@ -18,11 +18,21 @@ class KarangTarunaServiceImpl implements KarangTarunaService
             $no = 1;
             $rows = KarangTaruna::query();
 
+            // filter
             if ($request->user->site) {
                 $rows->where('site_id', $request->user->site_id);
             }
+            if ($request->year) {
+                $rows->where("year", $request->year);
+            }
+            if ($request->site_id) {
+                $rows->where('site_id', $request->site_id);
+            }
+            if ($request->status) {
+                $rows->where('status', $request->status);
+            }
 
-            $rows = $rows->select('id', 'site_id', 'no_urut', 'nama', 'nama_ketua', 'program_unggulan', 'status')->orderBy('id', 'DESC')->with('site')->get();
+            $rows = $rows->select('id', 'year', 'site_id', 'no_urut', 'nama', 'nama_ketua', 'program_unggulan', 'status')->orderBy('id', 'DESC')->with('site')->get();
 
             return datatables()->of($rows)
                 ->addColumn('no', function ($row) use (&$no) {
@@ -119,6 +129,7 @@ class KarangTarunaServiceImpl implements KarangTarunaService
 
             $newKarangTaruna = KarangTaruna::create([
                 'site_id'                       => $siteId,
+                'year'                          => $request->year,
                 'no_urut'                       => $noUrut,
                 'nama'                          => $request->nama,
                 'nama_ketua'                    => $request->nama_ketua,
@@ -170,8 +181,9 @@ class KarangTarunaServiceImpl implements KarangTarunaService
                 $rowCount++;
 
                 if ($rowCount > 2) {
-                    $newKarangTaruna = KarangTaruna::create([
+                    KarangTaruna::create([
                         'site_id'                       => $request->site_id,
+                        'year'                          => $request->year,
                         'no_urut'                       => $this->generateNoUrut($request->site_id),
                         'nama'                          => $row[1],
                         'nama_ketua'                    => $row[2],
@@ -190,7 +202,6 @@ class KarangTarunaServiceImpl implements KarangTarunaService
                         'status'                        => 'diterima',
                         'inputter'                      => $request->user->id,
                         'verifier'                      => $request->user->id,
-                        'created_at'                    => $request->year."-01-01 00:00:00",
                     ]);
 
                     $rowAdded++;
@@ -246,6 +257,7 @@ class KarangTarunaServiceImpl implements KarangTarunaService
             $verifier = $request->status == 'diproses' ? null : $request->user->id;
             $data     = [
                 'site_id'                       => $request->site_id,
+                'year'                          => $request->year,
                 'nama'                          => $request->nama,
                 'nama_ketua'                    => $request->nama_ketua,
                 'alamat_jalan'                  => $request->alamat_jalan,

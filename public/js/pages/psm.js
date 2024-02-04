@@ -1,52 +1,62 @@
 $token = $.cookie("jwt_token");
+let autoComplete = false;
 
 /**
- * Initial Psm Table
+ * Select 2
+ * ----------------------
  */
-function initialDataTablePsm(params) {
-    $("#tablePsm").DataTable({
-        "bDestroy": true,
-        "serverSide": true,
-        "processing": true,
-        "responsive": true,
-        "autoWidth": false,
-        "pageLength": 10,
-        "order": [[0, 'asc']],
-        "ajax": {
-            "url": `${BASE_URL}/api/v1/psm/datatable`,
-            "beforeSend": function(xhr){
-                xhr.setRequestHeader('token', $token);
-            }
-        },
-        "columns": [
-            { data: 'no', width: '5%' },
-            { data: 'id_psm' },
-            { data: 'nama' },
-            { data: 'tempat_tugas' },
-            { data: 'jenis_kelamin' },
-            { data: 'status', width: '10%' },
-            { data: 'action', width: '10%' },
-        ],
-        "columnDefs": [
-            {
-                "targets": [0,1,2,3,4,5,6],
-                "className": "text-center align-middle",
-            },
-        ],
-    }).buttons().container().appendTo('#tablePsm_wrapper .col-md-6:eq(0)');
-}
+$('.select2bs4').select2({
+    theme: 'bootstrap4'
+})
+$('.select2bs4').on('select2:select', function(e) {
+    $(this).removeClass('is-invalid');
+    autoComplete = true;
+});
 
-initialDataTablePsm();
+/**
+ * Auto Complete - Site
+ * --------------------
+ */
+$(".ac_site").autoComplete({
+    resolver: 'ajax',
+    noResultsText:'No results',
+    minLength: 0,
+    events: {
+        search: function (qry, callback) {
+            $.ajax(
+                {
+                    url: `${BASE_URL}/api/v1/autocomplete/site`,
+                    data: { 'name': qry},
+                    headers: {
+                        'token': $token,
+                    },
+                }
+            ).done(function (res) {
+                callback(res.data);
+            });
+        },
+    },
+});
+
+$('.ac_site').on('input', function () {
+    $(this).prev().val('')
+});
+
+$('.ac_site').on('autocomplete.select', function (evt, item) {
+    $(this).prev().val(item.id)
+    autoComplete = true;
+});
 
 /**
  * Get Info Status
+ * --------------------
  */
 function getInfoStatus() {
     $.ajax({
         type: "GET",
         url: `${BASE_URL}/api/v1/psm/info_status`,
         headers		: {
-            'token': $.cookie("jwt_token"),
+            'token': $token,
         },
         success:function(data) {
             let infoStatus = data[0];
@@ -65,57 +75,105 @@ function getInfoStatus() {
 getInfoStatus();
 
 /**
- * Auto Complete - Site
+ * Initial Psm Table
  */
-let autoComplete = false;
-$("#formImportPsm #site").autoComplete({
-    resolver: 'ajax',
-    noResultsText:'No results',
-    minLength: 0,
-    events: {
-        search: function (qry, callback) {
-            $.ajax(
-                {
-                    url: `${BASE_URL}/api/v1/autocomplete/site`,
-                    data: { 'name': qry},
-                    headers: {
-                        'token': $.cookie("jwt_token"),
-                    },
-                }
-            ).done(function (res) {
-                callback(res.data);
-            });
+let filterTahun  = "";
+let filterSiteId = "";
+let filterSite   = "";
+let filterStatus = "";
+
+function initialDataTablePsm(params) {
+    filterTahun  = $("#modal-filter-psm select[name='year_filter']").val();
+    filterSiteId = $("#modal-filter-psm input[name='site_filter_id']").val();
+    filterSite   = $("#modal-filter-psm input[name='site_filter']").val();
+    filterStatus = $("#modal-filter-psm select[name='status_filter']").val();
+
+    $("#tablePsm").DataTable({
+        "bDestroy": true,
+        "serverSide": true,
+        "processing": true,
+        "responsive": true,
+        "autoWidth": false,
+        "pageLength": 10,
+        "order": [[0, 'asc']],
+        "ajax": {
+            "url": `${BASE_URL}/api/v1/psm/datatable?year=${filterTahun}&site_id=${filterSiteId}&status=${filterStatus}`,
+            "beforeSend": function(xhr){
+                xhr.setRequestHeader('token', $token);
+            }
         },
-    },
-});
+        "columns": [
+            { data: 'no', width: '5%' },
+            { data: 'id_psm' },
+            { data: 'year', width: '8%' },
+            { data: 'nama' },
+            { data: 'tempat_tugas' },
+            { data: 'jenis_kelamin' },
+            { data: 'status', width: '10%' },
+            { data: 'action', width: '10%' },
+        ],
+        "columnDefs": [
+            {
+                "targets": [0,1,2,3,4,5,6,7],
+                "className": "text-center align-middle",
+            },
+        ],
+    }).buttons().container().appendTo('#tablePsm_wrapper .col-md-6:eq(0)');
+}
 
-$('#formImportPsm #site').on('input', function () {
-    $('#formImportPsm #site_id').val('')
-});
-
-$('#formImportPsm #site').on('autocomplete.select', function (evt, item) {
-    $('#formImportPsm #site_id').val(item.id)
-
-    $(`#formImportPsm #site_id-error`).html('');
-
-    autoComplete = true;
-});
+initialDataTablePsm();
 
 /**
- * Select 2
+ * Filter
+ * =========================
  */
-$('.select2bs4').select2({
-    theme: 'bootstrap4'
-})
-$('.select2bs4').on('select2:select', function(e) {
-    $(this).removeClass('is-invalid');
+// -- run filter psm --
+function run_filter_psm() {
+    initialDataTablePsm();
+    update_ket_filter_psm()
+    $(`#modal-filter-psm`).modal('hide');
+    $('.select2bs4').select2('close')
+}
+// -- clear filter psm --
+function clear_filter_psm() {
+    initialDataTablePsm();
+    update_ket_filter_psm()
+    $(`#modal-filter-psm`).modal('hide');
+}
+// -- update keterangan --
+function update_ket_filter_psm() {
+    let str_ket = "";
 
-    autoComplete = true;
+    if (filterTahun) {
+        str_ket += "<b>tahun: </b>"+filterTahun
+    }
+    if (filterSiteId) {
+        str_ket += filterTahun ? " - <b>wilayah: </b>"+filterSite : "<b>wilayah: </b>"+filterSite
+    }
+    if (filterStatus) {
+        str_ket += filterTahun || filterSiteId ? " - <b>status: </b>"+filterStatus : "<b>status: </b>"+filterStatus
+    }
+
+    $(".ket-filter").html(str_ket)
+}
+
+// -- form submit
+$("#formFilterPsm").on('keydown', function(event) {
+    if (event.keyCode === 13) {
+        if (autoComplete == false) {
+            run_filter_psm()
+        }
+        else {
+            autoComplete = false;
+        }
+    }
 });
 
 /**
  * Form Import Psm Logic
+ * =========================
  */
+// -- clear form - data
 $("a[data-target='#modal-import-psm']").on('click', function () {
     $("input").removeClass('is-invalid');
     $("select").removeClass('is-invalid');
@@ -124,11 +182,13 @@ $("a[data-target='#modal-import-psm']").on('click', function () {
     $("#formImportPsm input").val('');
     $("#formImportPsm select").val('').change();
 })
+
+// -- clear form - alert
 $("#formImportPsm button.close").on('click', function () {
     $("#formImportPsm .alert").hide();
 })
 
-//  clear error when keydown
+// -- clear form - error when keydown
 $("#formImportPsm input").on('keydown', function () {
     $(this).removeClass('is-invalid');
     $(`#formImportPsm #${$(this).attr('name')}-error`).html('');
@@ -138,7 +198,7 @@ $("#formImportPsm input").on('change', function () {
     $(`#formImportPsm #${$(this).attr('name')}-error`).html('');
 })
 
-// form submit
+// -- form validation
 $('#formImportPsm').validate({
     rules: {
         site_id: {
@@ -183,7 +243,8 @@ $('#formImportPsm').validate({
     }
 });
 
-$(document).on('keydown', function(event) {
+// -- form submit
+$('#formImportPsm').on('keydown', function(event) {
     if (event.keyCode === 13) {
         if (autoComplete == false) {
             saveImport()
@@ -210,7 +271,7 @@ function saveImport() {
             processData:false,
             contentType: false,
             headers		: {
-                'token': $.cookie("jwt_token"),
+                'token': $token,
             },
             success:function(data) {
                 hideLoadingSpinner();

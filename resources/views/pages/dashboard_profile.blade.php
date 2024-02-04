@@ -41,7 +41,11 @@
 
                     <div class="form-group mb-4">
                         <label for="new_password">Password Baru <small>(opsional)</small></label>
-                        <input type="password" class="form-control" id="new_password" name="new_password">
+                        <div class="with-icon">
+                            <input type="password" class="form-control" id="new_password" name="new_password">
+                            <i class="pass_hide nav-icon fa fa-eye opacity-07"></i>
+                            <i class="pass_show nav-icon fa fa-eye-slash opacity-07"></i>
+                        </div>
                     </div>
 
                     <button type="button" class="w-100 mt-4 btn btn-success" onclick="saveData()">SIMPAN</button>

@@ -40,6 +40,7 @@ class PsmRequest extends FormRequest
         else if ($this->method() == 'POST') {
             return [
                 'site_id'                       => $this->user->level_id == 1 ? 'required|exists:sites,id' : '',
+                'year'                          => 'required|date_format:Y',
                 'nama'                          => 'required|max:255',
                 'nik'                           => 'required|max:255',
                 'tempat_lahir'                  => 'required|max:255',
@@ -69,6 +70,7 @@ class PsmRequest extends FormRequest
             return [
                 'id'                            => 'required|exists:psm,id',
                 'site_id'                       => 'required|exists:sites,id',
+                'year'                          => 'required|date_format:Y',
                 'nama'                          => 'required|max:255',
                 'nik'                           => 'required|max:255',
                 'tempat_lahir'                  => 'required|max:255',

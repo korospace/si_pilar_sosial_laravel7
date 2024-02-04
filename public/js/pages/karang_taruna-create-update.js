@@ -190,6 +190,9 @@ $('#formCreateUpdateKarangTaruna').validate({
         site_id: {
             required: true,
         },
+        year: {
+            required: true
+        },
         status: {
             required: true,
         },
@@ -239,6 +242,9 @@ $('#formCreateUpdateKarangTaruna').validate({
     messages: {
         site_id: {
             required: "Site harus diisi",
+        },
+        year: {
+            required: "Data tahun harus disi"
         },
         status: {
             required: "Status harus diisi",

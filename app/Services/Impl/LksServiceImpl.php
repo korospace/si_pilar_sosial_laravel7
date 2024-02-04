@@ -18,11 +18,21 @@ class LksServiceImpl implements LksService
             $no = 1;
             $lksRows = Lks::query();
 
+            // filter
             if ($request->user->site) {
                 $lksRows->where('site_id', $request->user->site_id);
             }
+            if ($request->year) {
+                $lksRows->where("year", $request->year);
+            }
+            if ($request->site_id) {
+                $lksRows->where('site_id', $request->site_id);
+            }
+            if ($request->status) {
+                $lksRows->where('status', $request->status);
+            }
 
-            $lksRows = $lksRows->select('id', 'site_id', 'no_urut', 'nama', 'nama_ketua', 'jenis_layanan', 'akreditasi', 'status')->orderBy('id', 'DESC')->with('site')->get();
+            $lksRows = $lksRows->select('id', 'year', 'site_id', 'no_urut', 'nama', 'nama_ketua', 'jenis_layanan', 'akreditasi', 'status')->orderBy('id', 'DESC')->with('site')->get();
 
             return datatables()->of($lksRows)
                 ->addColumn('no', function ($row) use (&$no) {
@@ -127,6 +137,7 @@ class LksServiceImpl implements LksService
 
             $newLks = Lks::create([
                 'site_id'                           => $siteId,
+                'year'                              => $request->year,
                 'no_urut'                           => $noUrut,
                 'nama'                              => $request->nama,
                 'nama_ketua'                        => $request->nama_ketua,
@@ -197,6 +208,7 @@ class LksServiceImpl implements LksService
                 if ($rowCount > 2) {
                     $newLks = Lks::create([
                         'site_id'                           => $request->site_id,
+                        'year'                              => $request->year,
                         'no_urut'                           => $this->generateNoUrut($request->site_id),
                         'nama'                              => $row[1],
                         'nama_ketua'                        => $row[2],
@@ -232,7 +244,6 @@ class LksServiceImpl implements LksService
                         'status'                            => 'diterima',
                         'inputter'                          => $request->user->id,
                         'verifier'                          => $request->user->id,
-                        'created_at'                        => $request->year."-01-01 00:00:00",
                     ]);
 
                     $rowAdded++;
@@ -297,6 +308,7 @@ class LksServiceImpl implements LksService
             $LKS  = Lks::where("id", $request->id)->first();
             $data = [
                 'site_id'                           => $request->site_id,
+                'year'                              => $request->year,
                 'nama'                              => $request->nama,
                 'nama_ketua'                        => $request->nama_ketua,
                 'alamat_jalan'                      => $request->alamat_jalan,

@@ -40,6 +40,7 @@ class LksRequest extends FormRequest
         else if ($this->method() == 'POST') {
             return [
                 'site_id'                           => $this->user->level_id == 1 ? 'required|exists:sites,id' : '',
+                'year'                              => 'required|date_format:Y',
                 'nama'                              => 'required|max:255',
                 'nama_ketua'                        => 'required|max:255',
                 'alamat_jalan'                      => 'required',
@@ -84,6 +85,7 @@ class LksRequest extends FormRequest
             return [
                 'id'                                => 'required|exists:lks,id',
                 'site_id'                           => 'required|exists:sites,id',
+                'year'                              => 'required|date_format:Y',
                 'nama'                              => 'required|max:255',
                 'nama_ketua'                        => 'required|max:255',
                 'alamat_jalan'                      => 'required',

@@ -20,11 +20,21 @@ class PsmServiceImpl implements PsmService
             $no = 1;
             $psmRows = Psm::query();
 
+            // filter
             if ($request->user->site) {
                 $psmRows->where('site_id', $request->user->site_id);
             }
+            if ($request->year) {
+                $psmRows->where("year", $request->year);
+            }
+            if ($request->site_id) {
+                $psmRows->where('site_id', $request->site_id);
+            }
+            if ($request->status) {
+                $psmRows->where('status', $request->status);
+            }
 
-            $psmRows = $psmRows->select('id', 'site_id', 'no_urut', 'nama', 'kec_id', 'tempat_tugas_kecamatan', 'kel_id', 'tempat_tugas_kelurahan', 'jenis_kelamin', 'status')->orderBy('id', 'DESC')->with('site')->get();
+            $psmRows = $psmRows->select('id', 'year', 'site_id', 'no_urut', 'nama', 'kec_id', 'tempat_tugas_kecamatan', 'kel_id', 'tempat_tugas_kelurahan', 'jenis_kelamin', 'status')->orderBy('id', 'DESC')->with('site')->get();
 
             return datatables()->of($psmRows)
                 ->addColumn('no', function ($row) use (&$no) {
@@ -133,6 +143,7 @@ class PsmServiceImpl implements PsmService
 
             $newPsm = Psm::create([
                 'site_id'               => $siteId,
+                'year'                  => $request->year,
                 'nama'                  => $request->nama,
                 'nik'                   => $request->nik,
                 'tempat_lahir'          => $request->tempat_lahir,
@@ -192,6 +203,7 @@ class PsmServiceImpl implements PsmService
                 if ($rowCount > 2) {
                     $newPsm = Psm::create([
                         'site_id'               => $request->site_id,
+                        'year'                  => $request->year,
                         'no_urut'               => $this->generateNoUrut($request->site_id, $row[6], $row[7]),
                         'nama'                  => $row[1],
                         'nik'                   => $row[2],
@@ -214,7 +226,6 @@ class PsmServiceImpl implements PsmService
                         'status'                => 'diterima',
                         'inputter'              => $request->user->id,
                         'verifier'              => $request->user->id,
-                        'created_at'            => $request->year."-01-01 00:00:00",
                     ]);
 
                     $rowAdded++;
@@ -273,6 +284,7 @@ class PsmServiceImpl implements PsmService
             $PSM  = Psm::where("id", $request->id)->first();
             $data = [
                 'site_id'                       => $request->site_id,
+                'year'                          => $request->year,
                 'nama'                          => $request->nama,
                 'nik'                           => $request->nik,
                 'tempat_lahir'                  => $request->tempat_lahir,

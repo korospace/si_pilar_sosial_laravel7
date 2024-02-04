@@ -84,11 +84,26 @@
 				<div class="col-md-10">
                     <div class="card card-secondary card-outline">
 						<div class="card-header">
+                            {{-- filter --}}
+                            <div class="mb-4">
+                                <div class="wraper-filter">
+                                    <button class="btn-filter" data-uniqid="modal-filter-karang_taruna"> <!-- main.css -->
+                                        <i class="fa fa-sliders-h opacity-07"></i>
+                                    </button>
+                                    <span class="ket-filter opacity-07">
+                                    </span>
+                                </div>
+                            </div>
+
+                            {{-- table --}}
 							<table id="tableKarangTaruna" class="table table-bordered table-hover">
 								<thead>
 									<tr>
 										<th class="align-middle">
 											No
+										</th>
+                                        <th class="align-middle">
+											Tahun
 										</th>
 										<th class="align-middle">
 											No Urut
@@ -120,6 +135,7 @@
         </div>
     </div>
 
+    {{-- modal import --}}
     <div class="modal fade" id="modal-import-karang_taruna">
         <div class="modal-dialog">
             <form id="formImportKarangTaruna" class="modal-content" autocomplete="off">
@@ -141,7 +157,7 @@
                             <div class="form-group mb-4">
                                 <label for="site"><small><b>Site</b></small></label>
                                 <input type="text" id="site_id" name="site_id" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
-                                <input type="text" class="form-control" id="site" name="site">
+                                <input type="text" class="form-control ac_site" id="site" name="site">
                             </div>
                             <div class="form-group mb-4">
                                 <label for="year"><small><b>Tahun</b></small></label>
@@ -168,6 +184,55 @@
                         Template
                     </a>
                     <button type="button" class="btn btn-success" onclick="saveImport()">Kirim</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{-- modal filter --}}
+    <div id="modal-filter-karang_taruna" class="modal fade modal-filter">
+        <div class="modal-dialog">
+            <form id="formFilterKarangTaruna" class="modal-content" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">Filter Data</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12" autocomplete="off" style="position: relative;">
+                            <div class="form-group mb-4">
+                                <label for="year_filter"><small><b>Tahun</b></small></label>
+                                <select id="year_filter" name="year_filter" class="custom-select select2bs4">
+                                    <option value="">-- pilih --</option>
+
+                                    @for ($year = date('Y'); $year >= 2000; $year--)
+                                        <option value="{{ $year }}">{{ $year }}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label for="site_filter"><small><b>Site</b></small></label>
+                                <input type="text" id="site_filter_id" name="site_filter_id" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
+                                <input type="text" class="form-control ac_site" id="site_filter" name="site_filter">
+                            </div>
+                            <div class="form-group mb-4">
+                                <label for="status_filter"><small><b>Status</b></small></label>
+                                <select id="status_filter" name="status_filter" class="custom-select select2bs4">
+                                    <option value="">-- pilih --</option>
+
+                                    @foreach (['diperiksa','ditolak','diterima'] as $status)
+                                        <option value="{{ $status }}">{{ $status }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-end">
+                    <button type="button" class="btn btn-info btn-clear-filter" onclick="clear_filter_karang_taruna()">Clear</button>
+                    <button type="button" class="btn btn-success" onclick="run_filter_karang_taruna()">Submit</button>
                 </div>
             </form>
         </div>

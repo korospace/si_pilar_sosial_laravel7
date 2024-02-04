@@ -1,8 +1,9 @@
 $(function () {
 
     /*
-        LOGIN - vaidate from
+        LOGIN
     */
+    // vaidate from
     $('#formLogin')
         .submit(function(e) {
             e.preventDefault();
@@ -73,7 +74,7 @@ $(function () {
         });
 
     /*
-        FORGOT PASSWORD - vaidate from
+        FORGOT PASSWORD
     */
     // clear input
     $("a[data-target='#modal-forgot-pass']").on('click', function () {
@@ -88,6 +89,7 @@ $(function () {
         $(`#formForgotPass #${$(this).attr('name')}-error`).html('');
     })
 
+    // vaidate from
     $('#formForgotPass')
         .submit(function(e) {
             e.preventDefault();

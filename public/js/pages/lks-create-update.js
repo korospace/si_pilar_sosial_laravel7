@@ -180,6 +180,9 @@ $('#formCreateUpdateLks').validate({
         site_id: {
             required: true
         },
+        year: {
+            required: true
+        },
         status: {
             required: true
         },
@@ -280,6 +283,9 @@ $('#formCreateUpdateLks').validate({
     messages: {
         site_id: {
             required: "Field Site harus diisi."
+        },
+        year: {
+            required: "Data tahun harus disi"
         },
         status: {
             required: "Field Status harus diisi."
