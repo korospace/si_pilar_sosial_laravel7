@@ -98,7 +98,7 @@ class PsmServiceImpl implements PsmService
                 ->toJson();
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 

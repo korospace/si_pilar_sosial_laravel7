@@ -213,6 +213,8 @@ $('#formCreateUpdatePsm').validate({
         },
         nik: {
             required: true,
+            minlength: 16,
+            digits: true
         },
         tempat_lahir: {
             required: true,
@@ -262,7 +264,7 @@ $('#formCreateUpdatePsm').validate({
             required: "Data tahun harus disi"
         },
         site_id: {
-            required: "Site harus diisi",
+            required: "Wilayah harus diisi",
         },
         status: {
             required: "Status harus diisi",
@@ -272,6 +274,8 @@ $('#formCreateUpdatePsm').validate({
         },
         nik: {
             required: "NIK harus diisi",
+            minlength: "NIK minimal 16 digit",
+            digits: "NIK tidak valid"
         },
         tempat_lahir: {
             required: "Tempat lahir harus diisi",

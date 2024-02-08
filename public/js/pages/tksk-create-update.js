@@ -250,7 +250,9 @@ $('#formCreateUpdateTksk').validate({
             required: true
         },
         nik: {
-            required: true
+            required: true,
+            minlength: 16,
+            digits: true
         },
         telepon: {
             required: true
@@ -333,7 +335,9 @@ $('#formCreateUpdateTksk').validate({
             required: "Nama Ibu Kandung harus diisi"
         },
         nik: {
-            required: "NIK harus diisi"
+            required: "NIK harus diisi",
+            minlength: "NIK minimal 16 digit",
+            digits: "NIK tidak valid"
         },
         telepon: {
             required: "No. Telepon harus diisi"
@@ -393,7 +397,7 @@ $('#formCreateUpdateTksk').validate({
             required: "Pejabat Pengangkatan Terakhir harus diisi"
         },
         site_id: {
-            required: "Site harus diisi"
+            required: "Wilayah harus diisi"
         },
         status: {
             required: "Status harus diisi"

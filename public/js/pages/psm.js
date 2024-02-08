@@ -97,7 +97,14 @@ function initialDataTablePsm(params) {
         "pageLength": 10,
         "order": [[0, 'asc']],
         "ajax": {
-            "url": `${BASE_URL}/api/v1/psm/datatable?year=${filterTahun}&site_id=${filterSiteId}&status=${filterStatus}`,
+            "type": "POST",
+            "url": `${BASE_URL}/api/v1/psm/datatable`,
+            "data": function (d) {
+                d.year = filterTahun;
+                d.site_id = filterSiteId;
+                d.status = filterStatus;
+                return d;
+            },
             "beforeSend": function(xhr){
                 xhr.setRequestHeader('token', $token);
             }
@@ -213,7 +220,7 @@ $('#formImportPsm').validate({
     },
     messages: {
         site_id: {
-            required: "site harus diisi",
+            required: "wilayah harus diisi",
         },
         year: {
             required: "tahun harus diisi",

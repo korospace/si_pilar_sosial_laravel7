@@ -282,7 +282,7 @@ $('#formCreateUpdateLks').validate({
     },
     messages: {
         site_id: {
-            required: "Field Site harus diisi."
+            required: "Field Wilayah harus diisi."
         },
         year: {
             required: "Data tahun harus disi"

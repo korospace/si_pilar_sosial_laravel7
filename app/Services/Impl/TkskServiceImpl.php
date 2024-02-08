@@ -88,7 +88,7 @@ class TkskServiceImpl implements TkskService
                 ->toJson();
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 

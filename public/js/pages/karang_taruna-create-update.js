@@ -241,7 +241,7 @@ $('#formCreateUpdateKarangTaruna').validate({
     },
     messages: {
         site_id: {
-            required: "Site harus diisi",
+            required: "Wilayah harus diisi",
         },
         year: {
             required: "Data tahun harus disi"

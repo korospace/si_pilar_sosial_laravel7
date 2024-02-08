@@ -119,7 +119,7 @@
                         <li class="nav-item mb-2" style="font-size: 0.8em;">
                             <a href="{{ route('site.main') }}" class="nav-link {{ request()->is('site*') ? 'active' : '' }}">
                                 <i class="nav-icon far fa-circle"></i>
-                                <p>Site</p>
+                                <p>Wilayah</p>
                             </a>
                         </li>
                         <li class="nav-item mb-2" style="font-size: 0.8em;">

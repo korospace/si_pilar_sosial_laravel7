@@ -37,7 +37,7 @@ class LksRequest extends FormRequest
                 'file_lks'                     => 'required|mimes:xls,xlsx',
             ];
         }
-        else if ($this->method() == 'POST') {
+        else if ($this->method() == 'POST' && $this->route()->getActionMethod() == 'createLks') {
             return [
                 'site_id'                           => $this->user->level_id == 1 ? 'required|exists:sites,id' : '',
                 'year'                              => 'required|date_format:Y',

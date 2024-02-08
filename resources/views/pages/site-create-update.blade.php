@@ -23,7 +23,7 @@
                     @endif
 
                     <div class="form-group">
-                        <label for="name">Nama Site</label>
+                        <label for="name">Nama Wilayah</label>
                         <input type="text" class="form-control" id="name" name="name" value="{{ $site != null ? $site->name : '' }}">
                         <span id="name-error" class="invalid-feedback"></span>
                     </div>

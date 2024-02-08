@@ -98,7 +98,14 @@ function initialDataTableLks(params) {
         "pageLength": 10,
         "order": [[0, 'asc']],
         "ajax": {
-            "url": `${BASE_URL}/api/v1/lks/datatable?year=${filterTahun}&site_id=${filterSiteId}&status=${filterStatus}`,
+            "type": "POST",
+            "url": `${BASE_URL}/api/v1/lks/datatable`,
+            "data": function (d) {
+                d.year = filterTahun;
+                d.site_id = filterSiteId;
+                d.status = filterStatus;
+                return d;
+            },
             "beforeSend": function(xhr){
                 xhr.setRequestHeader('token', $token);
             }
@@ -215,7 +222,7 @@ $('#formImportLks').validate({
     },
     messages: {
         site_id: {
-            required: "site harus diisi",
+            required: "wilayah harus diisi",
         },
         year: {
             required: "tahun harus diisi",

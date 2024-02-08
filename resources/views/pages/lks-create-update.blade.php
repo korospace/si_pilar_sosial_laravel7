@@ -56,7 +56,7 @@
                     <div class="row mb-4">
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="site"><small><b>Site</b></small></label>
+                                <label for="site"><small><b>Wilayah</b></small></label>
                                 <input type="text" id="site_id" name="site_id" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;" value="{{ $lks != null ? $lks->site_id : '' }}">
                                 <input type="text" class="form-control" id="site" name="site" value="{{ $lks != null ? $lks->site->name : '' }}">
                             </div>

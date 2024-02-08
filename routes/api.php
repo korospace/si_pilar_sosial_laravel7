@@ -375,7 +375,7 @@ Route::group(['prefix' => 'v1'], function () {
          * - url    : /api/v1/tksk/datatable
          * - params : none
          */
-        Route::get('/datatable', [TkskController::class, 'getTkskDataTable']);
+        Route::post('/datatable', [TkskController::class, 'getTkskDataTable']);
 
         /**
          * Get Info Status
@@ -430,7 +430,7 @@ Route::group(['prefix' => 'v1'], function () {
          * - url    : /api/v1/lks/datatable
          * - params : none
          */
-        Route::get('/datatable', [LksController::class, 'getLksDataTable']);
+        Route::post('/datatable', [LksController::class, 'getLksDataTable']);
 
         /**
          * Get Info Status
@@ -485,7 +485,7 @@ Route::group(['prefix' => 'v1'], function () {
          * - url    : /api/v1/karang_taruna/datatable
          * - params : none
          */
-        Route::get('/datatable', [KarangTarunaController::class, 'getKarangTarunaDataTable']);
+        Route::post('/datatable', [KarangTarunaController::class, 'getKarangTarunaDataTable']);
 
         /**
          * Get Info Status
@@ -540,7 +540,7 @@ Route::group(['prefix' => 'v1'], function () {
          * - url    : /api/v1/psm/datatable
          * - params : none
          */
-        Route::get('/datatable', [PsmController::class, 'getPsmDataTable']);
+        Route::post('/datatable', [PsmController::class, 'getPsmDataTable']);
 
         /**
          * Get Info Status

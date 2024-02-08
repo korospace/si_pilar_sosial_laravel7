@@ -37,7 +37,7 @@ class TkskRequest extends FormRequest
                 'file_tksk'                     => 'required|mimes:xls,xlsx',
             ];
         }
-        else if ($this->method() == 'POST') {
+        else if ($this->method() == 'POST' && $this->route()->getActionMethod() == 'createTksk') {
             return [
                 'site_id'                       => $this->user->level_id == 1 ? 'required|exists:sites,id' : '',
                 'year'                          => 'required|date_format:Y',
@@ -45,7 +45,7 @@ class TkskRequest extends FormRequest
                 'tempat_tugas'                  => 'required|max:255',
                 'nama'                          => 'required|max:255',
                 'nama_ibu_kandung'              => 'required|max:255',
-                'nik'                           => 'required|max:255',
+                'nik'                           => 'required|digits:16|max:255',
                 'tempat_lahir'                  => 'required|max:255',
                 'tanggal_lahir'                 => 'required|max:255',
                 'pendidikan_terakhir'           => 'required|max:255',
@@ -83,7 +83,7 @@ class TkskRequest extends FormRequest
                 'tempat_tugas'                  => 'required|max:255',
                 'nama'                          => 'required|max:255',
                 'nama_ibu_kandung'              => 'required|max:255',
-                'nik'                           => 'required|max:255',
+                'nik'                           => 'required|digits:16|max:255',
                 'tempat_lahir'                  => 'required|max:255',
                 'tanggal_lahir'                 => 'required|max:255',
                 'pendidikan_terakhir'           => 'required|max:255',

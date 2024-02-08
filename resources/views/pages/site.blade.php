@@ -15,7 +15,7 @@
 @endpush
 
 @section('dashboard-wraper.content')
-    @include('components/dashboard-head', ['headTitle' => 'Master Site', 'headPage' => 'Site'])
+    @include('components/dashboard-head', ['headTitle' => 'Master Wilayah', 'headPage' => 'Wilayah'])
 
 	<div class="content mt-4">
 		<div class="container-fluid">

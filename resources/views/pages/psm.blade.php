@@ -154,7 +154,7 @@
                     <div class="row">
                         <div class="col-12" autocomplete="off" style="position: relative;">
                             <div class="form-group mb-4">
-                                <label for="site"><small><b>Site</b></small></label>
+                                <label for="site"><small><b>Wilayah</b></small></label>
                                 <input type="text" id="site_id" name="site_id" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
                                 <input type="text" class="form-control ac_site" id="site" name="site">
                             </div>
@@ -212,7 +212,7 @@
                                 </select>
                             </div>
                             <div class="form-group mb-4">
-                                <label for="site_filter"><small><b>Site</b></small></label>
+                                <label for="site_filter"><small><b>Wilayah</b></small></label>
                                 <input type="text" id="site_filter_id" name="site_filter_id" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
                                 <input type="text" class="form-control ac_site" id="site_filter" name="site_filter">
                             </div>

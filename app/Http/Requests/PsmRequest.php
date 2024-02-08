@@ -37,12 +37,12 @@ class PsmRequest extends FormRequest
                 'file_psm'                      => 'required|mimes:xls,xlsx',
             ];
         }
-        else if ($this->method() == 'POST') {
+        else if ($this->method() == 'POST' && $this->route()->getActionMethod() == 'createPsm') {
             return [
                 'site_id'                       => $this->user->level_id == 1 ? 'required|exists:sites,id' : '',
                 'year'                          => 'required|date_format:Y',
                 'nama'                          => 'required|max:255',
-                'nik'                           => 'required|max:255',
+                'nik'                           => 'required|digits:16|max:255',
                 'tempat_lahir'                  => 'required|max:255',
                 'tanggal_lahir'                 => 'required|max:255',
                 'jenis_kelamin'                 => 'required|in:L,P',
@@ -72,7 +72,7 @@ class PsmRequest extends FormRequest
                 'site_id'                       => 'required|exists:sites,id',
                 'year'                          => 'required|date_format:Y',
                 'nama'                          => 'required|max:255',
-                'nik'                           => 'required|max:255',
+                'nik'                           => 'required|digits:16|max:255',
                 'tempat_lahir'                  => 'required|max:255',
                 'tanggal_lahir'                 => 'required|max:255',
                 'jenis_kelamin'                 => 'required|in:L,P',

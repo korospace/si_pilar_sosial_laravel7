@@ -26,7 +26,7 @@ class SiteController extends Controller
     {
 
         $data = [
-            'metaTitle' => 'Site',
+            'metaTitle' => 'Wilayah',
             'user'      => $request->user
         ];
 
@@ -42,8 +42,8 @@ class SiteController extends Controller
     public function siteCreateView(Request $request)
     {
         $data = [
-            'metaTitle' => 'Tambah Site',
-            'headTitle' => 'Tambah Site',
+            'metaTitle' => 'Tambah Wilayah',
+            'headTitle' => 'Tambah Wilayah',
             'user'      => $request->user,
             'site'      => null,
         ];
@@ -60,8 +60,8 @@ class SiteController extends Controller
     public function siteUpdateView(Request $request, $id)
     {
         $data = [
-            'metaTitle' => 'Edit Site',
-            'headTitle' => 'Edit Site',
+            'metaTitle' => 'Edit Wilayah',
+            'headTitle' => 'Edit Wilayah',
             'user'      => $request->user,
             'site'      => Site::where('id', $id)->first(),
         ];
