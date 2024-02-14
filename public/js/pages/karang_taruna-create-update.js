@@ -6,12 +6,14 @@ if ($("#formCreateUpdateKarangTaruna #id").val() != null && $("#formCreateUpdate
 }
 
 /**
- * Date Picker - initialization
+ * Date Picker
+ * -----------------------------------
  */
+// -- initialization --
 moment.locale('id');
 $("#formCreateUpdateKarangTaruna .tgl").daterangepicker({
     singleDatePicker: true,
-    showDropdowns: true, // Opsional, menampilkan dropdown untuk memilih bulan dan tahun
+    // showDropdowns: true, // Opsional, menampilkan dropdown untuk memilih bulan dan tahun
     "locale": {
         "format": "DD MMMM YYYY",
         "separator": " - ",
@@ -33,10 +35,10 @@ $("#formCreateUpdateKarangTaruna .tgl").daterangepicker({
             'November',
             'Desember'
         ],
-        "firstDay": 1
-    }
+    },
 });
 
+// -- reset date when create --
 if ($("#formCreateUpdateKarangTaruna #id").val() == null) {
     $("#formCreateUpdateKarangTaruna .tgl").val('');
 }
@@ -175,14 +177,13 @@ $("#formCreateUpdateKarangTaruna select").on('change', function () {
 
 // kepengurusan
 $("#formCreateUpdateKarangTaruna #kepengurusan_status").on('change', function () {
-    if ($(this).val() == "belum terbentuk") {
-        $(`#formCreateUpdateKarangTaruna .col-kepengurusan`).hide();
-    }
-    else{
+    if ($(this).val() == "sudah terbentuk") {
         $(`#formCreateUpdateKarangTaruna .col-kepengurusan`).show();
     }
+    else{
+        $(`#formCreateUpdateKarangTaruna .col-kepengurusan`).hide();
+    }
 })
-$(`#formCreateUpdateKarangTaruna .col-kepengurusan`).hide();
 
 // form submit
 $('#formCreateUpdateKarangTaruna').validate({
@@ -238,6 +239,9 @@ $('#formCreateUpdateKarangTaruna').validate({
         kepengurusan_jumlah: {
             required: true,
         },
+        kepengurusan_pejabat: {
+            required: true,
+        },
     },
     messages: {
         site_id: {
@@ -290,6 +294,9 @@ $('#formCreateUpdateKarangTaruna').validate({
         },
         kepengurusan_jumlah: {
             required: "Jumlah Kepengurusan harus diisi",
+        },
+        kepengurusan_pejabat: {
+            required: "Pejabat Kepengurusan harus diisi",
         },
     },
     errorElement: 'span',

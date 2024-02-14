@@ -11,7 +11,7 @@ if ($("#formCreateUpdatePsm #id").val() != null && $("#formCreateUpdatePsm #leve
 moment.locale('id');
 $("#formCreateUpdatePsm .tgl").daterangepicker({
     singleDatePicker: true,
-    showDropdowns: true, // Opsional, menampilkan dropdown untuk memilih bulan dan tahun
+    // showDropdowns: true, // Opsional, menampilkan dropdown untuk memilih bulan dan tahun
     "locale": {
         "format": "DD MMMM YYYY",
         "separator": " - ",
@@ -174,7 +174,6 @@ $('.select2bs4').on('select2:select', function(e) {
 /**
  * Form Logic
  */
-
 //  clear error when keydown
 $("#formCreateUpdatePsm input").on('keydown', function () {
     $(this).removeClass('is-invalid');
@@ -187,14 +186,13 @@ $("#formCreateUpdatePsm select").on('change', function () {
 
 // sertifikasi
 $("#formCreateUpdatePsm #sertifikasi_status").on('change', function () {
-    if ($(this).val() == "belum") {
-        $(`#formCreateUpdatePsm .col-sertifikasi`).hide();
-    }
-    else{
+    if ($(this).val() == "sudah") {
         $(`#formCreateUpdatePsm .col-sertifikasi`).show();
     }
+    else{
+        $(`#formCreateUpdatePsm .col-sertifikasi`).hide();
+    }
 })
-$(`#formCreateUpdatePsm .col-sertifikasi`).hide();
 
 // form submit
 $('#formCreateUpdatePsm').validate({

@@ -21,4 +21,12 @@ class KarangTaruna extends Model
     {
         return $this->belongsTo(Site::class,'site_id','id');
     }
+
+    /**
+     * POJO
+     * ===================================================
+     */
+    public function getKepengurusanSkTglAttribute($value) {
+        return MonthToIndonesia(date("d F Y", strtotime($value)));
+    }
 }

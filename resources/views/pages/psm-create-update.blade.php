@@ -52,8 +52,8 @@
                     <input type="text" id="level_id" name="level_id" value="{{ $user->level_id }}" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
                     <input type="text" id="region_id" name="region_id" value="{{ $user->site ? $user->site->region_id : '' }}" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
 
-                    @if($user->level_id == 1)
                     <div class="row mb-4">
+                        @if($user->level_id == 1)
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="site"><small><b>Wilayah</b></small></label>
@@ -61,6 +61,20 @@
                                 <input type="text" class="form-control" id="site" name="site" value="{{ $psm != null ? $psm->site->name : '' }}">
                             </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="status"><small><b>Status</b></small></label>
+                                <select id="status" name="status" class="custom-select select2bs4" value="{{ $psm != null ? $psm->status : '' }}">
+                                    <option value="">-- pilih --</option>
+
+                                    @foreach (['diperiksa','diterima','ditolak'] as $status)
+                                        <option value="{{ $status }}" {{ $psm != null && $status == $psm->status ? 'selected' : '' }}>{{ $status }}</option>
+                                    @endforeach
+                                </select>
+                                <span id="status-error" class="invalid-feedback"></span>
+                            </div>
+                        </div>
+                        @endif
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="year"><small><b>Data Tahun</b></small></label>
@@ -80,28 +94,14 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="status"><small><b>Status</b></small></label>
-                                <select id="status" name="status" class="custom-select select2bs4" value="{{ $psm != null ? $psm->status : '' }}">
-                                    <option value="">-- pilih --</option>
-
-                                    @foreach (['diperiksa','diterima','ditolak'] as $status)
-                                        <option value="{{ $status }}" {{ $psm != null && $status == $psm->status ? 'selected' : '' }}>{{ $status }}</option>
-                                    @endforeach
-                                </select>
-                                <span id="status-error" class="invalid-feedback"></span>
-                            </div>
-                        </div>
-                    </div>
-                    @endif
-
-                    <div class="row mb-4">
-                        <div class="col-md-3">
-                            <div class="form-group">
                                 <label for="nama"><small><b>Nama</b></small></label>
                                 <input type="text" class="form-control" id="nama" name="nama" value="{{ $psm != null ? $psm->nama : '' }}">
                                 <span id="nama-error" class="invalid-feedback"></span>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="row mb-4">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="nik"><small><b>NIK</b></small></label>
@@ -111,7 +111,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="telepon"><small><b>Telepon</b></small></label>
+                                <label for="telepon"><small><b>No. HP</b></small></label>
                                 <input type="text" class="form-control" id="telepon" name="telepon" value="{{ $psm != null ? $psm->telepon : '' }}">
                                 <span id="telepon-error" class="invalid-feedback"></span>
                             </div>
@@ -127,6 +127,19 @@
                                     @endforeach
                                 </select>
                                 <span id="pendidikan_terakhir-error" class="invalid-feedback"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="jenis_kelamin"><small><b>Jenis Kelamin</b></small></label>
+                                <select id="jenis_kelamin" name="jenis_kelamin" class="custom-select select2bs4" value="{{ $psm != null ? $psm->jenis_kelamin : '' }}">
+                                    <option value="">-- pilih --</option>
+
+                                    @foreach (['L' => 'laki-laki', 'P' => 'perempuan'] as $key => $kelamin)
+                                        <option value="{{ $key }}" {{ $psm != null && $key == $psm->jenis_kelamin ? 'selected' : '' }}>{{ $kelamin }}</option>
+                                    @endforeach
+                                </select>
+                                <span id="jenis_kelamin-error" class="invalid-feedback"></span>
                             </div>
                         </div>
                     </div>
@@ -170,22 +183,6 @@
                                     @endforeach
                                 </select>
                                 <span id="kondisi_existing-error" class="invalid-feedback"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="jenis_kelamin"><small><b>Jenis Kelamin</b></small></label>
-                                <select id="jenis_kelamin" name="jenis_kelamin" class="custom-select select2bs4" value="{{ $psm != null ? $psm->jenis_kelamin : '' }}">
-                                    <option value="">-- pilih --</option>
-
-                                    @foreach (['L' => 'laki-laki', 'P' => 'perempuan'] as $key => $kelamin)
-                                        <option value="{{ $key }}" {{ $psm != null && $key == $psm->jenis_kelamin ? 'selected' : '' }}>{{ $kelamin }}</option>
-                                    @endforeach
-                                </select>
-                                <span id="jenis_kelamin-error" class="invalid-feedback"></span>
                             </div>
                         </div>
                     </div>
@@ -234,7 +231,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="tempat_tugas_kecamatan"><small><b>Kecamatan</b></small></label>
-                                <input type="text" id="tempat_tugas_kecamatan_hide" name="tempat_tugas_kecamatan_hide" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;" value="{{ $psm != null ? $psm->tempat_tugas : '' }}">
+                                <input type="text" id="tempat_tugas_kecamatan_hide" name="tempat_tugas_kecamatan_hide" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;" value="{{ $psm != null ? $psm->tempat_tugas_kecamatan : '' }}">
                                 <input type="text" class="form-control" id="tempat_tugas_kecamatan" name="tempat_tugas_kecamatan" value="{{ $psm != null ? $psm->tempat_tugas_kecamatan : '' }}">
                                 <span id="tempat_tugas_kecamatan-error" class="invalid-feedback"></span>
                             </div>
@@ -242,7 +239,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="tempat_tugas_kelurahan"><small><b>Kelurahan</b></small></label>
-                                <input type="text" id="tempat_tugas_kelurahan_hide" name="tempat_tugas_kelurahan_hide" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;" value="{{ $psm != null ? $psm->tempat_tugas : '' }}">
+                                <input type="text" id="tempat_tugas_kelurahan_hide" name="tempat_tugas_kelurahan_hide" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;" value="{{ $psm != null ? $psm->tempat_tugas_kelurahan : '' }}">
                                 <input type="text" class="form-control" id="tempat_tugas_kelurahan" name="tempat_tugas_kelurahan" value="{{ $psm != null ? $psm->tempat_tugas_kelurahan : '' }}">
                                 <span id="tempat_tugas_kelurahan-error" class="invalid-feedback"></span>
                             </div>
@@ -277,8 +274,12 @@
                                 <select id="sertifikasi_tahun" name="sertifikasi_tahun" class="custom-select select2bs4">
                                     <option value="">-- pilih --</option>
 
-                                    @for ($year = 2000; $year <= date('Y'); $year++)
-                                        <option value="{{ $year }}">{{ $year }}</option>
+                                    @for ($year = date('Y'); $year >= 2000; $year--)
+                                        @if ($psm != null)
+                                            <option value="{{ $year }}" {{ $year == $psm->sertifikasi_tahun ? 'selected' : '' }}>{{ $year }}</option>
+                                        @else
+                                            <option value="{{ $year }}" {{ $year == date('Y') ? 'selected' : '' }}>{{ $year }}</option>
+                                        @endif
                                     @endfor
                                 </select>
                                 <span id="sertifikasi_tahun-error" class="invalid-feedback"></span>

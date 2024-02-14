@@ -122,7 +122,7 @@ class KarangTarunaServiceImpl implements KarangTarunaService
     {
         try {
             $siteId   = $request->user->level_id === 1 ? $request->site_id : $request->user->site_id;
-            $skTgl    = $request->kepengurusan_sk_tgl ? date("d-m-Y", strtotime($request->kepengurusan_sk_tgl)) : null;
+            $skTgl    = $request->kepengurusan_sk_tgl ? date("d-m-Y", strtotime(MonthToEnglish($request->kepengurusan_sk_tgl))) : null;
             $status   = $request->user->level_id === 1 ? $request->status : 'diperiksa';
             $noUrut   = $request->user->level_id === 1 && $request->status == 'diterima' ? $this->generateNoUrut($siteId) : null;
             $verifier = $request->user->level_id === 1 && $request->status == 'diterima' ? $request->user->id : null;
@@ -143,6 +143,7 @@ class KarangTarunaServiceImpl implements KarangTarunaService
                 'kepengurusan_sk_tgl'           => $skTgl,
                 'kepengurusan_periode_tahun'    => $request->kepengurusan_periode_tahun ? $request->kepengurusan_periode_tahun : null,
                 'kepengurusan_jumlah'           => $request->kepengurusan_jumlah ? $request->kepengurusan_jumlah : null,
+                'kepengurusan_pejabat'          => $request->kepengurusan_pejabat,
                 'keaktifan_status'              => $request->keaktifan_status,
                 'program_unggulan'              => $request->program_unggulan,
                 'status'                        => $status,
@@ -185,18 +186,19 @@ class KarangTarunaServiceImpl implements KarangTarunaService
                         'site_id'                       => $request->site_id,
                         'year'                          => $request->year,
                         'no_urut'                       => $this->generateNoUrut($request->site_id),
-                        'nama'                          => $row[1],
-                        'nama_ketua'                    => $row[2],
-                        'alamat_jalan'                  => $row[3],
-                        'alamat_rt'                     => $row[4],
-                        'alamat_rw'                     => $row[5],
-                        'alamat_kelurahan'              => $row[6],
-                        'alamat_kecamatan'              => $row[7],
-                        'telepon'                       => $row[8],
-                        'kepengurusan_status'           => $row[9],
-                        'kepengurusan_sk_tgl'           => date("d-m-Y", strtotime($row[10])),
-                        'kepengurusan_periode_tahun'    => $row[11],
-                        'kepengurusan_jumlah'           => $row[12],
+                        'nama'                          => $row[0],
+                        'nama_ketua'                    => $row[1],
+                        'alamat_jalan'                  => $row[2],
+                        'alamat_rt'                     => $row[3],
+                        'alamat_rw'                     => $row[4],
+                        'alamat_kelurahan'              => $row[5],
+                        'alamat_kecamatan'              => $row[6],
+                        'telepon'                       => $row[7],
+                        'kepengurusan_status'           => $row[8],
+                        'kepengurusan_sk_tgl'           => date("d-m-Y", strtotime($row[9])),
+                        'kepengurusan_periode_tahun'    => $row[10],
+                        'kepengurusan_jumlah'           => $row[11],
+                        'kepengurusan_pejabat'          => $row[12],
                         'keaktifan_status'              => $row[13],
                         'program_unggulan'              => $row[14],
                         'status'                        => 'diterima',
@@ -253,7 +255,7 @@ class KarangTarunaServiceImpl implements KarangTarunaService
     {
         try {
             $karangTaruna = KarangTaruna::where("id", $request->id)->first();
-            $skTgl    = $request->kepengurusan_sk_tgl ? date("d-m-Y", strtotime($request->kepengurusan_sk_tgl)) : null;
+            $skTgl    = $request->kepengurusan_sk_tgl ? date("d-m-Y", strtotime(MonthToEnglish($request->kepengurusan_sk_tgl))) : null;
             $verifier = $request->status == 'diproses' ? null : $request->user->id;
             $data     = [
                 'site_id'                       => $request->site_id,
@@ -270,6 +272,7 @@ class KarangTarunaServiceImpl implements KarangTarunaService
                 'kepengurusan_sk_tgl'           => $skTgl,
                 'kepengurusan_periode_tahun'    => $request->kepengurusan_periode_tahun ? $request->kepengurusan_periode_tahun : null,
                 'kepengurusan_jumlah'           => $request->kepengurusan_jumlah ? $request->kepengurusan_jumlah : null,
+                'kepengurusan_pejabat'          => $request->kepengurusan_pejabat,
                 'keaktifan_status'              => $request->keaktifan_status,
                 'program_unggulan'              => $request->program_unggulan,
                 'status'                        => $request->status,

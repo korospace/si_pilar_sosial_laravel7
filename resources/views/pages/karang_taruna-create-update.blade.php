@@ -52,8 +52,8 @@
                     <input type="text" id="level_id" name="level_id" value="{{ $user->level_id }}" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
                     <input type="text" id="region_id" name="region_id" value="{{ $user->site ? $user->site->region_id : '' }}" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
 
-                    @if($user->level_id == 1)
                     <div class="row mb-4">
+                        @if($user->level_id == 1)
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="site"><small><b>Wilayah</b></small></label>
@@ -61,6 +61,20 @@
                                 <input type="text" class="form-control" id="site" name="site" value="{{ $karangTaruna != null ? $karangTaruna->site->name : '' }}">
                             </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="status"><small><b>Status</b></small></label>
+                                <select id="status" name="status" class="custom-select select2bs4" value="{{ $karangTaruna != null ? $karangTaruna->status : '' }}">
+                                    <option value="">-- pilih --</option>
+
+                                    @foreach (['diperiksa','diterima','ditolak'] as $status)
+                                        <option value="{{ $status }}" {{ $karangTaruna != null && $status == $karangTaruna->status ? 'selected' : '' }}>{{ $status }}</option>
+                                    @endforeach
+                                </select>
+                                <span id="status-error" class="invalid-feedback"></span>
+                            </div>
+                        </div>
+                        @endif
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="year"><small><b>Data Tahun</b></small></label>
@@ -80,28 +94,14 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="status"><small><b>Status</b></small></label>
-                                <select id="status" name="status" class="custom-select select2bs4" value="{{ $karangTaruna != null ? $karangTaruna->status : '' }}">
-                                    <option value="">-- pilih --</option>
-
-                                    @foreach (['diperiksa','diterima','ditolak'] as $status)
-                                        <option value="{{ $status }}" {{ $karangTaruna != null && $status == $karangTaruna->status ? 'selected' : '' }}>{{ $status }}</option>
-                                    @endforeach
-                                </select>
-                                <span id="status-error" class="invalid-feedback"></span>
-                            </div>
-                        </div>
-                    </div>
-                    @endif
-
-                    <div class="row mb-4">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="nama"><small><b>Nama</b></small></label>
+                                <label for="nama"><small><b>Nama Lembaga</b></small></label>
                                 <input type="text" class="form-control" id="nama" name="nama" value="{{ $karangTaruna != null ? $karangTaruna->nama : '' }}">
                                 <span id="nama-error" class="invalid-feedback"></span>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="row mb-4">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="nama_ketua"><small><b>Ketua</b></small></label>
@@ -111,7 +111,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="telepon"><small><b>Telepon</b></small></label>
+                                <label for="telepon"><small><b>No. HP</b></small></label>
                                 <input type="text" class="form-control" id="telepon" name="telepon" value="{{ $karangTaruna != null ? $karangTaruna->telepon : '' }}">
                                 <span id="telepon-error" class="invalid-feedback"></span>
                             </div>
@@ -129,9 +129,6 @@
                                 <span id="keaktifan_status-error" class="invalid-feedback"></span>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="program_unggulan"><small><b>Program unggulan</b></small></label>
@@ -233,6 +230,16 @@
                                 <label for="kepengurusan_jumlah"><small><b>Jumlah</b></small></label>
                                 <input type="text" class="form-control" id="kepengurusan_jumlah" name="kepengurusan_jumlah" value="{{ $karangTaruna != null ? $karangTaruna->kepengurusan_jumlah : '' }}">
                                 <span id="kepengurusan_jumlah-error" class="invalid-feedback"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3 col-kepengurusan">
+                            <div class="form-group">
+                                <label for="kepengurusan_pejabat"><small><b>Pejabat</b></small></label>
+                                <input type="text" class="form-control" id="kepengurusan_pejabat" name="kepengurusan_pejabat" value="{{ $karangTaruna != null ? $karangTaruna->kepengurusan_pejabat : '' }}">
+                                <span id="kepengurusan_pejabat-error" class="invalid-feedback"></span>
                             </div>
                         </div>
                     </div>
