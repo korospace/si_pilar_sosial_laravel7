@@ -52,15 +52,31 @@
                     <input type="text" id="level_id" name="level_id" value="{{ $user->level_id }}" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
                     <input type="text" id="region_id" name="region_id" value="{{ $user->site ? $user->site->region_id : '' }}" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
 
-                    @if($user->level_id == 1)
                     <div class="row mb-4">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="site"><small><b>Wilayah</b></small></label>
+                                @if($user->level_id == 1)
                                 <input type="text" id="site_id" name="site_id" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;" value="{{ $tksk != null ? $tksk->site_id : '' }}">
+                                @endif
                                 <input type="text" class="form-control" id="site" name="site" value="{{ $tksk != null ? $tksk->site->name : '' }}">
                             </div>
                         </div>
+                        @if($user->level_id == 1)
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="status"><small><b>Status</b></small></label>
+                                <select id="status" name="status" class="custom-select select2bs4" value="{{ $tksk != null ? $tksk->status : '' }}">
+                                    <option value="">-- pilih --</option>
+
+                                    @foreach (['diperiksa','diterima','ditolak'] as $status)
+                                        <option value="{{ $status }}" {{ $tksk != null && $status == $tksk->status ? 'selected' : '' }}>{{ $status }}</option>
+                                    @endforeach
+                                </select>
+                                <span id="status-error" class="invalid-feedback"></span>
+                            </div>
+                        </div>
+                        @endif
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="year"><small><b>Data Tahun</b></small></label>
@@ -78,21 +94,7 @@
                                 <span id="year-error" class="invalid-feedback"></span>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="status"><small><b>Status</b></small></label>
-                                <select id="status" name="status" class="custom-select select2bs4" value="{{ $tksk != null ? $tksk->status : '' }}">
-                                    <option value="">-- pilih --</option>
-
-                                    @foreach (['diperiksa','diterima','ditolak'] as $status)
-                                        <option value="{{ $status }}" {{ $tksk != null && $status == $tksk->status ? 'selected' : '' }}>{{ $status }}</option>
-                                    @endforeach
-                                </select>
-                                <span id="status-error" class="invalid-feedback"></span>
-                            </div>
-                        </div>
                     </div>
-                    @endif
 
                     <div class="row mb-4">
                         <div class="col-md-3">

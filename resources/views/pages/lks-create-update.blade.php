@@ -52,15 +52,31 @@
                     <input type="text" id="level_id" name="level_id" value="{{ $user->level_id }}" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
                     <input type="text" id="region_id" name="region_id" value="{{ $user->site ? $user->site->region_id : '' }}" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
 
-                    @if($user->level_id == 1)
                     <div class="row mb-4">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="site"><small><b>Wilayah</b></small></label>
+                                @if($user->level_id == 1)
                                 <input type="text" id="site_id" name="site_id" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;" value="{{ $lks != null ? $lks->site_id : '' }}">
+                                @endif
                                 <input type="text" class="form-control" id="site" name="site" value="{{ $lks != null ? $lks->site->name : '' }}">
                             </div>
                         </div>
+                        @if($user->level_id == 1)
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="status"><small><b>Status</b></small></label>
+                                <select id="status" name="status" class="custom-select select2bs4" value="{{ $lks != null ? $lks->status : '' }}">
+                                    <option value="">-- pilih --</option>
+
+                                    @foreach (['diperiksa','diterima','ditolak'] as $status)
+                                        <option value="{{ $status }}" {{ $lks != null && $status == $lks->status ? 'selected' : '' }}>{{ $status }}</option>
+                                    @endforeach
+                                </select>
+                                <span id="status-error" class="invalid-feedback"></span>
+                            </div>
+                        </div>
+                        @endif
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="year"><small><b>Data Tahun</b></small></label>
@@ -80,28 +96,14 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="status"><small><b>Status</b></small></label>
-                                <select id="status" name="status" class="custom-select select2bs4" value="{{ $lks != null ? $lks->status : '' }}">
-                                    <option value="">-- pilih --</option>
-
-                                    @foreach (['diperiksa','diterima','ditolak'] as $status)
-                                        <option value="{{ $status }}" {{ $lks != null && $status == $lks->status ? 'selected' : '' }}>{{ $status }}</option>
-                                    @endforeach
-                                </select>
-                                <span id="status-error" class="invalid-feedback"></span>
-                            </div>
-                        </div>
-                    </div>
-                    @endif
-
-                    <div class="row mb-4">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="nama"><small><b>Nama</b></small></label>
+                                <label for="nama"><small><b>Nama Lembaga</b></small></label>
                                 <input type="text" class="form-control" id="nama" name="nama" value="{{ $lks != null ? $lks->nama : '' }}">
                                 <span id="nama-error" class="invalid-feedback"></span>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="row mb-4">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="nama_ketua"><small><b>Ketua</b></small></label>
@@ -118,16 +120,6 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="npwp"><small><b>NPWP</b></small></label>
-                                <input type="text" class="form-control" id="npwp" name="npwp" value="{{ $lks != null ? $lks->npwp : '' }}">
-                                <span id="npwp-error" class="invalid-feedback"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
                                 <label for="jenis_layanan"><small><b>Jenis Layanan</b></small></label>
                                 <select id="jenis_layanan" name="jenis_layanan" class="custom-select select2bs4" value="{{ $lks != null ? $lks->jenis_layanan : '' }}">
                                     <option value="">-- pilih --</option>
@@ -139,6 +131,9 @@
                                 <span id="jenis_layanan-error" class="invalid-feedback"></span>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="akreditasi"><small><b>Akreditasi</b></small></label>
@@ -155,7 +150,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="akreditasi_tgl"><small><b>Tanggal Akreditasi</b></small></label>
-                                <input type="text" class="form-control tgl" id="akreditasi_tgl" name="akreditasi_tgl" value="{{ $lks != null ? strftime('%d %B %Y', strtotime($lks->akreditasi_tgl)) : '' }}">
+                                <input type="text" class="form-control tgl" id="akreditasi_tgl" name="akreditasi_tgl" value="{{ $lks != null ? $lks->akreditasi_tgl : '' }}">
                                 <span id="akreditasi_tgl-error" class="invalid-feedback"></span>
                             </div>
                         </div>
@@ -215,84 +210,6 @@
                     <div class="row mt-5 mb-5">
                         <div class="col">
                             <div class="d-flex justify-content-center align-items-center" style="border-bottom: 2px solid #D0D5DB;position: relative;">
-                                <span class="p-4 text-bold text-muted" style="position: absolute;background: #F4F6F9;">PENDIRIAN</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="akta_pendirian_nomor"><small><b>Nomor AKTA</b></small></label>
-                                <input type="text" class="form-control" id="akta_pendirian_nomor" name="akta_pendirian_nomor" value="{{ $lks != null ? $lks->akta_pendirian_nomor : '' }}">
-                                <span id="akta_pendirian_nomor-error" class="invalid-feedback"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="akta_pendirian_tgl"><small><b>Tanggal AKTA</b></small></label>
-                                <input type="text" class="form-control tgl" id="akta_pendirian_tgl" name="akta_pendirian_tgl" value="{{ $lks != null ? strftime('%d %B %Y', strtotime($lks->akta_pendirian_tgl)) : '' }}">
-                                <span id="akta_pendirian_tgl-error" class="invalid-feedback"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="sk_hukumham_pendirian_nomor"><small><b>No. sk Hukum HAM</b></small></label>
-                                <input type="text" class="form-control" id="sk_hukumham_pendirian_nomor" name="sk_hukumham_pendirian_nomor" value="{{ $lks != null ? $lks->sk_hukumham_pendirian_nomor : '' }}">
-                                <span id="sk_hukumham_pendirian_nomor-error" class="invalid-feedback"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="sk_hukumham_pendirian_tgl"><small><b>Tanggal sk</b></small></label>
-                                <input type="text" class="form-control tgl" id="sk_hukumham_pendirian_tgl" name="sk_hukumham_pendirian_tgl" value="{{ $lks != null ? strftime('%d %B %Y', strtotime($lks->sk_hukumham_pendirian_tgl)) : '' }}">
-                                <span id="sk_hukumham_pendirian_tgl-error" class="invalid-feedback"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-5 mb-5">
-                        <div class="col">
-                            <div class="d-flex justify-content-center align-items-center" style="border-bottom: 2px solid #D0D5DB;position: relative;">
-                                <span class="p-4 text-bold text-muted" style="position: absolute;background: #F4F6F9;">PERUBAHAN</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="akta_perubahan_nomor"><small><b>Nomor AKTA</b></small></label>
-                                <input type="text" class="form-control" id="akta_perubahan_nomor" name="akta_perubahan_nomor" value="{{ $lks != null ? $lks->akta_perubahan_nomor : '' }}">
-                                <span id="akta_perubahan_nomor-error" class="invalid-feedback"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="akta_perubahan_tgl"><small><b>Tanggal AKTA</b></small></label>
-                                <input type="text" class="form-control tgl" id="akta_perubahan_tgl" name="akta_perubahan_tgl" value="{{ $lks != null ? strftime('%d %B %Y', strtotime($lks->akta_perubahan_tgl)) : '' }}">
-                                <span id="akta_perubahan_tgl-error" class="invalid-feedback"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="sk_hukumham_perubahan_nomor"><small><b>No. sk Hukum HAM</b></small></label>
-                                <input type="text" class="form-control" id="sk_hukumham_perubahan_nomor" name="sk_hukumham_perubahan_nomor" value="{{ $lks != null ? $lks->sk_hukumham_perubahan_nomor : '' }}">
-                                <span id="sk_hukumham_perubahan_nomor-error" class="invalid-feedback"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="sk_hukumham_perubahan_tgl"><small><b>Tanggal sk</b></small></label>
-                                <input type="text" class="form-control tgl" id="sk_hukumham_perubahan_tgl" name="sk_hukumham_perubahan_tgl" value="{{ $lks != null ? strftime('%d %B %Y', strtotime($lks->sk_hukumham_perubahan_tgl)) : '' }}">
-                                <span id="sk_hukumham_perubahan_tgl-error" class="invalid-feedback"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-5 mb-5">
-                        <div class="col">
-                            <div class="d-flex justify-content-center align-items-center" style="border-bottom: 2px solid #D0D5DB;position: relative;">
                                 <span class="p-4 text-bold text-muted" style="position: absolute;background: #F4F6F9;">SK DOMISILI YAYASAN</span>
                             </div>
                         </div>
@@ -308,16 +225,23 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="sk_domisili_yayasan_tgl_terbit"><small><b>Tanggal</b></small></label>
-                                <input type="text" class="form-control tgl" id="sk_domisili_yayasan_tgl_terbit" name="sk_domisili_yayasan_tgl_terbit" value="{{ $lks != null ? strftime('%d %B %Y', strtotime($lks->sk_domisili_yayasan_tgl_terbit)) : '' }}">
-                                <span id="sk_domisili_yayasan_tgl_terbit-error" class="invalid-feedback"></span>
+                                <label for="sk_domisili_yayasan_masaberlaku_mulai"><small><b>Masa Berlaku</b> <i>(mulai)</i></small></label>
+                                <input type="text" class="form-control tgl" id="sk_domisili_yayasan_masaberlaku_mulai" name="sk_domisili_yayasan_masaberlaku_mulai" value="{{ $lks != null ? $lks->sk_domisili_yayasan_masaberlaku_mulai : '' }}">
+                                <span id="sk_domisili_yayasan_masaberlaku_mulai-error" class="invalid-feedback"></span>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="sk_domisili_yayasan_masa_berlaku"><small><b>Masa Berlaku</b></small></label>
-                                <input type="text" class="form-control" id="sk_domisili_yayasan_masa_berlaku" name="sk_domisili_yayasan_masa_berlaku" value="{{ $lks != null ? $lks->sk_domisili_yayasan_masa_berlaku : '' }}">
-                                <span id="sk_domisili_yayasan_masa_berlaku-error" class="invalid-feedback"></span>
+                                <label for="sk_domisili_yayasan_masaberlaku_selesai"><small><b>Masa Berlaku</b> <i>(selesai)</i></small></label>
+                                <input type="text" class="form-control tgl" id="sk_domisili_yayasan_masaberlaku_selesai" name="sk_domisili_yayasan_masaberlaku_selesai" value="{{ $lks != null ? $lks->sk_domisili_yayasan_masaberlaku_selesai : '' }}">
+                                <span id="sk_domisili_yayasan_masaberlaku_selesai-error" class="invalid-feedback"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="sk_domisili_yayasan_instansi_penerbit"><small><b>Instansi Penerbit</b></small></label>
+                                <input type="text" class="form-control" id="sk_domisili_yayasan_instansi_penerbit" name="sk_domisili_yayasan_instansi_penerbit" value="{{ $lks != null ? $lks->sk_domisili_yayasan_instansi_penerbit : '' }}">
+                                <span id="sk_domisili_yayasan_instansi_penerbit-error" class="invalid-feedback"></span>
                             </div>
                         </div>
                     </div>
@@ -340,16 +264,23 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="tanda_daftar_yayasan_tgl_terbit"><small><b>Tanggal</b></small></label>
-                                <input type="text" class="form-control tgl" id="tanda_daftar_yayasan_tgl_terbit" name="tanda_daftar_yayasan_tgl_terbit" value="{{ $lks != null ? strftime('%d %B %Y', strtotime($lks->tanda_daftar_yayasan_tgl_terbit)) : '' }}">
-                                <span id="tanda_daftar_yayasan_tgl_terbit-error" class="invalid-feedback"></span>
+                                <label for="tanda_daftar_yayasan_masaberlaku_mulai"><small><b>Masa Berlaku</b> <i>(mulai)</i></small></label>
+                                <input type="text" class="form-control tgl" id="tanda_daftar_yayasan_masaberlaku_mulai" name="tanda_daftar_yayasan_masaberlaku_mulai" value="{{ $lks != null ? $lks->tanda_daftar_yayasan_masaberlaku_mulai : '' }}">
+                                <span id="tanda_daftar_yayasan_masaberlaku_mulai-error" class="invalid-feedback"></span>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="tanda_daftar_yayasan_masa_berlaku"><small><b>Masa Berlaku</b></small></label>
-                                <input type="text" class="form-control" id="tanda_daftar_yayasan_masa_berlaku" name="tanda_daftar_yayasan_masa_berlaku" value="{{ $lks != null ? $lks->tanda_daftar_yayasan_masa_berlaku : '' }}">
-                                <span id="tanda_daftar_yayasan_masa_berlaku-error" class="invalid-feedback"></span>
+                                <label for="tanda_daftar_yayasan_masaberlaku_selesai"><small><b>Masa Berlaku</b> <i>(selesai)</i></small></label>
+                                <input type="text" class="form-control tgl" id="tanda_daftar_yayasan_masaberlaku_selesai" name="tanda_daftar_yayasan_masaberlaku_selesai" value="{{ $lks != null ? $lks->tanda_daftar_yayasan_masaberlaku_selesai : '' }}">
+                                <span id="tanda_daftar_yayasan_masaberlaku_selesai-error" class="invalid-feedback"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="tanda_daftar_yayasan_instansi_penerbit"><small><b>Instansi Penerbit</b></small></label>
+                                <input type="text" class="form-control" id="tanda_daftar_yayasan_instansi_penerbit" name="tanda_daftar_yayasan_instansi_penerbit" value="{{ $lks != null ? $lks->tanda_daftar_yayasan_instansi_penerbit : '' }}">
+                                <span id="tanda_daftar_yayasan_instansi_penerbit-error" class="invalid-feedback"></span>
                             </div>
                         </div>
                     </div>
@@ -372,16 +303,23 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="izin_kegiatan_yayasan_tgl_terbit"><small><b>Tanggal</b></small></label>
-                                <input type="text" class="form-control tgl" id="izin_kegiatan_yayasan_tgl_terbit" name="izin_kegiatan_yayasan_tgl_terbit" value="{{ $lks != null ? strftime('%d %B %Y', strtotime($lks->izin_kegiatan_yayasan_tgl_terbit)) : '' }}">
-                                <span id="izin_kegiatan_yayasan_tgl_terbit-error" class="invalid-feedback"></span>
+                                <label for="izin_kegiatan_yayasan_masaberlaku_mulai"><small><b>Masa Berlaku</b> <i>(mulai)</i></small></label>
+                                <input type="text" class="form-control tgl" id="izin_kegiatan_yayasan_masaberlaku_mulai" name="izin_kegiatan_yayasan_masaberlaku_mulai" value="{{ $lks != null ? $lks->izin_kegiatan_yayasan_masaberlaku_mulai : '' }}">
+                                <span id="izin_kegiatan_yayasan_masaberlaku_mulai-error" class="invalid-feedback"></span>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="izin_kegiatan_yayasan_masa_berlaku"><small><b>Masa Berlaku</b></small></label>
-                                <input type="text" class="form-control" id="izin_kegiatan_yayasan_masa_berlaku" name="izin_kegiatan_yayasan_masa_berlaku" value="{{ $lks != null ? $lks->izin_kegiatan_yayasan_masa_berlaku : '' }}">
-                                <span id="izin_kegiatan_yayasan_masa_berlaku-error" class="invalid-feedback"></span>
+                                <label for="izin_kegiatan_yayasan_masaberlaku_selesai"><small><b>Masa Berlaku</b> <i>(selesai)</i></small></label>
+                                <input type="text" class="form-control tgl" id="izin_kegiatan_yayasan_masaberlaku_selesai" name="izin_kegiatan_yayasan_masaberlaku_selesai" value="{{ $lks != null ? $lks->izin_kegiatan_yayasan_masaberlaku_selesai : '' }}">
+                                <span id="izin_kegiatan_yayasan_masaberlaku_selesai-error" class="invalid-feedback"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="izin_kegiatan_yayasan_instansi_penerbit"><small><b>Instansi Penerbit</b></small></label>
+                                <input type="text" class="form-control" id="izin_kegiatan_yayasan_instansi_penerbit" name="izin_kegiatan_yayasan_instansi_penerbit" value="{{ $lks != null ? $lks->izin_kegiatan_yayasan_instansi_penerbit : '' }}">
+                                <span id="izin_kegiatan_yayasan_instansi_penerbit-error" class="invalid-feedback"></span>
                             </div>
                         </div>
                     </div>
@@ -397,16 +335,36 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
+                                <label for="induk_berusaha_status"><small><b>Status</b></small></label>
+                                <select id="induk_berusaha_status" name="induk_berusaha_status" class="custom-select select2bs4" value="{{ $lks != null ? $lks->induk_berusaha_status : '' }}">
+                                    <option value="">-- pilih --</option>
+
+                                    @foreach (['ada','tidak ada'] as $induk_berusaha_status)
+                                        <option value="{{ $induk_berusaha_status }}" {{ $lks != null && $induk_berusaha_status == $lks->induk_berusaha_status ? 'selected' : '' }}>{{ $induk_berusaha_status }}</option>
+                                    @endforeach
+                                </select>
+                                <span id="induk_berusaha_status-error" class="invalid-feedback"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-induk-berusaha">
+                            <div class="form-group">
                                 <label for="induk_berusaha_nomor"><small><b>Nomor</b></small></label>
                                 <input type="text" class="form-control" id="induk_berusaha_nomor" name="induk_berusaha_nomor" value="{{ $lks != null ? $lks->induk_berusaha_nomor : '' }}">
                                 <span id="induk_berusaha_nomor-error" class="invalid-feedback"></span>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-3 col-induk-berusaha">
                             <div class="form-group">
-                                <label for="induk_berusaha_tgl"><small><b>Tanggal</b></small></label>
-                                <input type="text" class="form-control tgl" id="induk_berusaha_tgl" name="induk_berusaha_tgl" value="{{ $lks != null ? strftime('%d %B %Y', strtotime($lks->induk_berusaha_tgl)) : '' }}">
-                                <span id="induk_berusaha_tgl-error" class="invalid-feedback"></span>
+                                <label for="induk_berusaha_tgl_terbit"><small><b>Tanggal Terbit</b></small></label>
+                                <input type="text" class="form-control tgl" id="induk_berusaha_tgl_terbit" name="induk_berusaha_tgl_terbit" value="{{ $lks != null ? $lks->induk_berusaha_tgl_terbit : '' }}">
+                                <span id="induk_berusaha_tgl_terbit-error" class="invalid-feedback"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-induk-berusaha">
+                            <div class="form-group">
+                                <label for="induk_berusaha_instansi_penerbit"><small><b>Instansi Penerbit</b></small></label>
+                                <input type="text" class="form-control" id="induk_berusaha_instansi_penerbit" name="induk_berusaha_instansi_penerbit" value="{{ $lks != null ? $lks->induk_berusaha_instansi_penerbit : '' }}">
+                                <span id="induk_berusaha_instansi_penerbit-error" class="invalid-feedback"></span>
                             </div>
                         </div>
                     </div>

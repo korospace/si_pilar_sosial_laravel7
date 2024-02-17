@@ -2,5 +2,4 @@
 
 BUG
 1. select2 ketika di enter dia ikut ngesubmit form
-2. bug karang taruna saat edit bagian kepengurusan, ketika value nya 'sudah terbentuk' tidak muncul field detil kepengurusan
-3. psm ketika edit, section tempat tugas tidak ke isi id wilayahnya. jadi ketika di submit muncul validasi 'wilayah tidak valid'
+2. saat create/edit bagaimana caranya harus munculin wilayah dan data tahun walaupun bukan admin tapi pikirkan hak akses nya juga

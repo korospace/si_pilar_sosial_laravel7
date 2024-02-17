@@ -174,6 +174,17 @@ $("#formCreateUpdateLks select").on('change', function () {
     $(`#formCreateUpdateLks #${$(this).attr('name')}-error`).html('');
 })
 
+// induk berusaja
+$("#formCreateUpdateLks #induk_berusaha_status").on('change', function () {
+    if ($(this).val() == "ada") {
+        $(`#formCreateUpdateLks .col-induk-berusaha`).show();
+    }
+    else{
+        $(`#formCreateUpdateLks .col-induk-berusaha`).hide();
+    }
+})
+$("#formCreateUpdateLks #induk_berusaha_status").change()
+
 // form submit
 $('#formCreateUpdateLks').validate({
     rules: {
@@ -195,10 +206,55 @@ $('#formCreateUpdateLks').validate({
         no_telp_yayasan: {
             required: true
         },
-        npwp: {
+        jenis_layanan: {
             required: true
         },
-        jenis_layanan: {
+        sk_domisili_yayasan_nomor: {
+            required: true
+        },
+        sk_domisili_yayasan_masaberlaku_mulai: {
+            required: true
+        },
+        sk_domisili_yayasan_masaberlaku_selesai: {
+            required: true
+        },
+        sk_domisili_yayasan_instansi_penerbit: {
+            required: true
+        },
+        tanda_daftar_yayasan_nomor: {
+            required: true
+        },
+        tanda_daftar_yayasan_masaberlaku_mulai: {
+            required: true
+        },
+        tanda_daftar_yayasan_masaberlaku_selesai: {
+            required: true
+        },
+        tanda_daftar_yayasan_instansi_penerbit: {
+            required: true
+        },
+        izin_kegiatan_yayasan_nomor: {
+            required: true
+        },
+        izin_kegiatan_yayasan_masaberlaku_mulai: {
+            required: true
+        },
+        izin_kegiatan_yayasan_masaberlaku_selesai: {
+            required: true
+        },
+        izin_kegiatan_yayasan_instansi_penerbit: {
+            required: true
+        },
+        induk_berusaha_status: {
+            required: true
+        },
+        induk_berusaha_nomor: {
+            required: true
+        },
+        induk_berusaha_tgl_terbit: {
+            required: true
+        },
+        induk_berusaha_instansi_penerbit: {
             required: true
         },
         akreditasi: {
@@ -220,30 +276,6 @@ $('#formCreateUpdateLks').validate({
             required: true
         },
         alamat_kecamatan_hide: {
-            required: true
-        },
-        akta_pendirian_nomor: {
-            required: true
-        },
-        akta_pendirian_tgl: {
-            required: true
-        },
-        sk_hukumham_pendirian_nomor: {
-            required: true
-        },
-        sk_hukumham_pendirian_tgl: {
-            required: true
-        },
-        akta_perubahan_nomor: {
-            required: true
-        },
-        akta_perubahan_tgl: {
-            required: true
-        },
-        sk_hukumham_perubahan_nomor: {
-            required: true
-        },
-        sk_hukumham_perubahan_tgl: {
             required: true
         },
         sk_domisili_yayasan_nomor: {
@@ -299,11 +331,56 @@ $('#formCreateUpdateLks').validate({
         no_telp_yayasan: {
             required: "Field Telepon harus diisi."
         },
-        npwp: {
-            required: "Field NPWP harus diisi."
-        },
         jenis_layanan: {
             required: "Field Jenis Layanan harus diisi."
+        },
+        sk_domisili_yayasan_nomor: {
+            required: "Field Nomor harus diisi."
+        },
+        sk_domisili_yayasan_masaberlaku_mulai: {
+            required: "Field Masa Berlaku Mulai harus diisi."
+        },
+        sk_domisili_yayasan_masaberlaku_selesai: {
+            required: "Field Masa Berlaku Selesai harus diisi."
+        },
+        sk_domisili_yayasan_instansi_penerbit: {
+            required: "Field Instansi Penerbit harus diisi."
+        },
+        tanda_daftar_yayasan_nomor: {
+            required: "Field Nomor harus diisi."
+        },
+        tanda_daftar_yayasan_masaberlaku_mulai: {
+            required: "Field Masa Berlaku Mulai harus diisi."
+        },
+        tanda_daftar_yayasan_masaberlaku_selesai: {
+            required: "Field Masa Berlaku Selesai harus diisi."
+        },
+        tanda_daftar_yayasan_instansi_penerbit: {
+            required: "Field Instansi Penerbit harus diisi."
+        },
+        izin_kegiatan_yayasan_nomor: {
+            required: "Field Nomor harus diisi."
+        },
+        izin_kegiatan_yayasan_masaberlaku_mulai: {
+            required: "Field Masa Berlaku Mulai  harus diisi."
+        },
+        izin_kegiatan_yayasan_masaberlaku_selesai: {
+            required: "Field Masa Berlaku Selesai  harus diisi."
+        },
+        izin_kegiatan_yayasan_instansi_penerbit: {
+            required: "Field Instansi Penerbit  harus diisi."
+        },
+        induk_berusaha_status: {
+            required: "Field Status harus diisi."
+        },
+        induk_berusaha_nomor: {
+            required: "Field Nomor harus diisi."
+        },
+        induk_berusaha_tgl_terbit: {
+            required: "Field Tanggal Terbit harus diisi."
+        },
+        induk_berusaha_instansi_penerbit: {
+            required: "Field Instansi Penerbit harus diisi."
         },
         akreditasi: {
             required: "Field Akreditasi harus diisi."
@@ -326,30 +403,6 @@ $('#formCreateUpdateLks').validate({
         alamat_kecamatan_hide: {
             required: "Field Kecamatan harus diisi."
         },
-        akta_pendirian_nomor: {
-            required: "harus diisi."
-        },
-        akta_pendirian_tgl: {
-            required: "harus diisi."
-        },
-        sk_hukumham_pendirian_nomor: {
-            required: "harus diisi."
-        },
-        sk_hukumham_pendirian_tgl: {
-            required: "harus diisi."
-        },
-        akta_perubahan_nomor: {
-            required: "harus diisi."
-        },
-        akta_perubahan_tgl: {
-            required: "harus diisi."
-        },
-        sk_hukumham_perubahan_nomor: {
-            required: "harus diisi."
-        },
-        sk_hukumham_perubahan_tgl: {
-            required: "harus diisi."
-        },
         sk_domisili_yayasan_nomor: {
             required: "Field Nomor harus diisi."
         },
@@ -360,7 +413,7 @@ $('#formCreateUpdateLks').validate({
             required: "Field Masa Berlaku harus diisi."
         },
         tanda_daftar_yayasan_nomor: {
-            required: "Field Nomor diisi."
+            required: "Field Nomor harus diisi."
         },
         tanda_daftar_yayasan_tgl_terbit: {
             required: "Field Tanggal diisi."
@@ -369,7 +422,7 @@ $('#formCreateUpdateLks').validate({
             required: "Field Masa Berlaku diisi."
         },
         izin_kegiatan_yayasan_nomor: {
-            required: "Field Nomor diisi."
+            required: "Field Nomor harus diisi."
         },
         izin_kegiatan_yayasan_tgl_terbit: {
             required: "Field Tanggal diisi."
@@ -378,7 +431,7 @@ $('#formCreateUpdateLks').validate({
             required: "Field Masa Berlaku diisi."
         },
         induk_berusaha_nomor: {
-            required: "Field Nomor diisi."
+            required: "Field Nomor harus diisi."
         },
         induk_berusaha_tgl: {
             required: "Field Tanggal diisi."

@@ -121,19 +121,18 @@ class LksServiceImpl implements LksService
     public function createLks(LksRequest $request): JsonResponse
     {
         try {
-            $siteId                          = $request->user->level_id === 1 ? $request->site_id : $request->user->site_id;
-            $akta_pendirian_tgl              = date("d-m-Y", strtotime($request->akta_pendirian_tgl));
-            $sk_hukumham_pendirian_tgl       = date("d-m-Y", strtotime($request->sk_hukumham_pendirian_tgl));
-            $akta_perubahan_tgl              = date("d-m-Y", strtotime($request->akta_perubahan_tgl));
-            $sk_hukumham_perubahan_tgl       = date("d-m-Y", strtotime($request->sk_hukumham_perubahan_tgl));
-            $sk_domisili_yayasan_tgl_terbit  = date("d-m-Y", strtotime($request->sk_domisili_yayasan_tgl_terbit));
-            $tanda_daftar_yayasan_tgl_terbit = date("d-m-Y", strtotime($request->tanda_daftar_yayasan_tgl_terbit));
-            $izin_kegiatan_yayasan_tgl_terbit= date("d-m-Y", strtotime($request->izin_kegiatan_yayasan_tgl_terbit));
-            $induk_berusaha_tgl              = date("d-m-Y", strtotime($request->induk_berusaha_tgl));
-            $akreditasi_tgl                  = date("d-m-Y", strtotime($request->akreditasi_tgl));
-            $status                          = $request->user->level_id === 1 ? $request->status : 'diperiksa';
-            $noUrut                          = $request->user->level_id === 1 && $request->status == 'diterima' ? $this->generateNoUrut($siteId) : null;
-            $verifier                        = $request->user->level_id === 1 && $request->status == 'diterima' ? $request->user->id : null;
+            $siteId                                   = $request->user->level_id === 1 ? $request->site_id : $request->user->site_id;
+            $sk_domisili_yayasan_masaberlaku_mulai    = date("Y-m-d H:i:s", strtotime(MonthToEnglish($request->sk_domisili_yayasan_masaberlaku_mulai)));
+            $sk_domisili_yayasan_masaberlaku_selesai  = date("Y-m-d H:i:s", strtotime(MonthToEnglish($request->sk_domisili_yayasan_masaberlaku_selesai)));
+            $tanda_daftar_yayasan_masaberlaku_mulai   = date("Y-m-d H:i:s", strtotime(MonthToEnglish($request->tanda_daftar_yayasan_masaberlaku_mulai)));
+            $tanda_daftar_yayasan_masaberlaku_selesai = date("Y-m-d H:i:s", strtotime(MonthToEnglish($request->tanda_daftar_yayasan_masaberlaku_selesai)));
+            $izin_kegiatan_yayasan_masaberlaku_mulai  = date("Y-m-d H:i:s", strtotime(MonthToEnglish($request->izin_kegiatan_yayasan_masaberlaku_mulai)));
+            $izin_kegiatan_yayasan_masaberlaku_selesai= date("Y-m-d H:i:s", strtotime(MonthToEnglish($request->izin_kegiatan_yayasan_masaberlaku_selesai)));
+            $induk_berusaha_tgl_terbit                = date("Y-m-d H:i:s", strtotime(MonthToEnglish($request->induk_berusaha_tgl_terbit)));
+            $akreditasi_tgl                           = date("d-m-Y", strtotime(MonthToEnglish($request->akreditasi_tgl)));
+            $status                                   = $request->user->level_id === 1 ? $request->status : 'diperiksa';
+            $noUrut                                   = $request->user->level_id === 1 && $request->status == 'diterima' ? $this->generateNoUrut($siteId) : null;
+            $verifier                                 = $request->user->level_id === 1 && $request->status == 'diterima' ? $request->user->id : null;
 
             $newLks = Lks::create([
                 'site_id'                           => $siteId,
@@ -148,26 +147,22 @@ class LksServiceImpl implements LksService
                 'alamat_kecamatan'                  => $request->alamat_kecamatan,
                 'no_telp_yayasan'                   => $request->no_telp_yayasan,
                 'jenis_layanan'                     => $request->jenis_layanan,
-                'akta_pendirian_nomor'              => $request->akta_pendirian_nomor,
-                'akta_pendirian_tgl'                => $akta_pendirian_tgl,
-                'sk_hukumham_pendirian_nomor'       => $request->sk_hukumham_pendirian_nomor,
-                'sk_hukumham_pendirian_tgl'         => $sk_hukumham_pendirian_tgl,
-                'akta_perubahan_nomor'              => $request->akta_perubahan_nomor,
-                'akta_perubahan_tgl'                => $akta_perubahan_tgl,
-                'sk_hukumham_perubahan_nomor'       => $request->sk_hukumham_perubahan_nomor,
-                'sk_hukumham_perubahan_tgl'         => $sk_hukumham_perubahan_tgl,
-                'npwp'                              => $request->npwp,
-                'sk_domisili_yayasan_nomor'         => $request->sk_domisili_yayasan_nomor,
-                'sk_domisili_yayasan_tgl_terbit'    => $sk_domisili_yayasan_tgl_terbit,
-                'sk_domisili_yayasan_masa_berlaku'  => $request->sk_domisili_yayasan_masa_berlaku,
-                'tanda_daftar_yayasan_nomor'        => $request->tanda_daftar_yayasan_nomor,
-                'tanda_daftar_yayasan_tgl_terbit'   => $tanda_daftar_yayasan_tgl_terbit,
-                'tanda_daftar_yayasan_masa_berlaku' => $request->tanda_daftar_yayasan_masa_berlaku,
-                'izin_kegiatan_yayasan_nomor'       => $request->izin_kegiatan_yayasan_nomor,
-                'izin_kegiatan_yayasan_tgl_terbit'  => $izin_kegiatan_yayasan_tgl_terbit,
-                'izin_kegiatan_yayasan_masa_berlaku'=> $request->izin_kegiatan_yayasan_masa_berlaku,
+                'sk_domisili_yayasan_nomor'                 => $request->sk_domisili_yayasan_nomor,
+                'sk_domisili_yayasan_masaberlaku_mulai'     => $sk_domisili_yayasan_masaberlaku_mulai,
+                'sk_domisili_yayasan_masaberlaku_selesai'   => $sk_domisili_yayasan_masaberlaku_selesai,
+                'sk_domisili_yayasan_instansi_penerbit'     => $request->sk_domisili_yayasan_instansi_penerbit,
+                'tanda_daftar_yayasan_nomor'                => $request->tanda_daftar_yayasan_nomor,
+                'tanda_daftar_yayasan_masaberlaku_mulai'    => $tanda_daftar_yayasan_masaberlaku_mulai,
+                'tanda_daftar_yayasan_masaberlaku_selesai'  => $tanda_daftar_yayasan_masaberlaku_selesai,
+                'tanda_daftar_yayasan_instansi_penerbit'    => $request->tanda_daftar_yayasan_instansi_penerbit,
+                'izin_kegiatan_yayasan_nomor'               => $request->izin_kegiatan_yayasan_nomor,
+                'izin_kegiatan_yayasan_masaberlaku_mulai'   => $izin_kegiatan_yayasan_masaberlaku_mulai,
+                'izin_kegiatan_yayasan_masaberlaku_selesai' => $izin_kegiatan_yayasan_masaberlaku_selesai,
+                'izin_kegiatan_yayasan_instansi_penerbit'   => $request->izin_kegiatan_yayasan_instansi_penerbit,
+                'induk_berusaha_status'             => $request->induk_berusaha_status,
                 'induk_berusaha_nomor'              => $request->induk_berusaha_nomor,
-                'induk_berusaha_tgl'                => $induk_berusaha_tgl,
+                'induk_berusaha_tgl_terbit'         => $induk_berusaha_tgl_terbit,
+                'induk_berusaha_instansi_penerbit'  => $request->induk_berusaha_instansi_penerbit,
                 'akreditasi'                        => $request->akreditasi,
                 'akreditasi_tgl'                    => $akreditasi_tgl,
                 'status'                            => $status,
@@ -206,41 +201,37 @@ class LksServiceImpl implements LksService
                 $rowCount++;
 
                 if ($rowCount > 2) {
-                    $newLks = Lks::create([
+                    Lks::create([
                         'site_id'                           => $request->site_id,
                         'year'                              => $request->year,
                         'no_urut'                           => $this->generateNoUrut($request->site_id),
-                        'nama'                              => $row[1],
-                        'nama_ketua'                        => $row[2],
-                        'alamat_jalan'                      => $row[3],
-                        'alamat_rt'                         => $row[4],
-                        'alamat_rw'                         => $row[5],
-                        'alamat_kelurahan'                  => $row[6],
-                        'alamat_kecamatan'                  => $row[7],
-                        'no_telp_yayasan'                   => $row[8],
-                        'jenis_layanan'                     => $row[9],
-                        'akta_pendirian_nomor'              => $row[10],
-                        'akta_pendirian_tgl'                => date("d-m-Y", strtotime($row[11])),
-                        'sk_hukumham_pendirian_nomor'       => $row[12],
-                        'sk_hukumham_pendirian_tgl'         => date("d-m-Y", strtotime($row[13])),
-                        'akta_perubahan_nomor'              => $row[14],
-                        'akta_perubahan_tgl'                => date("d-m-Y", strtotime($row[15])),
-                        'sk_hukumham_perubahan_nomor'       => $row[16],
-                        'sk_hukumham_perubahan_tgl'         => date("d-m-Y", strtotime($row[17])),
-                        'npwp'                              => $row[18],
-                        'sk_domisili_yayasan_nomor'         => $row[19],
-                        'sk_domisili_yayasan_tgl_terbit'    => date("d-m-Y", strtotime($row[20])),
-                        'sk_domisili_yayasan_masa_berlaku'  => $row[21],
-                        'tanda_daftar_yayasan_nomor'        => $row[22],
-                        'tanda_daftar_yayasan_tgl_terbit'   => date("d-m-Y", strtotime($row[23])),
-                        'tanda_daftar_yayasan_masa_berlaku' => $row[24],
-                        'izin_kegiatan_yayasan_nomor'       => $row[25],
-                        'izin_kegiatan_yayasan_tgl_terbit'  => date("d-m-Y", strtotime($row[26])),
-                        'izin_kegiatan_yayasan_masa_berlaku'=> $row[27],
-                        'induk_berusaha_nomor'              => $row[28],
-                        'induk_berusaha_tgl'                => date("d-m-Y", strtotime($row[29])),
-                        'akreditasi'                        => $row[30],
-                        'akreditasi_tgl'                    => date("d-m-Y", strtotime($row[31])),
+                        'nama'                              => $row[0],
+                        'nama_ketua'                        => $row[1],
+                        'alamat_jalan'                      => $row[2],
+                        'alamat_rt'                         => $row[3],
+                        'alamat_rw'                         => $row[4],
+                        'alamat_kelurahan'                  => $row[5],
+                        'alamat_kecamatan'                  => $row[6],
+                        'no_telp_yayasan'                   => $row[7],
+                        'jenis_layanan'                     => $row[8],
+                        'sk_domisili_yayasan_nomor'                 => $row[9],
+                        'sk_domisili_yayasan_masaberlaku_mulai'     => date("Y-m-d H:i:s", strtotime($row[10])),
+                        'sk_domisili_yayasan_masaberlaku_selesai'   => date("Y-m-d H:i:s", strtotime($row[11])),
+                        'sk_domisili_yayasan_instansi_penerbit'     => $row[12],
+                        'tanda_daftar_yayasan_nomor'                => $row[13],
+                        'tanda_daftar_yayasan_masaberlaku_mulai'    => date("Y-m-d H:i:s", strtotime($row[14])),
+                        'tanda_daftar_yayasan_masaberlaku_selesai'  => date("Y-m-d H:i:s", strtotime($row[15])),
+                        'tanda_daftar_yayasan_instansi_penerbit'    => $row[16],
+                        'izin_kegiatan_yayasan_nomor'               => $row[17],
+                        'izin_kegiatan_yayasan_masaberlaku_mulai'   => date("Y-m-d H:i:s", strtotime($row[18])),
+                        'izin_kegiatan_yayasan_masaberlaku_selesai' => date("Y-m-d H:i:s", strtotime($row[19])),
+                        'izin_kegiatan_yayasan_instansi_penerbit'   => $row[20],
+                        'induk_berusaha_status'             => $row[21],
+                        'induk_berusaha_nomor'              => $row[22],
+                        'induk_berusaha_tgl_terbit'         => date("Y-m-d H:i:s", strtotime($row[23])),
+                        'induk_berusaha_instansi_penerbit'  => $row[24],
+                        'akreditasi'                        => $row[25],
+                        'akreditasi_tgl'                    => date("d-m-Y", strtotime($row[26])),
                         'status'                            => 'diterima',
                         'inputter'                          => $request->user->id,
                         'verifier'                          => $request->user->id,
@@ -294,16 +285,15 @@ class LksServiceImpl implements LksService
     public function updateLks(LksRequest $request): JsonResponse
     {
         try {
-            $akta_pendirian_tgl              = date("d-m-Y", strtotime($request->akta_pendirian_tgl));
-            $sk_hukumham_pendirian_tgl       = date("d-m-Y", strtotime($request->sk_hukumham_pendirian_tgl));
-            $akta_perubahan_tgl              = date("d-m-Y", strtotime($request->akta_perubahan_tgl));
-            $sk_hukumham_perubahan_tgl       = date("d-m-Y", strtotime($request->sk_hukumham_perubahan_tgl));
-            $sk_domisili_yayasan_tgl_terbit  = date("d-m-Y", strtotime($request->sk_domisili_yayasan_tgl_terbit));
-            $tanda_daftar_yayasan_tgl_terbit = date("d-m-Y", strtotime($request->tanda_daftar_yayasan_tgl_terbit));
-            $izin_kegiatan_yayasan_tgl_terbit= date("d-m-Y", strtotime($request->izin_kegiatan_yayasan_tgl_terbit));
-            $induk_berusaha_tgl              = date("d-m-Y", strtotime($request->induk_berusaha_tgl));
-            $akreditasi_tgl                  = date("d-m-Y", strtotime($request->akreditasi_tgl));
-            $verifier                        = $request->status == 'diproses' ? null : $request->user->id;
+            $sk_domisili_yayasan_masaberlaku_mulai    = date("Y-m-d H:i:s", strtotime(MonthToEnglish($request->sk_domisili_yayasan_masaberlaku_mulai)));
+            $sk_domisili_yayasan_masaberlaku_selesai  = date("Y-m-d H:i:s", strtotime(MonthToEnglish($request->sk_domisili_yayasan_masaberlaku_selesai)));
+            $tanda_daftar_yayasan_masaberlaku_mulai   = date("Y-m-d H:i:s", strtotime(MonthToEnglish($request->tanda_daftar_yayasan_masaberlaku_mulai)));
+            $tanda_daftar_yayasan_masaberlaku_selesai = date("Y-m-d H:i:s", strtotime(MonthToEnglish($request->tanda_daftar_yayasan_masaberlaku_selesai)));
+            $izin_kegiatan_yayasan_masaberlaku_mulai  = date("Y-m-d H:i:s", strtotime(MonthToEnglish($request->izin_kegiatan_yayasan_masaberlaku_mulai)));
+            $izin_kegiatan_yayasan_masaberlaku_selesai= date("Y-m-d H:i:s", strtotime(MonthToEnglish($request->izin_kegiatan_yayasan_masaberlaku_selesai)));
+            $induk_berusaha_tgl_terbit                = date("Y-m-d H:i:s", strtotime(MonthToEnglish($request->induk_berusaha_tgl_terbit)));
+            $akreditasi_tgl                           = date("d-m-Y", strtotime(MonthToEnglish($request->akreditasi_tgl)));
+            $verifier                                 = $request->status == 'diproses' ? null : $request->user->id;
 
             $LKS  = Lks::where("id", $request->id)->first();
             $data = [
@@ -318,26 +308,22 @@ class LksServiceImpl implements LksService
                 'alamat_kecamatan'                  => $request->alamat_kecamatan,
                 'no_telp_yayasan'                   => $request->no_telp_yayasan,
                 'jenis_layanan'                     => $request->jenis_layanan,
-                'akta_pendirian_nomor'              => $request->akta_pendirian_nomor,
-                'akta_pendirian_tgl'                => $akta_pendirian_tgl,
-                'sk_hukumham_pendirian_nomor'       => $request->sk_hukumham_pendirian_nomor,
-                'sk_hukumham_pendirian_tgl'         => $sk_hukumham_pendirian_tgl,
-                'akta_perubahan_nomor'              => $request->akta_perubahan_nomor,
-                'akta_perubahan_tgl'                => $akta_perubahan_tgl,
-                'sk_hukumham_perubahan_nomor'       => $request->sk_hukumham_perubahan_nomor,
-                'sk_hukumham_perubahan_tgl'         => $sk_hukumham_perubahan_tgl,
-                'npwp'                              => $request->npwp,
-                'sk_domisili_yayasan_nomor'         => $request->sk_domisili_yayasan_nomor,
-                'sk_domisili_yayasan_tgl_terbit'    => $sk_domisili_yayasan_tgl_terbit,
-                'sk_domisili_yayasan_masa_berlaku'  => $request->sk_domisili_yayasan_masa_berlaku,
-                'tanda_daftar_yayasan_nomor'        => $request->tanda_daftar_yayasan_nomor,
-                'tanda_daftar_yayasan_tgl_terbit'   => $tanda_daftar_yayasan_tgl_terbit,
-                'tanda_daftar_yayasan_masa_berlaku' => $request->tanda_daftar_yayasan_masa_berlaku,
-                'izin_kegiatan_yayasan_nomor'       => $request->izin_kegiatan_yayasan_nomor,
-                'izin_kegiatan_yayasan_tgl_terbit'  => $izin_kegiatan_yayasan_tgl_terbit,
-                'izin_kegiatan_yayasan_masa_berlaku'=> $request->izin_kegiatan_yayasan_masa_berlaku,
+                'sk_domisili_yayasan_nomor'                 => $request->sk_domisili_yayasan_nomor,
+                'sk_domisili_yayasan_masaberlaku_mulai'     => $sk_domisili_yayasan_masaberlaku_mulai,
+                'sk_domisili_yayasan_masaberlaku_selesai'   => $sk_domisili_yayasan_masaberlaku_selesai,
+                'sk_domisili_yayasan_instansi_penerbit'     => $request->sk_domisili_yayasan_instansi_penerbit,
+                'tanda_daftar_yayasan_nomor'                => $request->tanda_daftar_yayasan_nomor,
+                'tanda_daftar_yayasan_masaberlaku_mulai'    => $tanda_daftar_yayasan_masaberlaku_mulai,
+                'tanda_daftar_yayasan_masaberlaku_selesai'  => $tanda_daftar_yayasan_masaberlaku_selesai,
+                'tanda_daftar_yayasan_instansi_penerbit'    => $request->tanda_daftar_yayasan_instansi_penerbit,
+                'izin_kegiatan_yayasan_nomor'               => $request->izin_kegiatan_yayasan_nomor,
+                'izin_kegiatan_yayasan_masaberlaku_mulai'   => $izin_kegiatan_yayasan_masaberlaku_mulai,
+                'izin_kegiatan_yayasan_masaberlaku_selesai' => $izin_kegiatan_yayasan_masaberlaku_selesai,
+                'izin_kegiatan_yayasan_instansi_penerbit'   => $request->izin_kegiatan_yayasan_instansi_penerbit,
+                'induk_berusaha_status'             => $request->induk_berusaha_status,
                 'induk_berusaha_nomor'              => $request->induk_berusaha_nomor,
-                'induk_berusaha_tgl'                => $induk_berusaha_tgl,
+                'induk_berusaha_tgl_terbit'         => $induk_berusaha_tgl_terbit,
+                'induk_berusaha_instansi_penerbit'  => $request->induk_berusaha_instansi_penerbit,
                 'akreditasi'                        => $request->akreditasi,
                 'akreditasi_tgl'                    => $akreditasi_tgl,
                 'status'                            => $request->status,

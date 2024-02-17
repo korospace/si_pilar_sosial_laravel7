@@ -184,6 +184,7 @@ $("#formCreateUpdateKarangTaruna #kepengurusan_status").on('change', function ()
         $(`#formCreateUpdateKarangTaruna .col-kepengurusan`).hide();
     }
 })
+$("#formCreateUpdateKarangTaruna #kepengurusan_status").change()
 
 // form submit
 $('#formCreateUpdateKarangTaruna').validate({
