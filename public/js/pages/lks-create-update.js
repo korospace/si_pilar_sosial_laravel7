@@ -1,8 +1,19 @@
+let user_level_id = $("#formCreateUpdateLks #level_id").val();
+
 /**
- * Disable All Input
+ * Disable Input
+ * -----------------------------
  */
-if ($("#formCreateUpdateLks #id").val() != null && $("#formCreateUpdateLks #level_id").val() != 1) {
+// -- disable all input when update AND non admin --
+if ($("#formCreateUpdateLks #id").val() != null && user_level_id != 1) {
     $('#formCreateUpdateLks input, #formCreateUpdateLks select').prop('disabled', true);
+}
+// -- disable autocomplete wilayah when non admin --
+if (user_level_id != 1) {
+    $('#formCreateUpdateLks #site').prop('disabled', true);
+}
+else {
+    EnableAutoCompleteWilayah()
 }
 
 /**
@@ -45,40 +56,43 @@ if ($("#formCreateUpdateLks #id").val() == null) {
  * Auto Complete - Site
  */
 let autoComplete = false;
+let region_id = $("#formCreateUpdateLks #region_id").val();
 
-$("#formCreateUpdateLks #site").autoComplete({
-    resolver: 'ajax',
-    noResultsText:'No results',
-    events: {
-        search: function (qry, callback) {
-            $.ajax(
-                {
-                    url: `${BASE_URL}/api/v1/autocomplete/site`,
-                    data: { 'name': qry},
-                    headers: {
-                        'token': $.cookie("jwt_token"),
-                    },
-                }
-            ).done(function (res) {
-                callback(res.data);
-            });
+function EnableAutoCompleteWilayah() {
+    $("#formCreateUpdateLks #site").autoComplete({
+        resolver: 'ajax',
+        noResultsText:'No results',
+        events: {
+            search: function (qry, callback) {
+                $.ajax(
+                    {
+                        url: `${BASE_URL}/api/v1/autocomplete/site`,
+                        data: { 'name': qry},
+                        headers: {
+                            'token': $.cookie("jwt_token"),
+                        },
+                    }
+                ).done(function (res) {
+                    callback(res.data);
+                });
+            },
         },
-    },
-});
+    });
 
-$('#formCreateUpdateLks #site').on('input', function () {
-    $('#formCreateUpdateLks #site_id').val('')
-    region_id = $("#formCreateUpdateLks #region_id").val()
-});
+    $('#formCreateUpdateLks #site').on('input', function () {
+        $('#formCreateUpdateLks #site_id').val('')
+        region_id = $("#formCreateUpdateLks #region_id").val()
+    });
 
-$('#formCreateUpdateLks #site').on('autocomplete.select', function (evt, item) {
-    $('#formCreateUpdateLks #site_id').val(item.id)
-    region_id = item.region_id
+    $('#formCreateUpdateLks #site').on('autocomplete.select', function (evt, item) {
+        $('#formCreateUpdateLks #site_id').val(item.id)
+        region_id = item.region_id
 
-    $(`#formCreateUpdateTksk #site_id-error`).html('');
+        $(`#formCreateUpdateLks #site_id-error`).html('');
 
-    autoComplete = true;
-});
+        autoComplete = true;
+    });
+}
 
 /**
  * Auto Complete - Kelurahan
@@ -152,7 +166,8 @@ $('#formCreateUpdateLks #alamat_kecamatan').on('autocomplete.select', function (
  * Select 2
  */
 $('.select2bs4').select2({
-    theme: 'bootstrap4'
+    theme: 'bootstrap4',
+    width: '100%'
 })
 $('.select2bs4').on('select2:select', function(e) {
     $(this).removeClass('is-invalid');
@@ -514,7 +529,12 @@ function saveData() {
                         icon: 'success'
                     }).then((result) => {
                         if (lksId == null) {
-                            $("#formCreateUpdateLks input").val('');
+                            if (user_level_id == 1) {
+                                $("#formCreateUpdateLks input").val('');
+                            }
+                            else {
+                                $("#formCreateUpdateLks input").not("#site").val('');
+                            }
                             $("#formCreateUpdateLks select").val('').change();
                         }
                         else {

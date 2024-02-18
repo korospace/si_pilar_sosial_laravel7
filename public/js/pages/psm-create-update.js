@@ -1,8 +1,19 @@
+let user_level_id = $("#formCreateUpdatePsm #level_id").val();
+
 /**
- * Disable All Input
+ * Disable Input
+ * -----------------------------
  */
-if ($("#formCreateUpdatePsm #id").val() != null && $("#formCreateUpdatePsm #level_id").val() != 1) {
+// -- disable all input when update AND non admin --
+if ($("#formCreateUpdatePsm #id").val() != null && user_level_id != 1) {
     $('#formCreateUpdatePsm input, #formCreateUpdatePsm select').prop('disabled', true);
+}
+// -- disable autocomplete wilayah when non admin --
+if (user_level_id != 1) {
+    $('#formCreateUpdatePsm #site').prop('disabled', true);
+}
+else {
+    EnableAutoCompleteWilayah()
 }
 
 /**
@@ -11,7 +22,7 @@ if ($("#formCreateUpdatePsm #id").val() != null && $("#formCreateUpdatePsm #leve
 moment.locale('id');
 $("#formCreateUpdatePsm .tgl").daterangepicker({
     singleDatePicker: true,
-    // showDropdowns: true, // Opsional, menampilkan dropdown untuk memilih bulan dan tahun
+    showDropdowns: true, // Opsional, menampilkan dropdown untuk memilih bulan dan tahun
     "locale": {
         "format": "DD MMMM YYYY",
         "separator": " - ",
@@ -47,44 +58,46 @@ if ($("#formCreateUpdatePsm #id").val() == null) {
 let autoComplete = false;
 let region_id = $("#formCreateUpdatePsm #region_id").val();
 
-$("#formCreateUpdatePsm #site").autoComplete({
-    resolver: 'ajax',
-    noResultsText:'No results',
-    events: {
-        search: function (qry, callback) {
-            $.ajax(
-                {
-                    url: `${BASE_URL}/api/v1/autocomplete/site`,
-                    data: { 'name': qry},
-                    headers: {
-                        'token': $.cookie("jwt_token"),
-                    },
-                }
-            ).done(function (res) {
-                callback(res.data);
-            });
+function EnableAutoCompleteWilayah() {
+    $("#formCreateUpdatePsm #site").autoComplete({
+        resolver: 'ajax',
+        noResultsText:'No results',
+        events: {
+            search: function (qry, callback) {
+                $.ajax(
+                    {
+                        url: `${BASE_URL}/api/v1/autocomplete/site`,
+                        data: { 'name': qry},
+                        headers: {
+                            'token': $.cookie("jwt_token"),
+                        },
+                    }
+                ).done(function (res) {
+                    callback(res.data);
+                });
+            },
         },
-    },
-});
+    });
 
-$('#formCreateUpdatePsm #site').on('input', function () {
-    $('#formCreateUpdatePsm #site_id').val('')
-    region_id = $("#formCreateUpdatePsm #region_id").val()
+    $('#formCreateUpdatePsm #site').on('input', function () {
+        $('#formCreateUpdatePsm #site_id').val('')
+        region_id = $("#formCreateUpdatePsm #region_id").val()
 
-    $('#formCreateUpdatePsm #tempat_tugas_kelurahan').val('')
-    $('#formCreateUpdatePsm #tempat_tugas_kelurahan_hide').val('')
-    $('#formCreateUpdatePsm #tempat_tugas_kecamatan').val('')
-    $('#formCreateUpdatePsm #tempat_tugas_kecamatan_hide').val('')
-});
+        $('#formCreateUpdatePsm #tempat_tugas_kelurahan').val('')
+        $('#formCreateUpdatePsm #tempat_tugas_kelurahan_hide').val('')
+        $('#formCreateUpdatePsm #tempat_tugas_kecamatan').val('')
+        $('#formCreateUpdatePsm #tempat_tugas_kecamatan_hide').val('')
+    });
 
-$('#formCreateUpdatePsm #site').on('autocomplete.select', function (evt, item) {
-    $('#formCreateUpdatePsm #site_id').val(item.id)
-    region_id = item.region_id
+    $('#formCreateUpdatePsm #site').on('autocomplete.select', function (evt, item) {
+        $('#formCreateUpdatePsm #site_id').val(item.id)
+        region_id = item.region_id
 
-    $(`#formCreateUpdateTksk #site_id-error`).html('');
+        $(`#formCreateUpdatePsm #site_id-error`).html('');
 
-    autoComplete = true;
-});
+        autoComplete = true;
+    });
+}
 
 /**
  * Auto Complete - Kecamatan
@@ -163,7 +176,8 @@ $('#formCreateUpdatePsm #tempat_tugas_kelurahan').on('autocomplete.select', func
  * Select 2
  */
 $('.select2bs4').select2({
-    theme: 'bootstrap4'
+    theme: 'bootstrap4',
+    width: '100%'
 })
 $('.select2bs4').on('select2:select', function(e) {
     $(this).removeClass('is-invalid');
@@ -193,6 +207,7 @@ $("#formCreateUpdatePsm #sertifikasi_status").on('change', function () {
         $(`#formCreateUpdatePsm .col-sertifikasi`).hide();
     }
 })
+$("#formCreateUpdatePsm #sertifikasi_status").change()
 
 // form submit
 $('#formCreateUpdatePsm').validate({
@@ -395,8 +410,13 @@ function saveData() {
                     icon: 'success'
                     }).then((result) => {
                         if (psmId == null) {
-                            $("#formCreateUpdatePsm input").val('');
-                            $("#formCreateUpdatePsm select").val('');
+                            if (user_level_id == 1) {
+                                $("#formCreateUpdatePsm input").val('');
+                            }
+                            else {
+                                $("#formCreateUpdatePsm input").not("#site").val('');
+                            }
+                            $("#formCreateUpdatePsm select").val('').change();
                         }
                         else {
                             location.reload();

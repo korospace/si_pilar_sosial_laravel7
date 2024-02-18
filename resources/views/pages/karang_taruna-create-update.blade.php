@@ -74,6 +74,13 @@
                                 <span id="status-error" class="invalid-feedback"></span>
                             </div>
                         </div>
+                        @else
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="site"><small><b>Wilayah</b></small></label>
+                                <input type="text" class="form-control" id="site" name="site" value="{{ $user->site->name }}">
+                            </div>
+                        </div>
                         @endif
                         <div class="col-md-3">
                             <div class="form-group">

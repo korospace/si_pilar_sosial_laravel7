@@ -2,4 +2,4 @@
 
 BUG
 1. select2 ketika di enter dia ikut ngesubmit form
-2. saat create/edit bagaimana caranya harus munculin wilayah dan data tahun walaupun bukan admin tapi pikirkan hak akses nya juga
+2. form psm tidak kereset setelah create data

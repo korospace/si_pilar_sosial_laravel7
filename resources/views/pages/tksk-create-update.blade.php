@@ -53,16 +53,14 @@
                     <input type="text" id="region_id" name="region_id" value="{{ $user->site ? $user->site->region_id : '' }}" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
 
                     <div class="row mb-4">
+                        @if($user->level_id == 1)
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="site"><small><b>Wilayah</b></small></label>
-                                @if($user->level_id == 1)
                                 <input type="text" id="site_id" name="site_id" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;" value="{{ $tksk != null ? $tksk->site_id : '' }}">
-                                @endif
                                 <input type="text" class="form-control" id="site" name="site" value="{{ $tksk != null ? $tksk->site->name : '' }}">
                             </div>
                         </div>
-                        @if($user->level_id == 1)
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="status"><small><b>Status</b></small></label>
@@ -74,6 +72,13 @@
                                     @endforeach
                                 </select>
                                 <span id="status-error" class="invalid-feedback"></span>
+                            </div>
+                        </div>
+                        @else
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="site"><small><b>Wilayah</b></small></label>
+                                <input type="text" class="form-control" id="site" name="site" value="{{ $user->site->name }}">
                             </div>
                         </div>
                         @endif

@@ -1,8 +1,19 @@
+let user_level_id = $("#formCreateUpdateTksk #level_id").val();
+
 /**
- * Disable All Input
+ * Disable Input
+ * -----------------------------
  */
-if ($("#formCreateUpdateTksk #id").val() != null && $("#formCreateUpdateTksk #level_id").val() != 1) {
+// -- disable all input when update AND non admin --
+if ($("#formCreateUpdateTksk #id").val() != null && user_level_id != 1) {
     $('#formCreateUpdateTksk input, #formCreateUpdateTksk select').prop('disabled', true);
+}
+// -- disable autocomplete wilayah when non admin --
+if (user_level_id != 1) {
+    $('#formCreateUpdateTksk #site').prop('disabled', true);
+}
+else {
+    EnableAutoCompleteWilayah()
 }
 
 /**
@@ -47,9 +58,9 @@ $("#formCreateUpdateTksk #tanggal_lahir").daterangepicker({
             'November',
             'Desember'
         ],
-        "firstDay": 1
-    }
-});
+        "firstDay": 1,
+    },
+})
 
 if ($("#formCreateUpdateTksk #id").val() == null) {
     $("#formCreateUpdateTksk #tanggal_lahir").val('');
@@ -68,43 +79,45 @@ $("#formCreateUpdateTksk #tanggal_lahir").on('change', function () {
 let autoComplete = false;
 let region_id = $("#formCreateUpdateTksk #region_id").val();
 
-$("#formCreateUpdateTksk #site").autoComplete({
-    resolver: 'ajax',
-    noResultsText:'No results',
-    events: {
-        search: function (qry, callback) {
-            $.ajax(
-                {
-                    url: `${BASE_URL}/api/v1/autocomplete/site`,
-                    data: { 'name': qry},
-                    headers: {
-                        'token': $.cookie("jwt_token"),
-                    },
-                }
-            ).done(function (res) {
-                callback(res.data);
-            });
+function EnableAutoCompleteWilayah() {
+    $("#formCreateUpdateTksk #site").autoComplete({
+        resolver: 'ajax',
+        noResultsText:'No results',
+        events: {
+            search: function (qry, callback) {
+                $.ajax(
+                    {
+                        url: `${BASE_URL}/api/v1/autocomplete/site`,
+                        data: { 'name': qry},
+                        headers: {
+                            'token': $.cookie("jwt_token"),
+                        },
+                    }
+                ).done(function (res) {
+                    callback(res.data);
+                });
+            },
         },
-    },
-});
+    });
 
-$('#formCreateUpdateTksk #site').on('input', function () {
-    $('#formCreateUpdateTksk #site_id').val('')
-    region_id = $("#formCreateUpdateTksk #region_id").val()
+    $('#formCreateUpdateTksk #site').on('input', function () {
+        $('#formCreateUpdateTksk #site_id').val('')
+        region_id = $("#formCreateUpdateTksk #region_id").val()
 
-    $('#formCreateUpdateTksk #tempat_tugas').val('')
-    $('#formCreateUpdateTksk #tempat_tugas_hide').val('')
-});
+        $('#formCreateUpdateTksk #tempat_tugas').val('')
+        $('#formCreateUpdateTksk #tempat_tugas_hide').val('')
+    });
 
-$('#formCreateUpdateTksk #site').on('autocomplete.select', function (evt, item) {
-    $('#formCreateUpdateTksk #site_id').val(item.id)
-    region_id = item.region_id
+    $('#formCreateUpdateTksk #site').on('autocomplete.select', function (evt, item) {
+        $('#formCreateUpdateTksk #site_id').val(item.id)
+        region_id = item.region_id
 
-    $(this).removeClass('is-invalid');
-    $(`#formCreateUpdateTksk #site_id-error`).html('');
+        $(this).removeClass('is-invalid');
+        $(`#formCreateUpdateTksk #site_id-error`).html('');
 
-    autoComplete = true;
-});
+        autoComplete = true;
+    });
+}
 
 /**
  * Auto Complete - Tempat Tugas
@@ -209,7 +222,8 @@ $('#formCreateUpdateTksk #nama_bank').on('autocomplete.select', function (evt, i
  * Select 2
  */
 $('.select2bs4').select2({
-    theme: 'bootstrap4'
+    theme: 'bootstrap4',
+    width: '100%'
 })
 $('.select2bs4').on('select2:select', function(e) {
     $(this).removeClass('is-invalid');
@@ -486,7 +500,12 @@ function saveData() {
                         icon: 'success'
                     }).then((result) => {
                         if (userId == null) {
-                            $("#formCreateUpdateTksk input").val('');
+                            if (user_level_id == 1) {
+                                $("#formCreateUpdateTksk input").val('');
+                            }
+                            else {
+                                $("#formCreateUpdateTksk input").not("#site").val('');
+                            }
                             $("#formCreateUpdateTksk select").val('').change();
                         }
                         else {

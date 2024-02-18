@@ -1,8 +1,19 @@
+let user_level_id = $("#formCreateUpdateKarangTaruna #level_id").val();
+
 /**
- * Disable All Input
+ * Disable Input
+ * -----------------------------
  */
-if ($("#formCreateUpdateKarangTaruna #id").val() != null && $("#formCreateUpdateKarangTaruna #level_id").val() != 1) {
+// -- disable all input when update AND non admin --
+if ($("#formCreateUpdateKarangTaruna #id").val() != null && user_level_id != 1) {
     $('#formCreateUpdateKarangTaruna input, #formCreateUpdateKarangTaruna select').prop('disabled', true);
+}
+// -- disable autocomplete wilayah when non admin --
+if (user_level_id != 1) {
+    $('#formCreateUpdateKarangTaruna #site').prop('disabled', true);
+}
+else {
+    EnableAutoCompleteWilayah()
 }
 
 /**
@@ -47,39 +58,43 @@ if ($("#formCreateUpdateKarangTaruna #id").val() == null) {
  * Auto Complete - Site
  */
 let autoComplete = false;
-$("#formCreateUpdateKarangTaruna #site").autoComplete({
-    resolver: 'ajax',
-    noResultsText:'No results',
-    events: {
-        search: function (qry, callback) {
-            $.ajax(
-                {
-                    url: `${BASE_URL}/api/v1/autocomplete/site`,
-                    data: { 'name': qry},
-                    headers: {
-                        'token': $.cookie("jwt_token"),
-                    },
-                }
-            ).done(function (res) {
-                callback(res.data);
-            });
+let region_id = $("#formCreateUpdateKarangTaruna #region_id").val();
+
+function EnableAutoCompleteWilayah() {
+    $("#formCreateUpdateKarangTaruna #site").autoComplete({
+        resolver: 'ajax',
+        noResultsText:'No results',
+        events: {
+            search: function (qry, callback) {
+                $.ajax(
+                    {
+                        url: `${BASE_URL}/api/v1/autocomplete/site`,
+                        data: { 'name': qry},
+                        headers: {
+                            'token': $.cookie("jwt_token"),
+                        },
+                    }
+                ).done(function (res) {
+                    callback(res.data);
+                });
+            },
         },
-    },
-});
+    });
 
-$('#formCreateUpdateKarangTaruna #site').on('input', function () {
-    $('#formCreateUpdateKarangTaruna #site_id').val('')
-    region_id = $("#formCreateUpdateKarangTaruna #region_id").val()
-});
+    $('#formCreateUpdateKarangTaruna #site').on('input', function () {
+        $('#formCreateUpdateKarangTaruna #site_id').val('')
+        region_id = $("#formCreateUpdateKarangTaruna #region_id").val()
+    });
 
-$('#formCreateUpdateKarangTaruna #site').on('autocomplete.select', function (evt, item) {
-    $('#formCreateUpdateKarangTaruna #site_id').val(item.id)
-    region_id = item.region_id
+    $('#formCreateUpdateKarangTaruna #site').on('autocomplete.select', function (evt, item) {
+        $('#formCreateUpdateKarangTaruna #site_id').val(item.id)
+        region_id = item.region_id
 
-    $(`#formCreateUpdateTksk #site_id-error`).html('');
+        $(`#formCreateUpdateKarangTaruna #site_id-error`).html('');
 
-    autoComplete = true;
-});
+        autoComplete = true;
+    });
+}
 
 /**
  * Auto Complete - Kelurahan
@@ -153,7 +168,8 @@ $('#formCreateUpdateKarangTaruna #alamat_kecamatan').on('autocomplete.select', f
  * Select 2
  */
 $('.select2bs4').select2({
-    theme: 'bootstrap4'
+    theme: 'bootstrap4',
+    width: '100%'
 })
 $('.select2bs4').on('select2:select', function(e) {
     $(this).removeClass('is-invalid');
@@ -377,7 +393,12 @@ function saveData() {
                         icon: 'success'
                     }).then((result) => {
                         if (ktId == null) {
-                            $("#formCreateUpdateKarangTaruna input").val('');
+                            if (user_level_id == 1) {
+                                $("#formCreateUpdateKarangTaruna input").val('');
+                            }
+                            else {
+                                $("#formCreateUpdateKarangTaruna input").not("#site").val('');
+                            }
                             $("#formCreateUpdateKarangTaruna select").val('').change();
                         }
                         else {
