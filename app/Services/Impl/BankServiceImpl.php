@@ -36,7 +36,7 @@ class BankServiceImpl implements BankService
                 ->toJson();
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -59,7 +59,7 @@ class BankServiceImpl implements BankService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -80,7 +80,7 @@ class BankServiceImpl implements BankService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -101,7 +101,7 @@ class BankServiceImpl implements BankService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -126,7 +126,7 @@ class BankServiceImpl implements BankService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 }

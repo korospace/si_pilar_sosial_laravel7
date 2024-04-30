@@ -101,7 +101,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="nama"><small><b>Nama</b></small></label>
+                                <label for="nama"><small><b>Nama</b> (<i>sesuai KTP</i>)</small></label>
                                 <input type="text" class="form-control" id="nama" name="nama" value="{{ $psm != null ? $psm->nama : '' }}">
                                 <span id="nama-error" class="invalid-feedback"></span>
                             </div>
@@ -213,14 +213,14 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="alamat_rt"><small><b>RT</b></small></label>
-                                <input type="text" class="form-control" id="alamat_rt" name="alamat_rt" value="{{ $psm != null ? $psm->alamat_rt : '' }}">
+                                <input type="text" class="form-control" id="alamat_rt" name="alamat_rt" placeholder="001" value="{{ $psm != null ? $psm->alamat_rt : '' }}">
                                 <span id="alamat_rt-error" class="invalid-feedback"></span>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="alamat_rw"><small><b>RW</b></small></label>
-                                <input type="text" class="form-control" id="alamat_rw" name="alamat_rw" value="{{ $psm != null ? $psm->alamat_rw : '' }}">
+                                <input type="text" class="form-control" id="alamat_rw" name="alamat_rw" placeholder="001" value="{{ $psm != null ? $psm->alamat_rw : '' }}">
                                 <span id="alamat_rw-error" class="invalid-feedback"></span>
                             </div>
                         </div>

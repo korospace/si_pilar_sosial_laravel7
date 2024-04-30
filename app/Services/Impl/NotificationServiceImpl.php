@@ -2,6 +2,7 @@
 
 namespace App\Services\Impl;
 
+use App\Exceptions\GeneralException;
 use App\Http\Requests\NotificationRequest;
 use App\Models\User;
 use App\Services\NotificationService;
@@ -31,7 +32,7 @@ class NotificationServiceImpl implements NotificationService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 }

@@ -1,3 +1,4 @@
+let user_level_id = $("#level_id").val();
 $token = $.cookie("jwt_token");
 let autoComplete = false;
 
@@ -146,9 +147,15 @@ function run_filter_lks() {
 }
 // -- clear filter lks --
 function clear_filter_lks() {
-    initialDataTableLks();
-    update_ket_filter_lks()
-    $(`#modal-filter-lks`).modal('hide');
+    if (user_level_id == 1) {
+        $("#modal-filter-lks input").val('');
+    }
+    else {
+        $("#modal-filter-lks input:not(#site_filter_id):not(#site_filter)").val('');
+    }
+    $("#modal-filter-lks select").val('').change();
+
+    run_filter_lks();
 }
 // -- update keterangan --
 function update_ket_filter_lks() {

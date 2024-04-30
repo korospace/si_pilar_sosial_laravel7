@@ -2,6 +2,7 @@
 
 namespace App\Services\Impl;
 
+use App\Exceptions\GeneralException;
 use App\Models\Article;
 use App\Models\Site;
 use App\Services\HomepageService;
@@ -45,7 +46,7 @@ class HomepageServiceImpl implements HomepageService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -72,7 +73,7 @@ class HomepageServiceImpl implements HomepageService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -95,7 +96,7 @@ class HomepageServiceImpl implements HomepageService
             return view('components/homepage-articles-child', compact('articles'))->render();
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -120,7 +121,7 @@ class HomepageServiceImpl implements HomepageService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -146,7 +147,7 @@ class HomepageServiceImpl implements HomepageService
                 200
             );
         } catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 

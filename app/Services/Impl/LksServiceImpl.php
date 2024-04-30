@@ -114,7 +114,7 @@ class LksServiceImpl implements LksService
             return response()->json($result, 200);
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -179,7 +179,7 @@ class LksServiceImpl implements LksService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -253,7 +253,7 @@ class LksServiceImpl implements LksService
         }
         catch (\Throwable $th) {
             DB::rollback();
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -278,7 +278,7 @@ class LksServiceImpl implements LksService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -348,7 +348,7 @@ class LksServiceImpl implements LksService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 

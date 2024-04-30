@@ -2,7 +2,6 @@
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('css/plugins/fontawesome-free/css/all.min.css') }}">
-    {{-- <link rel="stylesheet" href="{{ asset('css/plugins/overlayScrollbars/OverlayScrollbars.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('css/plugins/adminlte/adminlte.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/showLoadingSpinner.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/toastify.min.css') }}">
@@ -17,12 +16,6 @@
             position: absolute;
             bottom: -20px;
         }
-        /* .btn-secondary {
-            background-color: #27419C;
-        }
-        .btn-secondary:hover {
-            background-color: #3651b0;
-        } */
         .page-item.active .page-link {
             background-color: #6c757d;
             border-color: #6c757d;

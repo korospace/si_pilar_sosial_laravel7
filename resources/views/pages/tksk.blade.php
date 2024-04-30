@@ -25,6 +25,8 @@
     @include('components/dashboard-head', ['headTitle' => 'TENAGA KESEJAHTERAAN SOSIAL', 'headPage' => 'tksk'])
 
 	<div class="content mt-4">
+        <input type="hidden" id="level_id" value="{{ $user->level_id }}">
+
 		<div class="container-fluid">
             {{-- Button Row --}}
             <div class="row mb-4 px-2">
@@ -106,7 +108,7 @@
 											Tahun
 										</th>
 										<th class="align-middle">
-											No Urut
+											NTR
 										</th>
 										<th class="align-middle">
 											No Induk Anggota
@@ -217,8 +219,17 @@
                             </div>
                             <div class="form-group mb-4">
                                 <label for="site_filter"><small><b>Wilayah</b></small></label>
-                                <input type="text" id="site_filter_id" name="site_filter_id" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
-                                <input type="text" class="form-control ac_site" id="site_filter" name="site_filter">
+                                <input
+                                    type="text" id="site_filter_id" name="site_filter_id"
+                                    style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;"
+                                    value="{{ $user->level_id != 1 ? $user->site->id : '' }}"
+                                >
+                                <input
+                                    type="text" id="site_filter" name="site_filter"
+                                    class="form-control {{ $user->level_id == 1 ? 'ac_site' : '' }}"
+                                    value="{{ $user->level_id != 1 ? $user->site->name : '' }}"
+                                    {{ $user->level_id != 1 ? 'disabled' : '' }}
+                                >
                             </div>
                             <div class="form-group mb-4">
                                 <label for="status_filter"><small><b>Status</b></small></label>

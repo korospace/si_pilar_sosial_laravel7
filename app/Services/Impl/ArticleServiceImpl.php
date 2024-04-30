@@ -6,7 +6,6 @@ use App\Exceptions\GeneralException;
 use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
 use App\Services\ArticleService;
-use Carbon\Carbon;
 use DOMDocument;
 use HTMLPurifier;
 use Illuminate\Http\JsonResponse;
@@ -72,7 +71,7 @@ class ArticleServiceImpl implements ArticleService
                 ->toJson();
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -112,7 +111,7 @@ class ArticleServiceImpl implements ArticleService
                 );
             });
         } catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -161,7 +160,7 @@ class ArticleServiceImpl implements ArticleService
                 );
             });
         } catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -191,7 +190,7 @@ class ArticleServiceImpl implements ArticleService
                 );
             });
         } catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 

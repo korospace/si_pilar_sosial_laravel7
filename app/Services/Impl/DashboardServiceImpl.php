@@ -2,6 +2,7 @@
 
 namespace App\Services\Impl;
 
+use App\Exceptions\GeneralException;
 use App\Http\Requests\DashboardRequest;
 use App\Models\User;
 use App\Services\DashboardService;
@@ -33,7 +34,7 @@ class DashboardServiceImpl implements DashboardService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 }

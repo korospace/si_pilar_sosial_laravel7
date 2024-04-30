@@ -1,6 +1,17 @@
 let user_level_id = $("#formCreateUpdatePsm #level_id").val();
 
 /**
+ * Only Number
+ * -----------------------------
+ */
+filterNumbers([ // layouts/main.js
+    "#formCreateUpdatePsm #nik",
+    "#formCreateUpdatePsm #telepon",
+    "#formCreateUpdatePsm #alamat_rt",
+    "#formCreateUpdatePsm #alamat_rw",
+])
+
+/**
  * Disable Input
  * -----------------------------
  */
@@ -227,6 +238,7 @@ $('#formCreateUpdatePsm').validate({
         nik: {
             required: true,
             minlength: 16,
+            maxlength: 16,
             digits: true
         },
         tempat_lahir: {
@@ -264,6 +276,9 @@ $('#formCreateUpdatePsm').validate({
         },
         telepon: {
             required: true,
+            minlength: 10,
+            maxlength: 12,
+            digits: true
         },
         pendidikan_terakhir: {
             required: true,
@@ -288,7 +303,8 @@ $('#formCreateUpdatePsm').validate({
         nik: {
             required: "NIK harus diisi",
             minlength: "NIK minimal 16 digit",
-            digits: "NIK tidak valid"
+            maxlength: "NIK maximal 16 digit",
+            digits: "NIK harus angka"
         },
         tempat_lahir: {
             required: "Tempat lahir harus diisi",
@@ -324,7 +340,10 @@ $('#formCreateUpdatePsm').validate({
             required: "Tahun sertifikasi harus diisi",
         },
         telepon: {
-            required: "Telepon harus diisi",
+            required: "No. HP harus diisi",
+            minlength: "No. HP minimal 10 digit",
+            maxlength: "No. HP maximal 12 digit",
+            digits: "No. HP harus angka"
         },
         pendidikan_terakhir: {
             required: "Pendidikan terakhir harus diisi",
@@ -431,6 +450,8 @@ function saveData() {
                             $(`#formCreateUpdatePsm #${key}`).addClass('is-invalid');
                             $(`#formCreateUpdatePsm #${key}-error`).html(errors[key][0]);
                         }
+
+                        showToast('data <b>belum valid</b>. mohon periksa kembali!','warning');
                     }
                     else if (data.status >= 500) {
                         Swal.showValidationMessage(`terjadi kesalahan pada server!`)

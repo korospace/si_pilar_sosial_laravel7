@@ -1,6 +1,18 @@
 let user_level_id = $("#formCreateUpdateTksk #level_id").val();
 
 /**
+ * Only Number
+ * -----------------------------
+ */
+filterNumbers([ // layouts/main.js
+    "#formCreateUpdateTksk #nik",
+    "#formCreateUpdateTksk #telepon",
+    "#formCreateUpdateTksk #alamat_rt",
+    "#formCreateUpdateTksk #alamat_rw",
+    "#formCreateUpdateTksk #no_rekening",
+])
+
+/**
  * Disable Input
  * -----------------------------
  */
@@ -266,10 +278,14 @@ $('#formCreateUpdateTksk').validate({
         nik: {
             required: true,
             minlength: 16,
+            maxlength: 16,
             digits: true
         },
         telepon: {
-            required: true
+            required: true,
+            minlength: 10,
+            maxlength: 12,
+            digits: true
         },
         tempat_lahir: {
             required: true
@@ -351,10 +367,14 @@ $('#formCreateUpdateTksk').validate({
         nik: {
             required: "NIK harus diisi",
             minlength: "NIK minimal 16 digit",
-            digits: "NIK tidak valid"
+            maxlength: "NIK maximal 16 digit",
+            digits: "NIK harus angka"
         },
         telepon: {
-            required: "No. Telepon harus diisi"
+            required: "No. HP harus diisi",
+            minlength: "No. HP minimal 10 digit",
+            maxlength: "No. HP maximal 12 digit",
+            digits: "No. HP harus angka"
         },
         tempat_lahir: {
             required: "Tempat Lahir harus diisi"
@@ -521,6 +541,8 @@ function saveData() {
                             $(`#formCreateUpdateTksk #${key}`).addClass('is-invalid');
                             $(`#formCreateUpdateTksk #${key}-error`).html(errors[key][0]);
                         }
+
+                        showToast('data <b>belum valid</b>. mohon periksa kembali!','warning');
                     }
                     else if (data.status >= 500) {
                         Swal.showValidationMessage(`terjadi kesalahan pada server!`)

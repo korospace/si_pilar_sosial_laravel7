@@ -114,7 +114,7 @@ class KarangTarunaServiceImpl implements KarangTarunaService
             return response()->json($result, 200);
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -160,7 +160,7 @@ class KarangTarunaServiceImpl implements KarangTarunaService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -222,7 +222,7 @@ class KarangTarunaServiceImpl implements KarangTarunaService
         }
         catch (\Throwable $th) {
             DB::rollback();
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -247,7 +247,7 @@ class KarangTarunaServiceImpl implements KarangTarunaService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -298,7 +298,7 @@ class KarangTarunaServiceImpl implements KarangTarunaService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 

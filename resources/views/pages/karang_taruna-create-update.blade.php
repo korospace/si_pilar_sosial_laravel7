@@ -164,14 +164,14 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="alamat_rt"><small><b>RT</b></small></label>
-                                <input type="text" class="form-control" id="alamat_rt" name="alamat_rt" value="{{ $karangTaruna != null ? $karangTaruna->alamat_rt : '' }}">
+                                <input type="text" class="form-control" id="alamat_rt" name="alamat_rt" placeholder="001" value="{{ $karangTaruna != null ? $karangTaruna->alamat_rt : '' }}">
                                 <span id="alamat_rt-error" class="invalid-feedback"></span>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="alamat_rw"><small><b>RW</b></small></label>
-                                <input type="text" class="form-control" id="alamat_rw" name="alamat_rw" value="{{ $karangTaruna != null ? $karangTaruna->alamat_rw : '' }}">
+                                <input type="text" class="form-control" id="alamat_rw" name="alamat_rw" placeholder="001" value="{{ $karangTaruna != null ? $karangTaruna->alamat_rw : '' }}">
                                 <span id="alamat_rw-error" class="invalid-feedback"></span>
                             </div>
                         </div>

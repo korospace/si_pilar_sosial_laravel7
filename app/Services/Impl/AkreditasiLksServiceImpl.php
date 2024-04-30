@@ -36,7 +36,7 @@ class AkreditasiLksServiceImpl implements AkreditasiLksService
                 ->toJson();
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -56,7 +56,7 @@ class AkreditasiLksServiceImpl implements AkreditasiLksService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -76,7 +76,7 @@ class AkreditasiLksServiceImpl implements AkreditasiLksService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -101,7 +101,7 @@ class AkreditasiLksServiceImpl implements AkreditasiLksService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 }

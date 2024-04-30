@@ -1,3 +1,4 @@
+let user_level_id = $("#level_id").val();
 $token = $.cookie("jwt_token");
 let autoComplete = false;
 
@@ -145,9 +146,15 @@ function run_filter_karang_taruna() {
 }
 // -- clear filter karang_taruna --
 function clear_filter_karang_taruna() {
-    initialDataTableKarangTaruna();
-    update_ket_filter_karang_taruna()
-    $(`#modal-filter-karang_taruna`).modal('hide');
+    if (user_level_id == 1) {
+        $("#modal-filter-karang_taruna input").val('');
+    }
+    else {
+        $("#modal-filter-karang_taruna input:not(#site_filter_id):not(#site_filter)").val('');
+    }
+    $("#modal-filter-karang_taruna select").val('').change();
+
+    run_filter_karang_taruna();
 }
 // -- update keterangan --
 function update_ket_filter_karang_taruna() {

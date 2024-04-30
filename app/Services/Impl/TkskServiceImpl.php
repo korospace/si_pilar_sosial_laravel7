@@ -117,7 +117,7 @@ class TkskServiceImpl implements TkskService
             return response()->json($result, 200);
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -172,7 +172,7 @@ class TkskServiceImpl implements TkskService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -268,7 +268,7 @@ class TkskServiceImpl implements TkskService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 
@@ -328,7 +328,7 @@ class TkskServiceImpl implements TkskService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 

@@ -2,4 +2,7 @@
 
 BUG
 1. select2 ketika di enter dia ikut ngesubmit form
-2. form psm tidak kereset setelah create data
+
+REFACTOR
+1. pemanggilan lib js/css bisa dipusatkan di layout dashboard
+2. rapihkan kodingan css dan js homepage

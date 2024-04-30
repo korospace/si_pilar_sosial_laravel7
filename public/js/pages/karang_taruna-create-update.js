@@ -1,6 +1,18 @@
 let user_level_id = $("#formCreateUpdateKarangTaruna #level_id").val();
 
 /**
+ * Only Number
+ * -----------------------------
+ */
+filterNumbers([ // layouts/main.js
+    "#formCreateUpdateKarangTaruna #telepon",
+    "#formCreateUpdateKarangTaruna #alamat_rt",
+    "#formCreateUpdateKarangTaruna #alamat_rw",
+    "#formCreateUpdateKarangTaruna #kepengurusan_periode_tahun",
+    "#formCreateUpdateKarangTaruna #kepengurusan_jumlah",
+])
+
+/**
  * Disable Input
  * -----------------------------
  */
@@ -24,7 +36,7 @@ else {
 moment.locale('id');
 $("#formCreateUpdateKarangTaruna .tgl").daterangepicker({
     singleDatePicker: true,
-    // showDropdowns: true, // Opsional, menampilkan dropdown untuk memilih bulan dan tahun
+    showDropdowns: true, // Opsional, menampilkan dropdown untuk memilih bulan dan tahun
     "locale": {
         "format": "DD MMMM YYYY",
         "separator": " - ",
@@ -222,6 +234,9 @@ $('#formCreateUpdateKarangTaruna').validate({
         },
         telepon: {
             required: true,
+            minlength: 10,
+            maxlength: 12,
+            digits: true
         },
         keaktifan_status: {
             required: true,
@@ -277,7 +292,10 @@ $('#formCreateUpdateKarangTaruna').validate({
             required: "Nama Ketua harus diisi",
         },
         telepon: {
-            required: "Telepon harus diisi",
+            required: "No. HP harus diisi",
+            minlength: "No. HP minimal 10 digit",
+            maxlength: "No. HP maximal 12 digit",
+            digits: "No. HP harus angka"
         },
         keaktifan_status: {
             required: "Status Keaktifan harus diisi",
@@ -414,6 +432,8 @@ function saveData() {
                             $(`#formCreateUpdateKarangTaruna #${key}`).addClass('is-invalid');
                             $(`#formCreateUpdateKarangTaruna #${key}-error`).html(errors[key][0]);
                         }
+
+                        showToast('data <b>belum valid</b>. mohon periksa kembali!','warning');
                     }
                     else if (data.status >= 500) {
                         Swal.showValidationMessage(`terjadi kesalahan pada server!`)

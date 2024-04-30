@@ -30,3 +30,17 @@ $(".btn-clear-filter").on('click', function () {
     const formElement = $(this).parent().parent();
     formElement.find('select').val('').change();
 })
+
+/**
+ * Filter Input Number Only
+ * ------------------------
+ */
+function filterNumbers(selectors) {
+    const elements = document.querySelectorAll(selectors);
+
+    elements.forEach(element => {
+        element.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '');
+        });
+    });
+}

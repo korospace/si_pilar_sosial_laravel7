@@ -2,6 +2,7 @@
 
 namespace App\Services\Impl;
 
+use App\Exceptions\GeneralException;
 use App\Http\Requests\RegionRequest;
 use App\Models\Region;
 use App\Services\RegionService;
@@ -50,7 +51,7 @@ class RegionServiceImpl implements RegionService
             );
         }
         catch (\Throwable $th) {
-            throw $th;
+            throw new GeneralException($th->getMessage(), 500);
         }
     }
 }

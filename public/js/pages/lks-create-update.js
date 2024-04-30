@@ -1,6 +1,16 @@
 let user_level_id = $("#formCreateUpdateLks #level_id").val();
 
 /**
+ * Only Number
+ * -----------------------------
+ */
+filterNumbers([ // layouts/main.js
+    "#formCreateUpdateLks #no_telp_yayasan",
+    "#formCreateUpdateLks #alamat_rt",
+    "#formCreateUpdateLks #alamat_rw",
+])
+
+/**
  * Disable Input
  * -----------------------------
  */
@@ -550,6 +560,8 @@ function saveData() {
                             $(`#formCreateUpdateLks #${key}`).addClass('is-invalid');
                             $(`#formCreateUpdateLks #${key}-error`).html(errors[key][0]);
                         }
+
+                        showToast('data <b>belum valid</b>. mohon periksa kembali!','warning');
                     }
                     else if (data.status >= 500) {
                         Swal.showValidationMessage(`terjadi kesalahan pada server!`)
