@@ -73,6 +73,11 @@ $(function () {
                                 "<b>username</b> atau <b>password</b> tidak valid",
                                 "warning"
                             );
+                        } else if (data.status >= 429) {
+                            showToast(
+                                "terlalu banyak percobaan login. Tunggu <b>1 menit</b> lagi untuk login kembali.",
+                                "danger"
+                            );
                         } else if (data.status >= 500) {
                             showToast("kesalahan pada <b>server</b>", "danger");
                         }

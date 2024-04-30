@@ -72,7 +72,7 @@ Route::group(['prefix' => 'v1'], function () {
      * - url      : /api/v1/login_cookie
      * - form-data: email, password
      */
-    Route::post('login_cookie', [LoginController::class, 'loginWithCookie']);
+    Route::post('login_cookie', [LoginController::class, 'loginWithCookie'])->middleware('throttle:10|60,1');
 
     /**
      * Forgot Password
