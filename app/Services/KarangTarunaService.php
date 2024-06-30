@@ -15,7 +15,9 @@ interface KarangTarunaService
 
     public function importKarangTaruna(KarangTarunaRequest $request): JsonResponse;
 
+    public function updateKarangTaruna(KarangTarunaRequest $request): JsonResponse;
+
     public function verifKarangTaruna(KarangTarunaRequest $request): JsonResponse;
 
-    public function updateKarangTaruna(KarangTarunaRequest $request): JsonResponse;
+    public function updateStatus(KarangTarunaRequest $request): JsonResponse;
 }

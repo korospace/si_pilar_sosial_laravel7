@@ -50,6 +50,9 @@ class LksRequest extends FormRequest
                 'alamat_kecamatan'                  => 'required|max:255',
                 'no_telp_yayasan'                   => 'required|max:255',
                 'jenis_layanan'                     => 'required|max:255',
+                'jenis_lks'                         => 'required|max:255',
+                'jumlah_wbs'                        => 'required',
+                'jumlah_peksos'                     => 'required',
                 'sk_domisili_yayasan_nomor'                => 'required|max:255',
                 'sk_domisili_yayasan_masaberlaku_mulai'    => 'required|max:255',
                 'sk_domisili_yayasan_masaberlaku_selesai'  => 'required|max:255',
@@ -71,12 +74,6 @@ class LksRequest extends FormRequest
                 'status'                            => $this->user->level_id == 1 ? 'required|in:diperiksa,diterima,ditolak' : '',
             ];
         }
-        else if ($this->method() == 'PUT' && $this->route()->getActionMethod() == 'verifLks') {
-            return [
-                'id'                            => 'required|exists:lks,id',
-                'status'                        => 'required|in:diterima,ditolak',
-            ];
-        }
         else if ($this->method() == 'PUT' && $this->route()->getActionMethod() == 'updateLks') {
             return [
                 'id'                                => 'required|exists:lks,id',
@@ -91,6 +88,9 @@ class LksRequest extends FormRequest
                 'alamat_kecamatan'                  => 'required|max:255',
                 'no_telp_yayasan'                   => 'required|max:255',
                 'jenis_layanan'                     => 'required|max:255',
+                'jenis_lks'                         => 'required|max:255',
+                'jumlah_wbs'                        => 'required',
+                'jumlah_peksos'                     => 'required',
                 'sk_domisili_yayasan_nomor'                => 'required|max:255',
                 'sk_domisili_yayasan_masaberlaku_mulai'    => 'required|max:255',
                 'sk_domisili_yayasan_masaberlaku_selesai'  => 'required|max:255',
@@ -104,12 +104,25 @@ class LksRequest extends FormRequest
                 'izin_kegiatan_yayasan_masaberlaku_selesai'=> 'required|max:255',
                 'izin_kegiatan_yayasan_instansi_penerbit'  => 'required|max:255',
                 'induk_berusaha_status'             => 'required|in:ada,tidak ada',
-                'induk_berusaha_nomor'              => 'required|max:255',
-                'induk_berusaha_tgl_terbit'         => 'required|max:255',
-                'induk_berusaha_instansi_penerbit'  => 'required|max:255',
+                'induk_berusaha_nomor'              => 'required_if:induk_berusaha_status,ada|max:255',
+                'induk_berusaha_tgl_terbit'         => 'required_if:induk_berusaha_status,ada|max:255',
+                'induk_berusaha_instansi_penerbit'  => 'required_if:induk_berusaha_status,ada|max:255',
                 'akreditasi'                        => 'required|max:255',
                 'akreditasi_tgl'                    => 'required|max:255',
                 'status'                            => 'required|in:diperiksa,diterima,ditolak',
+            ];
+        }
+        else if ($this->method() == 'PUT' && $this->route()->getActionMethod() == 'verifLks') {
+            return [
+                'id'                            => 'required|exists:lks,id',
+                'status'                        => 'required|in:diterima,ditolak',
+            ];
+        }
+        else if ($this->method() == 'PUT' && $this->route()->getActionMethod() == 'updateStatus') {
+            return [
+                'id'                            => 'required|exists:lks,id',
+                'status'                        => 'required|in:diperiksa,diterima,ditolak,nonaktif',
+                'description'                   => '',
             ];
         }
         else {

@@ -68,12 +68,6 @@ class TkskRequest extends FormRequest
                 'status'                        => $this->user->level_id == 1 ? 'required|in:diperiksa,diterima,ditolak' : '',
             ];
         }
-        else if ($this->method() == 'PUT' && $this->route()->getActionMethod() == 'verifTksk') {
-            return [
-                'id'                            => 'required|exists:tksk,id',
-                'status'                        => 'required|in:diterima,ditolak',
-            ];
-        }
         else if ($this->method() == 'PUT' && $this->route()->getActionMethod() == 'updateTksk') {
             return [
                 'id'                            => 'required|exists:tksk,id',
@@ -104,6 +98,19 @@ class TkskRequest extends FormRequest
                 'pejabat_pengangkatan_terakhir' => 'required|max:255',
                 'no_kartu_registrasi'           => 'required|max:255',
                 'status'                        => 'required|in:diperiksa,diterima,ditolak',
+            ];
+        }
+        else if ($this->method() == 'PUT' && $this->route()->getActionMethod() == 'verifTksk') {
+            return [
+                'id'                            => 'required|exists:tksk,id',
+                'status'                        => 'required|in:diterima,ditolak',
+            ];
+        }
+        else if ($this->method() == 'PUT' && $this->route()->getActionMethod() == 'updateStatus') {
+            return [
+                'id'                            => 'required|exists:tksk,id',
+                'status'                        => 'required|in:diperiksa,diterima,ditolak,nonaktif',
+                'description'                   => '',
             ];
         }
         else {

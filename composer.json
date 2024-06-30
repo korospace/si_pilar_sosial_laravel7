@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.2.5|^8.0",
+        "doctrine/dbal": "^2.0",
         "ezyang/htmlpurifier": "^4.16",
         "fideloper/proxy": "^4.4",
         "firebase/php-jwt": "^6.4",
@@ -44,7 +45,9 @@
             "database/seeds",
             "database/factories"
         ],
-        "files" : ["app/Helpers/Helper.php"]
+        "files": [
+            "app/Helpers/Helper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

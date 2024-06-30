@@ -5,6 +5,7 @@ namespace App\Services\Impl;
 use App\Exceptions\GeneralException;
 use App\Http\Requests\KarangTarunaRequest;
 use App\Models\KarangTaruna;
+use App\Models\LogStatus;
 use App\Services\KarangTarunaService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +31,12 @@ class KarangTarunaServiceImpl implements KarangTarunaService
             }
             if ($request->status) {
                 $rows->where('status', $request->status);
+            }
+            if ($request->non_aktif == "0") {
+                $rows->where('status', "!=", "nonaktif");
+            }
+            else if ($request->non_aktif == "1") {
+                $rows->where('status', "=", "nonaktif");
             }
 
             $rows = $rows->select('id', 'year', 'site_id', 'no_urut', 'nama', 'nama_ketua', 'program_unggulan', 'status')->orderBy('id', 'DESC')->with('site')->get();
@@ -105,6 +112,7 @@ class KarangTarunaServiceImpl implements KarangTarunaService
                     (SELECT COUNT(id) FROM karang_taruna WHERE status = 'diterima' $whereSite1) as diterima,
                     (SELECT COUNT(id) FROM karang_taruna WHERE status = 'ditolak' $whereSite1) as ditolak,
                     (SELECT COUNT(id) FROM karang_taruna WHERE status = 'diperiksa' $whereSite1) as diperiksa,
+                    (SELECT COUNT(id) FROM karang_taruna WHERE status = 'nonaktif' $whereSite1) as nonaktif,
                     COUNT(*) as total
                 FROM
                     karang_taruna
@@ -226,31 +234,6 @@ class KarangTarunaServiceImpl implements KarangTarunaService
         }
     }
 
-    public function verifKarangTaruna(KarangTarunaRequest $request): JsonResponse
-    {
-        try {
-            $siteId = $request->user->site_id;
-            $noUrut = $request->status == 'diterima' ? $this->generateNoUrut($siteId) : null;
-
-            $newKarangTaruna = KarangTaruna::where('id', $request->id)->update([
-                'no_urut'  => $noUrut,
-                'status'   => $request->status,
-                'verifier' => $request->user->id,
-            ]);
-
-            return response()->json(
-                [
-                    'message' => 'KARANG TARUNA berhasil disimpan',
-                    'data'    => $newKarangTaruna
-                ],
-                200
-            );
-        }
-        catch (\Throwable $th) {
-            throw new GeneralException($th->getMessage(), 500);
-        }
-    }
-
     public function updateKarangTaruna(KarangTarunaRequest $request): JsonResponse
     {
         try {
@@ -298,6 +281,65 @@ class KarangTarunaServiceImpl implements KarangTarunaService
             );
         }
         catch (\Throwable $th) {
+            throw new GeneralException($th->getMessage(), 500);
+        }
+    }
+
+    public function verifKarangTaruna(KarangTarunaRequest $request): JsonResponse
+    {
+        try {
+            $siteId = $request->user->site_id;
+            $noUrut = $request->status == 'diterima' ? $this->generateNoUrut($siteId) : null;
+
+            $newKarangTaruna = KarangTaruna::where('id', $request->id)->update([
+                'no_urut'  => $noUrut,
+                'status'   => $request->status,
+                'verifier' => $request->user->id,
+            ]);
+
+            return response()->json(
+                [
+                    'message' => 'verifikasi KARANG TARUNA berhasil diubah',
+                    'data'    => $newKarangTaruna
+                ],
+                200
+            );
+        }
+        catch (\Throwable $th) {
+            throw new GeneralException($th->getMessage(), 500);
+        }
+    }
+
+    public function updateStatus(KarangTarunaRequest $request): JsonResponse
+    {
+        try {
+            DB::beginTransaction();
+
+            $newPsm = KarangTaruna::where('id', $request->id)->update([
+                'status'   => $request->status,
+                'verifier' => $request->user->id,
+            ]);
+
+            LogStatus::create([
+                "id_reference"      => $request->id,
+                "table_reference"   => "karang_taruna",
+                "status"            => $request->status,
+                "description"       => $request->description ? $request->description : "",
+                'verifier'          => $request->user->id,
+            ]);
+
+            DB::commit();
+
+            return response()->json(
+                [
+                    'message' => 'Karang Taruna status berhasil diubah',
+                    'data'    => $newPsm
+                ],
+                200
+            );
+        }
+        catch (\Throwable $th) {
+            DB::rollback();
             throw new GeneralException($th->getMessage(), 500);
         }
     }

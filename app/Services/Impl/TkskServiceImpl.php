@@ -4,6 +4,7 @@ namespace App\Services\Impl;
 
 use App\Exceptions\GeneralException;
 use App\Http\Requests\TkskRequest;
+use App\Models\LogStatus;
 use App\Models\Tksk;
 use App\Services\TkskService;
 use Illuminate\Http\JsonResponse;
@@ -30,6 +31,12 @@ class TkskServiceImpl implements TkskService
             }
             if ($request->status) {
                 $tkskRows->where('status', $request->status);
+            }
+            if ($request->non_aktif == "0") {
+                $tkskRows->where('status', "!=", "nonaktif");
+            }
+            else if ($request->non_aktif == "1") {
+                $tkskRows->where('status', "=", "nonaktif");
             }
 
             $tkskRows = $tkskRows->select('id', 'year', 'site_id', 'no_urut', 'no_induk_anggota', 'nama', 'tempat_tugas', 'jenis_kelamin', 'status')->orderBy('id', 'DESC')->with('site')->get();
@@ -108,6 +115,7 @@ class TkskServiceImpl implements TkskService
                     (SELECT COUNT(id) FROM tksk WHERE status = 'diterima' $whereSite1) as diterima,
                     (SELECT COUNT(id) FROM tksk WHERE status = 'ditolak' $whereSite1) as ditolak,
                     (SELECT COUNT(id) FROM tksk WHERE status = 'diperiksa' $whereSite1) as diperiksa,
+                    (SELECT COUNT(id) FROM tksk WHERE status = 'nonaktif' $whereSite1) as nonaktif,
                     COUNT(*) as total
                 FROM
                     tksk
@@ -247,31 +255,6 @@ class TkskServiceImpl implements TkskService
         }
     }
 
-    public function verifTksk(TkskRequest $request): JsonResponse
-    {
-        try {
-            $siteId = $request->user->site_id;
-            $noUrut = $request->status == 'diterima' ? $this->generateNoUrut($siteId) : null;
-
-            $newTksk = Tksk::where('id', $request->id)->update([
-                'no_urut'  => $noUrut,
-                'status'   => $request->status,
-                'verifier' => $request->user->id,
-            ]);
-
-            return response()->json(
-                [
-                    'message' => 'TKSK berhasil disimpan',
-                    'data'    => $newTksk
-                ],
-                200
-            );
-        }
-        catch (\Throwable $th) {
-            throw new GeneralException($th->getMessage(), 500);
-        }
-    }
-
     public function updateTksk(TkskRequest $request): JsonResponse
     {
         try {
@@ -328,6 +311,65 @@ class TkskServiceImpl implements TkskService
             );
         }
         catch (\Throwable $th) {
+            throw new GeneralException($th->getMessage(), 500);
+        }
+    }
+
+    public function verifTksk(TkskRequest $request): JsonResponse
+    {
+        try {
+            $siteId = $request->user->site_id;
+            $noUrut = $request->status == 'diterima' ? $this->generateNoUrut($siteId) : null;
+
+            $newTksk = Tksk::where('id', $request->id)->update([
+                'no_urut'  => $noUrut,
+                'status'   => $request->status,
+                'verifier' => $request->user->id,
+            ]);
+
+            return response()->json(
+                [
+                    'message' => 'verifikasi TKSK berhasil diubah',
+                    'data'    => $newTksk
+                ],
+                200
+            );
+        }
+        catch (\Throwable $th) {
+            throw new GeneralException($th->getMessage(), 500);
+        }
+    }
+
+    public function updateStatus(TkskRequest $request): JsonResponse
+    {
+        try {
+            DB::beginTransaction();
+
+            $newPsm = Tksk::where('id', $request->id)->update([
+                'status'   => $request->status,
+                'verifier' => $request->user->id,
+            ]);
+
+            LogStatus::create([
+                "id_reference"      => $request->id,
+                "table_reference"   => "tksk",
+                "status"            => $request->status,
+                "description"       => $request->description ? $request->description : "",
+                'verifier'          => $request->user->id,
+            ]);
+
+            DB::commit();
+
+            return response()->json(
+                [
+                    'message' => 'TKSK status berhasil diubah',
+                    'data'    => $newPsm
+                ],
+                200
+            );
+        }
+        catch (\Throwable $th) {
+            DB::rollback();
             throw new GeneralException($th->getMessage(), 500);
         }
     }

@@ -1,65 +1,72 @@
 let user_level_id = $("#formCreateUpdateLks #level_id").val();
+let status_hide = $("#formCreateUpdateLks #status_hide").val();
+let lks_id = $("#formCreateUpdateLks #id").val();
 
 /**
  * Only Number
  * -----------------------------
  */
-filterNumbers([ // layouts/main.js
+filterNumbers([
+    // layouts/main.js
     "#formCreateUpdateLks #no_telp_yayasan",
     "#formCreateUpdateLks #alamat_rt",
     "#formCreateUpdateLks #alamat_rw",
-])
+]);
 
 /**
  * Disable Input
  * -----------------------------
  */
 // -- disable all input when update AND non admin --
-if ($("#formCreateUpdateLks #id").val() != null && user_level_id != 1) {
-    $('#formCreateUpdateLks input, #formCreateUpdateLks select').prop('disabled', true);
+if (
+    ($("#formCreateUpdateLks #id").val() != null && user_level_id != 1) ||
+    status_hide == "nonaktif"
+) {
+    $("#formCreateUpdateLks input, #formCreateUpdateLks select").prop(
+        "disabled",
+        true
+    );
 }
 // -- disable autocomplete wilayah when non admin --
 if (user_level_id != 1) {
-    $('#formCreateUpdateLks #site').prop('disabled', true);
-}
-else {
-    EnableAutoCompleteWilayah()
+    $("#formCreateUpdateLks #site").prop("disabled", true);
+} else {
+    EnableAutoCompleteWilayah();
 }
 
 /**
  * Date Picker - initialization
  */
-moment.locale('id');
 $("#formCreateUpdateLks .tgl").daterangepicker({
     singleDatePicker: true,
     showDropdowns: true, // Opsional, menampilkan dropdown untuk memilih bulan dan tahun
-    "locale": {
-        "format": "DD MMMM YYYY",
-        "separator": " - ",
-        "applyLabel": "Simpan",
-        "cancelLabel": "Tutup",
-        "customRangeLabel": "Custom",
-        "daysOfWeek": ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
-        "monthNames": [
-            'Januari',
-            'Februari',
-            'Maret',
-            'April',
-            'Mei',
-            'Juni',
-            'Juli',
-            'Agustus',
-            'September',
-            'Oktober',
-            'November',
-            'Desember'
+    locale: {
+        format: "DD MMMM YYYY",
+        separator: " - ",
+        applyLabel: "Simpan",
+        cancelLabel: "Tutup",
+        customRangeLabel: "Custom",
+        daysOfWeek: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
+        monthNames: [
+            "Januari",
+            "Februari",
+            "Maret",
+            "April",
+            "Mei",
+            "Juni",
+            "Juli",
+            "Agustus",
+            "September",
+            "Oktober",
+            "November",
+            "Desember",
         ],
-        "firstDay": 1
-    }
+        firstDay: 1,
+    },
 });
 
 if ($("#formCreateUpdateLks #id").val() == null) {
-    $("#formCreateUpdateLks .tgl").val('');
+    $("#formCreateUpdateLks .tgl").val("");
 }
 
 /**
@@ -70,117 +77,120 @@ let region_id = $("#formCreateUpdateLks #region_id").val();
 
 function EnableAutoCompleteWilayah() {
     $("#formCreateUpdateLks #site").autoComplete({
-        resolver: 'ajax',
-        noResultsText:'No results',
+        resolver: "ajax",
+        noResultsText: "No results",
         events: {
             search: function (qry, callback) {
-                $.ajax(
-                    {
-                        url: `${BASE_URL}/api/v1/autocomplete/site`,
-                        data: { 'name': qry},
-                        headers: {
-                            'token': $.cookie("jwt_token"),
-                        },
-                    }
-                ).done(function (res) {
+                $.ajax({
+                    url: `${BASE_URL}/api/v1/autocomplete/site`,
+                    data: { name: qry },
+                    headers: {
+                        token: $.cookie("jwt_token"),
+                    },
+                }).done(function (res) {
                     callback(res.data);
                 });
             },
         },
     });
 
-    $('#formCreateUpdateLks #site').on('input', function () {
-        $('#formCreateUpdateLks #site_id').val('')
-        region_id = $("#formCreateUpdateLks #region_id").val()
+    $("#formCreateUpdateLks #site").on("input", function () {
+        $("#formCreateUpdateLks #site_id").val("");
+        region_id = $("#formCreateUpdateLks #region_id").val();
     });
 
-    $('#formCreateUpdateLks #site').on('autocomplete.select', function (evt, item) {
-        $('#formCreateUpdateLks #site_id').val(item.id)
-        region_id = item.region_id
+    $("#formCreateUpdateLks #site").on(
+        "autocomplete.select",
+        function (evt, item) {
+            $("#formCreateUpdateLks #site_id").val(item.id);
+            region_id = item.region_id;
 
-        $(`#formCreateUpdateLks #site_id-error`).html('');
+            $(`#formCreateUpdateLks #site_id-error`).html("");
 
-        autoComplete = true;
-    });
+            autoComplete = true;
+        }
+    );
 }
 
 /**
  * Auto Complete - Kelurahan
  */
 $("#formCreateUpdateLks #alamat_kelurahan").autoComplete({
-    resolver: 'ajax',
-    noResultsText:'No results',
+    resolver: "ajax",
+    noResultsText: "No results",
     events: {
         search: function (qry, callback) {
-            $.ajax(
-                {
-                    url: `${BASE_URL}/api/v1/autocomplete/region`,
-                    data: { 'name': qry, 'type': 'kelurahan'},
-                    headers: {
-                        'token': $.cookie("jwt_token"),
-                    },
-                }
-            ).done(function (res) {
+            $.ajax({
+                url: `${BASE_URL}/api/v1/autocomplete/region`,
+                data: { name: qry, type: "kelurahan" },
+                headers: {
+                    token: $.cookie("jwt_token"),
+                },
+            }).done(function (res) {
                 callback(res.data);
             });
         },
     },
 });
 
-$('#formCreateUpdateLks #alamat_kelurahan').on('input', function () {
-    $('#formCreateUpdateLks #alamat_kelurahan_hide').val('')
+$("#formCreateUpdateLks #alamat_kelurahan").on("input", function () {
+    $("#formCreateUpdateLks #alamat_kelurahan_hide").val("");
 });
 
-$('#formCreateUpdateLks #alamat_kelurahan').on('autocomplete.select', function (evt, item) {
-    $('#formCreateUpdateLks #alamat_kelurahan_hide').val(item.text)
-    $(`#formCreateUpdateLks #alamat_kelurahan_hide-error`).html('');
+$("#formCreateUpdateLks #alamat_kelurahan").on(
+    "autocomplete.select",
+    function (evt, item) {
+        $("#formCreateUpdateLks #alamat_kelurahan_hide").val(item.text);
+        $(`#formCreateUpdateLks #alamat_kelurahan_hide-error`).html("");
 
-    autoComplete = true;
-});
+        autoComplete = true;
+    }
+);
 
 /**
  * Auto Complete - Kecamatan
  */
 $("#formCreateUpdateLks #alamat_kecamatan").autoComplete({
-    resolver: 'ajax',
-    noResultsText:'No results',
+    resolver: "ajax",
+    noResultsText: "No results",
     events: {
         search: function (qry, callback) {
-            $.ajax(
-                {
-                    url: `${BASE_URL}/api/v1/autocomplete/region`,
-                    data: { 'name': qry, 'type': 'kecamatan' },
-                    headers: {
-                        'token': $.cookie("jwt_token"),
-                    },
-                }
-            ).done(function (res) {
+            $.ajax({
+                url: `${BASE_URL}/api/v1/autocomplete/region`,
+                data: { name: qry, type: "kecamatan" },
+                headers: {
+                    token: $.cookie("jwt_token"),
+                },
+            }).done(function (res) {
                 callback(res.data);
             });
         },
     },
 });
 
-$('#formCreateUpdateLks #alamat_kecamatan').on('input', function () {
-    $('#formCreateUpdateLks #alamat_kecamatan_hide').val('')
+$("#formCreateUpdateLks #alamat_kecamatan").on("input", function () {
+    $("#formCreateUpdateLks #alamat_kecamatan_hide").val("");
 });
 
-$('#formCreateUpdateLks #alamat_kecamatan').on('autocomplete.select', function (evt, item) {
-    $('#formCreateUpdateLks #alamat_kecamatan_hide').val(item.text)
-    $(`#formCreateUpdateLks #alamat_kecamatan_hide-error`).html('');
+$("#formCreateUpdateLks #alamat_kecamatan").on(
+    "autocomplete.select",
+    function (evt, item) {
+        $("#formCreateUpdateLks #alamat_kecamatan_hide").val(item.text);
+        $(`#formCreateUpdateLks #alamat_kecamatan_hide-error`).html("");
 
-    autoComplete = true;
-});
+        autoComplete = true;
+    }
+);
 
 /**
  * Select 2
  */
-$('.select2bs4').select2({
-    theme: 'bootstrap4',
-    width: '100%'
-})
-$('.select2bs4').on('select2:select', function(e) {
-    $(this).removeClass('is-invalid');
+$(".select2bs4").select2({
+    theme: "bootstrap4",
+    width: "100%",
+});
+$(".select2bs4").on("select2:select", function (e) {
+    $(this).removeClass("is-invalid");
 
     autoComplete = true;
 });
@@ -190,389 +200,422 @@ $('.select2bs4').on('select2:select', function(e) {
  */
 
 //  clear error when keydown
-$("#formCreateUpdateLks input").on('keydown', function () {
-    $(this).removeClass('is-invalid');
-    $(`#formCreateUpdateLks #${$(this).attr('name')}-error`).html('');
-})
-$("#formCreateUpdateLks select").on('change', function () {
-    $(this).removeClass('is-invalid');
-    $(`#formCreateUpdateLks #${$(this).attr('name')}-error`).html('');
-})
+$("#formCreateUpdateLks input").on("keydown", function () {
+    $(this).removeClass("is-invalid");
+    $(`#formCreateUpdateLks #${$(this).attr("name")}-error`).html("");
+});
+$("#formCreateUpdateLks select").on("change", function () {
+    $(this).removeClass("is-invalid");
+    $(`#formCreateUpdateLks #${$(this).attr("name")}-error`).html("");
+});
 
 // induk berusaja
-$("#formCreateUpdateLks #induk_berusaha_status").on('change', function () {
+$("#formCreateUpdateLks #induk_berusaha_status").on("change", function () {
     if ($(this).val() == "ada") {
         $(`#formCreateUpdateLks .col-induk-berusaha`).show();
-    }
-    else{
+    } else {
         $(`#formCreateUpdateLks .col-induk-berusaha`).hide();
     }
-})
-$("#formCreateUpdateLks #induk_berusaha_status").change()
+});
+$("#formCreateUpdateLks #induk_berusaha_status").change();
 
 // form submit
-$('#formCreateUpdateLks').validate({
+$("#formCreateUpdateLks").validate({
     rules: {
         site_id: {
-            required: true
+            required: true,
         },
         year: {
-            required: true
+            required: true,
         },
         status: {
-            required: true
+            required: true,
         },
         nama: {
-            required: true
+            required: true,
         },
         nama_ketua: {
-            required: true
+            required: true,
         },
         no_telp_yayasan: {
-            required: true
+            required: true,
         },
         jenis_layanan: {
-            required: true
+            required: true,
+        },
+        jenis_lks: {
+            required: true,
+        },
+        jumlah_wbs: {
+            required: true,
+        },
+        jumlah_peksos: {
+            required: true,
         },
         sk_domisili_yayasan_nomor: {
-            required: true
+            required: true,
         },
         sk_domisili_yayasan_masaberlaku_mulai: {
-            required: true
+            required: true,
         },
         sk_domisili_yayasan_masaberlaku_selesai: {
-            required: true
+            required: true,
         },
         sk_domisili_yayasan_instansi_penerbit: {
-            required: true
+            required: true,
         },
         tanda_daftar_yayasan_nomor: {
-            required: true
+            required: true,
         },
         tanda_daftar_yayasan_masaberlaku_mulai: {
-            required: true
+            required: true,
         },
         tanda_daftar_yayasan_masaberlaku_selesai: {
-            required: true
+            required: true,
         },
         tanda_daftar_yayasan_instansi_penerbit: {
-            required: true
+            required: true,
         },
         izin_kegiatan_yayasan_nomor: {
-            required: true
+            required: true,
         },
         izin_kegiatan_yayasan_masaberlaku_mulai: {
-            required: true
+            required: true,
         },
         izin_kegiatan_yayasan_masaberlaku_selesai: {
-            required: true
+            required: true,
         },
         izin_kegiatan_yayasan_instansi_penerbit: {
-            required: true
+            required: true,
         },
         induk_berusaha_status: {
-            required: true
+            required: true,
         },
         induk_berusaha_nomor: {
-            required: true
+            required: true,
         },
         induk_berusaha_tgl_terbit: {
-            required: true
+            required: true,
         },
         induk_berusaha_instansi_penerbit: {
-            required: true
+            required: true,
         },
         akreditasi: {
-            required: true
+            required: true,
         },
         akreditasi_tgl: {
-            required: true
+            required: true,
         },
         alamat_jalan: {
-            required: true
+            required: true,
         },
         alamat_rt: {
-            required: true
+            required: true,
         },
         alamat_rw: {
-            required: true
+            required: true,
         },
         alamat_kelurahan_hide: {
-            required: true
+            required: true,
         },
         alamat_kecamatan_hide: {
-            required: true
+            required: true,
         },
         sk_domisili_yayasan_nomor: {
-            required: true
+            required: true,
         },
         sk_domisili_yayasan_tgl_terbit: {
-            required: true
+            required: true,
         },
         sk_domisili_yayasan_masa_berlaku: {
-            required: true
+            required: true,
         },
         tanda_daftar_yayasan_nomor: {
-            required: true
+            required: true,
         },
         tanda_daftar_yayasan_tgl_terbit: {
-            required: true
+            required: true,
         },
         tanda_daftar_yayasan_masa_berlaku: {
-            required: true
+            required: true,
         },
         izin_kegiatan_yayasan_nomor: {
-            required: true
+            required: true,
         },
         izin_kegiatan_yayasan_tgl_terbit: {
-            required: true
+            required: true,
         },
         izin_kegiatan_yayasan_masa_berlaku: {
-            required: true
+            required: true,
         },
         induk_berusaha_nomor: {
-            required: true
+            required: true,
         },
         induk_berusaha_tgl: {
-            required: true
-        }
+            required: true,
+        },
     },
     messages: {
         site_id: {
-            required: "Field Wilayah harus diisi."
+            required: "Field Wilayah harus diisi.",
         },
         year: {
-            required: "Data tahun harus disi"
+            required: "Data tahun harus disi",
         },
         status: {
-            required: "Field Status harus diisi."
+            required: "Field Status harus diisi.",
         },
         nama: {
-            required: "Field Nama harus diisi."
+            required: "Field Nama harus diisi.",
         },
         nama_ketua: {
-            required: "Field Ketua harus diisi."
+            required: "Field Ketua harus diisi.",
         },
         no_telp_yayasan: {
-            required: "Field Telepon harus diisi."
+            required: "Field Telepon harus diisi.",
         },
         jenis_layanan: {
-            required: "Field Jenis Layanan harus diisi."
+            required: "Field Jenis Layanan harus diisi.",
+        },
+        jenis_lks: {
+            required: "Field Jenis LKS harus diisi.",
+        },
+        jumlah_wbs: {
+            required: "Field harus diisi.",
+        },
+        jumlah_peksos: {
+            required: "Field harus diisi.",
         },
         sk_domisili_yayasan_nomor: {
-            required: "Field Nomor harus diisi."
+            required: "Field Nomor harus diisi.",
         },
         sk_domisili_yayasan_masaberlaku_mulai: {
-            required: "Field Masa Berlaku Mulai harus diisi."
+            required: "Field Masa Berlaku Mulai harus diisi.",
         },
         sk_domisili_yayasan_masaberlaku_selesai: {
-            required: "Field Masa Berlaku Selesai harus diisi."
+            required: "Field Masa Berlaku Selesai harus diisi.",
         },
         sk_domisili_yayasan_instansi_penerbit: {
-            required: "Field Instansi Penerbit harus diisi."
+            required: "Field Instansi Penerbit harus diisi.",
         },
         tanda_daftar_yayasan_nomor: {
-            required: "Field Nomor harus diisi."
+            required: "Field Nomor harus diisi.",
         },
         tanda_daftar_yayasan_masaberlaku_mulai: {
-            required: "Field Masa Berlaku Mulai harus diisi."
+            required: "Field Masa Berlaku Mulai harus diisi.",
         },
         tanda_daftar_yayasan_masaberlaku_selesai: {
-            required: "Field Masa Berlaku Selesai harus diisi."
+            required: "Field Masa Berlaku Selesai harus diisi.",
         },
         tanda_daftar_yayasan_instansi_penerbit: {
-            required: "Field Instansi Penerbit harus diisi."
+            required: "Field Instansi Penerbit harus diisi.",
         },
         izin_kegiatan_yayasan_nomor: {
-            required: "Field Nomor harus diisi."
+            required: "Field Nomor harus diisi.",
         },
         izin_kegiatan_yayasan_masaberlaku_mulai: {
-            required: "Field Masa Berlaku Mulai  harus diisi."
+            required: "Field Masa Berlaku Mulai  harus diisi.",
         },
         izin_kegiatan_yayasan_masaberlaku_selesai: {
-            required: "Field Masa Berlaku Selesai  harus diisi."
+            required: "Field Masa Berlaku Selesai  harus diisi.",
         },
         izin_kegiatan_yayasan_instansi_penerbit: {
-            required: "Field Instansi Penerbit  harus diisi."
+            required: "Field Instansi Penerbit  harus diisi.",
         },
         induk_berusaha_status: {
-            required: "Field Status harus diisi."
+            required: "Field Status harus diisi.",
         },
         induk_berusaha_nomor: {
-            required: "Field Nomor harus diisi."
+            required: "Field Nomor harus diisi.",
         },
         induk_berusaha_tgl_terbit: {
-            required: "Field Tanggal Terbit harus diisi."
+            required: "Field Tanggal Terbit harus diisi.",
         },
         induk_berusaha_instansi_penerbit: {
-            required: "Field Instansi Penerbit harus diisi."
+            required: "Field Instansi Penerbit harus diisi.",
         },
         akreditasi: {
-            required: "Field Akreditasi harus diisi."
+            required: "Field Akreditasi harus diisi.",
         },
         akreditasi_tgl: {
-            required: "harus diisi."
+            required: "harus diisi.",
         },
         alamat_jalan: {
-            required: "Field Jalan harus diisi."
+            required: "Field Jalan harus diisi.",
         },
         alamat_rt: {
-            required: "Field RT harus diisi."
+            required: "Field RT harus diisi.",
         },
         alamat_rw: {
-            required: "Field RW harus diisi."
+            required: "Field RW harus diisi.",
         },
         alamat_kelurahan_hide: {
-            required: "Field Kelurahan harus diisi."
+            required: "Field Kelurahan harus diisi.",
         },
         alamat_kecamatan_hide: {
-            required: "Field Kecamatan harus diisi."
+            required: "Field Kecamatan harus diisi.",
         },
         sk_domisili_yayasan_nomor: {
-            required: "Field Nomor harus diisi."
+            required: "Field Nomor harus diisi.",
         },
         sk_domisili_yayasan_tgl_terbit: {
-            required: "Field Tanggal harus diisi."
+            required: "Field Tanggal harus diisi.",
         },
         sk_domisili_yayasan_masa_berlaku: {
-            required: "Field Masa Berlaku harus diisi."
+            required: "Field Masa Berlaku harus diisi.",
         },
         tanda_daftar_yayasan_nomor: {
-            required: "Field Nomor harus diisi."
+            required: "Field Nomor harus diisi.",
         },
         tanda_daftar_yayasan_tgl_terbit: {
-            required: "Field Tanggal diisi."
+            required: "Field Tanggal diisi.",
         },
         tanda_daftar_yayasan_masa_berlaku: {
-            required: "Field Masa Berlaku diisi."
+            required: "Field Masa Berlaku diisi.",
         },
         izin_kegiatan_yayasan_nomor: {
-            required: "Field Nomor harus diisi."
+            required: "Field Nomor harus diisi.",
         },
         izin_kegiatan_yayasan_tgl_terbit: {
-            required: "Field Tanggal diisi."
+            required: "Field Tanggal diisi.",
         },
         izin_kegiatan_yayasan_masa_berlaku: {
-            required: "Field Masa Berlaku diisi."
+            required: "Field Masa Berlaku diisi.",
         },
         induk_berusaha_nomor: {
-            required: "Field Nomor harus diisi."
+            required: "Field Nomor harus diisi.",
         },
         induk_berusaha_tgl: {
-            required: "Field Tanggal diisi."
-        }
+            required: "Field Tanggal diisi.",
+        },
     },
-    errorElement: 'span',
+    errorElement: "span",
     errorPlacement: function (error, element) {
-        error.addClass('invalid-feedback');
-        element.closest('.form-group').append(error);
+        error.addClass("invalid-feedback");
+        element.closest(".form-group").append(error);
     },
     highlight: function (element, errorClass, validClass) {
-        if ($(element).attr('name') == "site_id") {
-            $('#formCreateUpdateLks #site').addClass('is-invalid');
+        if ($(element).attr("name") == "site_id") {
+            $("#formCreateUpdateLks #site").addClass("is-invalid");
         }
-        if ($(element).attr('name') == "alamat_kelurahan_hide") {
-            $('#formCreateUpdateLks #alamat_kelurahan').addClass('is-invalid');
+        if ($(element).attr("name") == "alamat_kelurahan_hide") {
+            $("#formCreateUpdateLks #alamat_kelurahan").addClass("is-invalid");
         }
-        if ($(element).attr('name') == "alamat_kecamatan_hide") {
-            $('#formCreateUpdateLks #alamat_kecamatan').addClass('is-invalid');
-        }
-        else {
-            $(element).addClass('is-invalid');
+        if ($(element).attr("name") == "alamat_kecamatan_hide") {
+            $("#formCreateUpdateLks #alamat_kecamatan").addClass("is-invalid");
+        } else {
+            $(element).addClass("is-invalid");
         }
     },
     unhighlight: function (element, errorClass, validClass) {
-        if ($(element).attr('name') == "site_id") {
-            $('#formCreateUpdateLks #site').removeClass('is-invalid');
+        if ($(element).attr("name") == "site_id") {
+            $("#formCreateUpdateLks #site").removeClass("is-invalid");
         }
-        if ($(element).attr('name') == "alamat_kelurahan_hide") {
-            $('#formCreateUpdateLks #alamat_kelurahan').removeClass('is-invalid');
+        if ($(element).attr("name") == "alamat_kelurahan_hide") {
+            $("#formCreateUpdateLks #alamat_kelurahan").removeClass(
+                "is-invalid"
+            );
         }
-        if ($(element).attr('name') == "alamat_kecamatan_hide") {
-            $('#formCreateUpdateLks #alamat_kecamatan').removeClass('is-invalid');
+        if ($(element).attr("name") == "alamat_kecamatan_hide") {
+            $("#formCreateUpdateLks #alamat_kecamatan").removeClass(
+                "is-invalid"
+            );
+        } else {
+            $(element).removeClass("is-invalid");
         }
-        else {
-            $(element).removeClass('is-invalid');
-        }
-    }
+    },
 });
 
-$(document).on('keydown', function(event) {
+$(document).on("keydown", function (event) {
     if (event.keyCode === 13) {
         event.preventDefault();
 
         if (autoComplete == false) {
-            saveData()
-        }
-        else {
+            saveData();
+        } else {
             autoComplete = false;
         }
     }
 });
 
 function saveData() {
-    if ($('#formCreateUpdateLks').valid()) {
-        let form  = new FormData(document.querySelector('#formCreateUpdateLks'));
-        let lksId = form.get('id');
+    if ($("#formCreateUpdateLks").valid()) {
+        let form = new FormData(document.querySelector("#formCreateUpdateLks"));
+        let lksId = form.get("id");
 
         Swal.fire({
-            title: 'ANDA YAKIN?',
+            title: "ANDA YAKIN?",
             text: `pastikan data sudah benar`,
-            icon: 'warning',
+            icon: "warning",
             showCancelButton: true,
-            confirmButtonText: 'iya',
+            confirmButtonText: "iya",
             preConfirm: () => {
                 return $.ajax({
-                    type: lksId ? "PUT": "POST",
-                    url: `${BASE_URL}/api/v1/lks/${lksId ? 'update' : 'create'}`,
+                    type: lksId ? "PUT" : "POST",
+                    url: `${BASE_URL}/api/v1/lks/${
+                        lksId ? "update" : "create"
+                    }`,
                     data: form,
                     cache: false,
-                    processData:false,
+                    processData: false,
                     contentType: false,
-                    headers		: {
-                        'token': $.cookie("jwt_token"),
+                    headers: {
+                        token: $.cookie("jwt_token"),
                     },
-                }).then(response => {
-                    Swal.fire({
-                        title: 'Sukses!',
-                        text: 'Data berhasil tersimpan.',
-                        icon: 'success'
-                    }).then((result) => {
-                        if (lksId == null) {
-                            if (user_level_id == 1) {
-                                $("#formCreateUpdateLks input").val('');
+                })
+                    .then((response) => {
+                        Swal.fire({
+                            title: "Sukses!",
+                            text: "Data berhasil tersimpan.",
+                            icon: "success",
+                        }).then((result) => {
+                            if (lksId == null) {
+                                if (user_level_id == 1) {
+                                    $("#formCreateUpdateLks input").val("");
+                                } else {
+                                    $("#formCreateUpdateLks input")
+                                        .not("#site")
+                                        .val("");
+                                }
+                                $("#formCreateUpdateLks select")
+                                    .val("")
+                                    .change();
+                            } else {
+                                location.reload();
                             }
-                            else {
-                                $("#formCreateUpdateLks input").not("#site").val('');
+                        });
+                    })
+                    .catch((data) => {
+                        if (data.status == 400) {
+                            Swal.close();
+                            let errors = data.responseJSON.data.errors;
+
+                            for (const key in errors) {
+                                $(`#formCreateUpdateLks #${key}`).addClass(
+                                    "is-invalid"
+                                );
+                                $(`#formCreateUpdateLks #${key}-error`).html(
+                                    errors[key][0]
+                                );
                             }
-                            $("#formCreateUpdateLks select").val('').change();
-                        }
-                        else {
-                            location.reload();
+
+                            showToast(
+                                "data <b>belum valid</b>. mohon periksa kembali!",
+                                "warning"
+                            );
+                        } else if (data.status >= 500) {
+                            Swal.showValidationMessage(
+                                `terjadi kesalahan pada server!`
+                            );
+                        } else {
+                            Swal.showValidationMessage(
+                                data.responseJSON.message
+                            );
                         }
                     });
-                }).catch(data => {
-                    if (data.status == 400) {
-                        Swal.close();
-                        let errors = data.responseJSON.data.errors;
-
-                        for (const key in errors) {
-                            $(`#formCreateUpdateLks #${key}`).addClass('is-invalid');
-                            $(`#formCreateUpdateLks #${key}-error`).html(errors[key][0]);
-                        }
-
-                        showToast('data <b>belum valid</b>. mohon periksa kembali!','warning');
-                    }
-                    else if (data.status >= 500) {
-                        Swal.showValidationMessage(`terjadi kesalahan pada server!`)
-                    }
-                    else {
-                        Swal.showValidationMessage(data.responseJSON.message)
-                    }
-                });
             },
-            allowOutsideClick: () => !Swal.isLoading()
-        })
+            allowOutsideClick: () => !Swal.isLoading(),
+        });
     }
 }
 
@@ -581,35 +624,165 @@ function saveData() {
  */
 function verifLKS(el, event, status, id) {
     Swal.fire({
-        title: 'ANDA YAKIN?',
+        title: "ANDA YAKIN?",
         text: `data tidak akan bisa diubah`,
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonText: 'iya',
+        confirmButtonText: "iya",
         preConfirm: () => {
             return $.ajax({
                 type: "PUT",
                 url: `${BASE_URL}/api/v1/lks/verif?status=${status}&id=${id}`,
-                headers	: {
-                    'token': $.cookie("jwt_token"),
+                headers: {
+                    token: $.cookie("jwt_token"),
                 },
-            }).then(response => {
-                Swal.fire({
-                  title: 'Sukses!',
-                  text: 'Data berhasil tersimpan.',
-                  icon: 'success'
-                }).then((result) => {
-                    location.reload();
+            })
+                .then((response) => {
+                    Swal.fire({
+                        title: "Sukses!",
+                        text: "Data berhasil tersimpan.",
+                        icon: "success",
+                    }).then((result) => {
+                        location.reload();
+                    });
+                })
+                .catch((data) => {
+                    if (data.status >= 500) {
+                        Swal.showValidationMessage(
+                            `terjadi kesalahan pada server!`
+                        );
+                    } else {
+                        Swal.showValidationMessage(data.responseJSON.message);
+                    }
                 });
-            }).catch(data => {
-                if (data.status >= 500) {
-                    Swal.showValidationMessage(`terjadi kesalahan pada server!`)
-                }
-                else {
-                    Swal.showValidationMessage(data.responseJSON.message)
-                }
-            });
         },
-        allowOutsideClick: () => !Swal.isLoading()
-    })
+        allowOutsideClick: () => !Swal.isLoading(),
+    });
+}
+
+/**
+ * NonAktif
+ * --------------------------
+ */
+$("#formNonAktif").validate({
+    rules: {
+        description: {
+            required: true,
+        },
+    },
+    messages: {
+        description: {
+            required: "Field ini harus diisi.",
+        },
+    },
+    errorElement: "span",
+    errorPlacement: function (error, element) {
+        error.addClass("invalid-feedback");
+        element.closest(".form-group").append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass("is-invalid");
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass("is-invalid");
+    },
+});
+
+function nonAktif() {
+    if ($("#formNonAktif").valid()) {
+        let form = new FormData(document.querySelector("#formNonAktif"));
+        form.append("status", "nonaktif");
+
+        Swal.fire({
+            title: "ANDA YAKIN?",
+            text: `data akan dinon-aktifkan`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "iya",
+            preConfirm: () => {
+                return $.ajax({
+                    type: "PUT",
+                    url: `${BASE_URL}/api/v1/lks/update_status`,
+                    data: form,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        token: $.cookie("jwt_token"),
+                    },
+                })
+                    .then((response) => {
+                        Swal.fire({
+                            title: "Sukses!",
+                            text: "Data berhasil dinon-aktifkan.",
+                            icon: "success",
+                        }).then((result) => {
+                            location.reload();
+                        });
+                    })
+                    .catch((data) => {
+                        if (data.status >= 500) {
+                            Swal.showValidationMessage(
+                                `terjadi kesalahan pada server!`
+                            );
+                        } else {
+                            Swal.showValidationMessage(
+                                data.responseJSON.message
+                            );
+                        }
+                    });
+            },
+            allowOutsideClick: () => !Swal.isLoading(),
+        });
+    }
+}
+
+/**
+ * Aktifasi
+ * --------------------------
+ */
+function aktifasi() {
+    let form = new FormData();
+    form.append("id", lks_id);
+    form.append("status", "diterima");
+
+    Swal.fire({
+        title: "ANDA YAKIN?",
+        text: `data akan diaktifkan`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "iya",
+        preConfirm: () => {
+            return $.ajax({
+                type: "PUT",
+                url: `${BASE_URL}/api/v1/lks/update_status`,
+                data: form,
+                cache: false,
+                processData: false,
+                contentType: false,
+                headers: {
+                    token: $.cookie("jwt_token"),
+                },
+            })
+                .then((response) => {
+                    Swal.fire({
+                        title: "Sukses!",
+                        text: "Data berhasil diaktifkan.",
+                        icon: "success",
+                    }).then((result) => {
+                        location.reload();
+                    });
+                })
+                .catch((data) => {
+                    if (data.status >= 500) {
+                        Swal.showValidationMessage(
+                            `terjadi kesalahan pada server!`
+                        );
+                    } else {
+                        Swal.showValidationMessage(data.responseJSON.message);
+                    }
+                });
+        },
+        allowOutsideClick: () => !Swal.isLoading(),
+    });
 }

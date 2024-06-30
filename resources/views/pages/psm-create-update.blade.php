@@ -42,12 +42,20 @@
                         @endif
                     </div>
                 </div>
+                @if($psm != null && $psm->status == "nonaktif" && $status_nonaktif != null)
+                <div class="col-12">
+                    <p class="text-danger">
+                        <small><i>*{{ $status_nonaktif->description }}</i></small>
+                    </p>
+                </div>
+                @endif
             </div>
 
             <div class="row px-2 pb-5">
 				<form id="formCreateUpdatePsm" class="col-12" autocomplete="off" style="position: relative;">
                     @if($psm != null)
                     <input type="text" id="id" name="id" value="{{ $psm->id }}" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
+                    <input type="text" id="status_hide" name="status_hide" value="{{ $psm->status }}" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
                     @endif
                     <input type="text" id="level_id" name="level_id" value="{{ $user->level_id }}" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
                     <input type="text" id="region_id" name="region_id" value="{{ $user->site ? $user->site->region_id : '' }}" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
@@ -294,24 +302,79 @@
                         </div>
                     </div>
 
-                    @if ($psm == null || $user->level_id == 1)
+                    @if ($psm == null)
                         <button type="button" class="w-100 mt-4 btn btn-success" onclick="saveData()">SIMPAN</button>
-                    @elseif ($user->level_id == 2 && $psm != null && $psm->status == 'diperiksa')
-                        <div class="row">
-                            <div class="col-md-6">
-                                <button type="button" class="w-100 mt-4 btn btn-danger" onclick="verifPSM(this, event, 'ditolak', {{ $psm->id }})">
-                                    TOLAK
-                                </button>
+                    @elseif ($psm != null && $user->level_id == 1)
+                        @if ($psm->status != 'diterima' && $psm->status != 'nonaktif')
+                            <button type="button" class="w-100 mt-4 btn btn-success" onclick="saveData()">SIMPAN</button>
+                        @elseif ($psm->status == 'nonaktif')
+                            <button type="button" class="w-100 mt-4 btn btn-info" onclick="aktifasi()">AKTIFASI</button>
+                        @elseif ($psm->status == 'diterima')
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button type="button" class="w-100 mt-4 btn btn-warning" data-toggle="modal" data-target="#modal-non-aktif">NON AKTIFKAN</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" class="w-100 mt-4 btn btn-success" onclick="saveData()">SIMPAN</button>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <button type="button" class="w-100 mt-4 btn btn-success" onclick="verifPSM(this, event, 'diterima', {{ $psm->id }})">
-                                    TERIMA
-                                </button>
+                        @endif
+                    @elseif ($psm != null && $user->level_id == 2)
+                        @if ($psm->status == 'diterima')
+                            <button type="button" class="w-100 mt-4 btn btn-warning" data-toggle="modal" data-target="#modal-non-aktif">NON AKTIFKAN</button>
+                        @elseif ($psm->status == 'nonaktif')
+                            <button type="button" class="w-100 mt-4 btn btn-info" onclick="aktifasi()">AKTIFASI</button>
+                        @elseif ($psm->status == 'diperiksa')
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button type="button" class="w-100 mt-4 btn btn-danger" onclick="verifPSM(this, event, 'ditolak', {{ $psm->id }})">
+                                        TOLAK
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" class="w-100 mt-4 btn btn-success" onclick="verifPSM(this, event, 'diterima', {{ $psm->id }})">
+                                        TERIMA
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     @endif
                 </form>
             </div>
         </div>
+
+        {{-- modal non-aktif --}}
+        @if ($psm != null && $psm->status == 'diterima' && ($user->level_id == 1 || $user->level_id == 2))
+        <div id="modal-non-aktif" class="modal fade">
+            <div class="modal-dialog">
+                <form id="formNonAktif" class="modal-content" autocomplete="off" style="position: relative;">
+                    @if($psm != null)
+                    <input type="text" id="id" name="id" value="{{ $psm->id }}" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
+                    @endif
+
+                    <div class="modal-header">
+                        <h4 class="modal-title">Non Aktif</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group mb-4">
+                                    <label for="description"><small><b>Deskripsi</b></small></label>
+                                    <textarea id="description" name="description" class="form-control" rows="5" placeholder="Masukan alasan"></textarea>
+                                    <span id="description-error" class="invalid-feedback"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-end">
+                        <button type="button" class="btn btn-success" onclick="nonAktif()">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        @endif
     </div>
 @endsection

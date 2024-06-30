@@ -77,6 +77,12 @@
                                         <span id="status_ditolak" class="badge bg-danger float-right">0</span>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="text-info fas fa-ban" style="font-size: 17px;margin-right: 10px;"></i> Nonaktif
+                                        <span id="status_nonaktif" class="badge bg-info float-right">0</span>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                         <!-- /.card-body -->
@@ -85,7 +91,17 @@
 				<div class="col-md-10">
 
                     <div class="card card-secondary card-outline">
-                        <div class="card-header">
+                        <div class="card-header p-0 border-bottom-0">
+                            <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="tab-tableLks" data-toggle="pill" href="#div_aktif" role="tab" aria-selected="true">Aktif</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab-tableLks_nonaktif" data-toggle="pill" href="#div_nonaktif" role="tab">Non-Aktif</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
                             {{-- filter --}}
                             <div class="mb-4">
                                 <div class="wraper-filter">
@@ -98,41 +114,79 @@
                             </div>
 
                             {{-- table --}}
-							<table id="tableTksk" class="table table-bordered table-hover">
-								<thead>
-									<tr>
-										<th class="align-middle">
-											No
-										</th>
-                                        <th class="align-middle">
-											Tahun
-										</th>
-										<th class="align-middle">
-											NTR
-										</th>
-										<th class="align-middle">
-											No Induk Anggota
-										</th>
-										<th class="align-middle">
-											Nama
-										</th>
-                                        <th class="align-middle">
-											Tempat Tugas
-										</th>
-                                        <th class="align-middle">
-											Kelamin
-										</th>
-										<th class="align-middle">
-											Status
-										</th>
-										<th class="align-middle">
-											Aksi
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-								</tbody>
-							</table>
+                            <div class="tab-content" id="custom-tabs-four-tabContent">
+                                <div class="tab-pane fade show active" id="div_aktif" role="tabpanel">
+                                    <table id="tableTksk" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="align-middle">
+                                                    No
+                                                </th>
+                                                <th class="align-middle">
+                                                    Tahun
+                                                </th>
+                                                <th class="align-middle">
+                                                    NTR
+                                                </th>
+                                                <th class="align-middle">
+                                                    No Induk Anggota
+                                                </th>
+                                                <th class="align-middle">
+                                                    Nama
+                                                </th>
+                                                <th class="align-middle">
+                                                    Tempat Tugas
+                                                </th>
+                                                <th class="align-middle">
+                                                    Kelamin
+                                                </th>
+                                                <th class="align-middle">
+                                                    Status
+                                                </th>
+                                                <th class="align-middle">
+                                                    Aksi
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade show" id="div_nonaktif" role="tabpanel">
+                                    <table id="tableTksk_nonaktif" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="align-middle">
+                                                    No
+                                                </th>
+                                                <th class="align-middle">
+                                                    Tahun
+                                                </th>
+                                                <th class="align-middle">
+                                                    NTR
+                                                </th>
+                                                <th class="align-middle">
+                                                    No Induk Anggota
+                                                </th>
+                                                <th class="align-middle">
+                                                    Nama
+                                                </th>
+                                                <th class="align-middle">
+                                                    Tempat Tugas
+                                                </th>
+                                                <th class="align-middle">
+                                                    Kelamin
+                                                </th>
+                                                <th class="align-middle">
+                                                    Aksi
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
 						</div>
 					</div>
                 </div>
@@ -231,7 +285,7 @@
                                     {{ $user->level_id != 1 ? 'disabled' : '' }}
                                 >
                             </div>
-                            <div class="form-group mb-4">
+                            <div id="status_filter_wraper" class="form-group mb-4">
                                 <label for="status_filter"><small><b>Status</b></small></label>
                                 <select id="status_filter" name="status_filter" class="custom-select select2bs4">
                                     <option value="">-- pilih --</option>

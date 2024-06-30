@@ -1,31 +1,39 @@
 let user_level_id = $("#formCreateUpdateTksk #level_id").val();
+let status_hide = $("#formCreateUpdateTksk #status_hide").val();
+let tksk_id = $("#formCreateUpdateTksk #id").val();
 
 /**
  * Only Number
  * -----------------------------
  */
-filterNumbers([ // layouts/main.js
+filterNumbers([
+    // layouts/main.js
     "#formCreateUpdateTksk #nik",
     "#formCreateUpdateTksk #telepon",
     "#formCreateUpdateTksk #alamat_rt",
     "#formCreateUpdateTksk #alamat_rw",
     "#formCreateUpdateTksk #no_rekening",
-])
+]);
 
 /**
  * Disable Input
  * -----------------------------
  */
 // -- disable all input when update AND non admin --
-if ($("#formCreateUpdateTksk #id").val() != null && user_level_id != 1) {
-    $('#formCreateUpdateTksk input, #formCreateUpdateTksk select').prop('disabled', true);
+if (
+    ($("#formCreateUpdateTksk #id").val() != null && user_level_id != 1) ||
+    status_hide == "nonaktif"
+) {
+    $("#formCreateUpdateTksk input, #formCreateUpdateTksk select").prop(
+        "disabled",
+        true
+    );
 }
 // -- disable autocomplete wilayah when non admin --
 if (user_level_id != 1) {
-    $('#formCreateUpdateTksk #site').prop('disabled', true);
-}
-else {
-    EnableAutoCompleteWilayah()
+    $("#formCreateUpdateTksk #site").prop("disabled", true);
+} else {
+    EnableAutoCompleteWilayah();
 }
 
 /**
@@ -33,11 +41,11 @@ else {
  */
 function calculateAge(dateString) {
     const currentDate = moment();
-    const providedDate = moment(dateString, 'DD MMMM YYYY'); // Menggunakan format bahasa Indonesia
+    const providedDate = moment(dateString, "DD MMMM YYYY"); // Menggunakan format bahasa Indonesia
 
-    const yearsDiff = currentDate.diff(providedDate, 'years');
-    const monthsDiff = currentDate.diff(providedDate, 'months') % 12;
-    const daysDiff = currentDate.diff(providedDate, 'days') % 30; // Perkiraan hari dalam sebulan
+    const yearsDiff = currentDate.diff(providedDate, "years");
+    const monthsDiff = currentDate.diff(providedDate, "months") % 12;
+    const daysDiff = currentDate.diff(providedDate, "days") % 30; // Perkiraan hari dalam sebulan
 
     $("#formCreateUpdateTksk #usia").val(yearsDiff);
 }
@@ -45,45 +53,44 @@ function calculateAge(dateString) {
 /**
  * Date Picker - Tanggal Lahir
  */
-moment.locale('id');
+moment.locale("id");
 $("#formCreateUpdateTksk #tanggal_lahir").daterangepicker({
     singleDatePicker: true,
     showDropdowns: true, // Opsional, menampilkan dropdown untuk memilih bulan dan tahun
-    "locale": {
-        "format": "DD MMMM YYYY",
-        "separator": " - ",
-        "applyLabel": "Simpan",
-        "cancelLabel": "Tutup",
-        "customRangeLabel": "Custom",
-        "daysOfWeek": ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
-        "monthNames": [
-            'Januari',
-            'Februari',
-            'Maret',
-            'April',
-            'Mei',
-            'Juni',
-            'Juli',
-            'Agustus',
-            'September',
-            'Oktober',
-            'November',
-            'Desember'
+    locale: {
+        format: "DD MMMM YYYY",
+        separator: " - ",
+        applyLabel: "Simpan",
+        cancelLabel: "Tutup",
+        customRangeLabel: "Custom",
+        daysOfWeek: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
+        monthNames: [
+            "Januari",
+            "Februari",
+            "Maret",
+            "April",
+            "Mei",
+            "Juni",
+            "Juli",
+            "Agustus",
+            "September",
+            "Oktober",
+            "November",
+            "Desember",
         ],
-        "firstDay": 1,
+        firstDay: 1,
     },
-})
+});
 
 if ($("#formCreateUpdateTksk #id").val() == null) {
-    $("#formCreateUpdateTksk #tanggal_lahir").val('');
-}
-else {
+    $("#formCreateUpdateTksk #tanggal_lahir").val("");
+} else {
     calculateAge($("#formCreateUpdateTksk #tanggal_lahir").val());
 }
 
-$("#formCreateUpdateTksk #tanggal_lahir").on('change', function () {
+$("#formCreateUpdateTksk #tanggal_lahir").on("change", function () {
     calculateAge($(this).val());
-})
+});
 
 /**
  * Auto Complete - Site
@@ -93,152 +100,156 @@ let region_id = $("#formCreateUpdateTksk #region_id").val();
 
 function EnableAutoCompleteWilayah() {
     $("#formCreateUpdateTksk #site").autoComplete({
-        resolver: 'ajax',
-        noResultsText:'No results',
+        resolver: "ajax",
+        noResultsText: "No results",
         events: {
             search: function (qry, callback) {
-                $.ajax(
-                    {
-                        url: `${BASE_URL}/api/v1/autocomplete/site`,
-                        data: { 'name': qry},
-                        headers: {
-                            'token': $.cookie("jwt_token"),
-                        },
-                    }
-                ).done(function (res) {
+                $.ajax({
+                    url: `${BASE_URL}/api/v1/autocomplete/site`,
+                    data: { name: qry },
+                    headers: {
+                        token: $.cookie("jwt_token"),
+                    },
+                }).done(function (res) {
                     callback(res.data);
                 });
             },
         },
     });
 
-    $('#formCreateUpdateTksk #site').on('input', function () {
-        $('#formCreateUpdateTksk #site_id').val('')
-        region_id = $("#formCreateUpdateTksk #region_id").val()
+    $("#formCreateUpdateTksk #site").on("input", function () {
+        $("#formCreateUpdateTksk #site_id").val("");
+        region_id = $("#formCreateUpdateTksk #region_id").val();
 
-        $('#formCreateUpdateTksk #tempat_tugas').val('')
-        $('#formCreateUpdateTksk #tempat_tugas_hide').val('')
+        $("#formCreateUpdateTksk #tempat_tugas").val("");
+        $("#formCreateUpdateTksk #tempat_tugas_hide").val("");
     });
 
-    $('#formCreateUpdateTksk #site').on('autocomplete.select', function (evt, item) {
-        $('#formCreateUpdateTksk #site_id').val(item.id)
-        region_id = item.region_id
+    $("#formCreateUpdateTksk #site").on(
+        "autocomplete.select",
+        function (evt, item) {
+            $("#formCreateUpdateTksk #site_id").val(item.id);
+            region_id = item.region_id;
 
-        $(this).removeClass('is-invalid');
-        $(`#formCreateUpdateTksk #site_id-error`).html('');
+            $(this).removeClass("is-invalid");
+            $(`#formCreateUpdateTksk #site_id-error`).html("");
 
-        autoComplete = true;
-    });
+            autoComplete = true;
+        }
+    );
 }
 
 /**
  * Auto Complete - Tempat Tugas
  */
 $("#formCreateUpdateTksk #tempat_tugas").autoComplete({
-    resolver: 'ajax',
-    noResultsText:'No results',
+    resolver: "ajax",
+    noResultsText: "No results",
     events: {
         search: function (qry, callback) {
-            $.ajax(
-                {
-                    url: `${BASE_URL}/api/v1/autocomplete/region`,
-                    data: { 'name': qry, 'type': 'kecamatan', 'region_id': region_id},
-                    headers: {
-                        'token': $.cookie("jwt_token"),
-                    },
-                }
-            ).done(function (res) {
+            $.ajax({
+                url: `${BASE_URL}/api/v1/autocomplete/region`,
+                data: { name: qry, type: "kecamatan", region_id: region_id },
+                headers: {
+                    token: $.cookie("jwt_token"),
+                },
+            }).done(function (res) {
                 callback(res.data);
             });
         },
     },
 });
 
-$('#formCreateUpdateTksk #tempat_tugas').on('input', function () {
-    $('#formCreateUpdateTksk #tempat_tugas_hide').val('')
+$("#formCreateUpdateTksk #tempat_tugas").on("input", function () {
+    $("#formCreateUpdateTksk #tempat_tugas_hide").val("");
 });
 
-$('#formCreateUpdateTksk #tempat_tugas').on('autocomplete.select', function (evt, item) {
-    $('#formCreateUpdateTksk #tempat_tugas_hide').val(item.text)
+$("#formCreateUpdateTksk #tempat_tugas").on(
+    "autocomplete.select",
+    function (evt, item) {
+        $("#formCreateUpdateTksk #tempat_tugas_hide").val(item.text);
 
-    autoComplete = true;
-});
+        autoComplete = true;
+    }
+);
 
 /**
  * Auto Complete - Kelurahan
  */
 $("#formCreateUpdateTksk #alamat_kelurahan").autoComplete({
-    resolver: 'ajax',
-    noResultsText:'No results',
+    resolver: "ajax",
+    noResultsText: "No results",
     events: {
         search: function (qry, callback) {
-            $.ajax(
-                {
-                    url: `${BASE_URL}/api/v1/autocomplete/region`,
-                    data: { 'name': qry, 'type': 'kelurahan'},
-                    headers: {
-                        'token': $.cookie("jwt_token"),
-                    },
-                }
-            ).done(function (res) {
+            $.ajax({
+                url: `${BASE_URL}/api/v1/autocomplete/region`,
+                data: { name: qry, type: "kelurahan" },
+                headers: {
+                    token: $.cookie("jwt_token"),
+                },
+            }).done(function (res) {
                 callback(res.data);
             });
         },
     },
 });
 
-$('#formCreateUpdateTksk #alamat_kelurahan').on('input', function () {
-    $('#formCreateUpdateTksk #alamat_kelurahan_hide').val('')
+$("#formCreateUpdateTksk #alamat_kelurahan").on("input", function () {
+    $("#formCreateUpdateTksk #alamat_kelurahan_hide").val("");
 });
 
-$('#formCreateUpdateTksk #alamat_kelurahan').on('autocomplete.select', function (evt, item) {
-    $('#formCreateUpdateTksk #alamat_kelurahan_hide').val(item.text)
+$("#formCreateUpdateTksk #alamat_kelurahan").on(
+    "autocomplete.select",
+    function (evt, item) {
+        $("#formCreateUpdateTksk #alamat_kelurahan_hide").val(item.text);
 
-    autoComplete = true;
-});
+        autoComplete = true;
+    }
+);
 
 /**
  * Auto Complete - Bank
  */
 $("#formCreateUpdateTksk #nama_bank").autoComplete({
-    resolver: 'ajax',
-    noResultsText:'No results',
+    resolver: "ajax",
+    noResultsText: "No results",
     events: {
         search: function (qry, callback) {
-            $.ajax(
-                {
-                    url: `${BASE_URL}/api/v1/autocomplete/bank`,
-                    data: { 'name': qry, },
-                    headers: {
-                        'token': $.cookie("jwt_token"),
-                    },
-                }
-            ).done(function (res) {
+            $.ajax({
+                url: `${BASE_URL}/api/v1/autocomplete/bank`,
+                data: { name: qry },
+                headers: {
+                    token: $.cookie("jwt_token"),
+                },
+            }).done(function (res) {
                 callback(res.data);
             });
         },
     },
 });
 
-$('#formCreateUpdateTksk #nama_bank').on('input', function () {
-    $('#formCreateUpdateTksk #nama_bank_hide').val('')
+$("#formCreateUpdateTksk #nama_bank").on("input", function () {
+    $("#formCreateUpdateTksk #nama_bank_hide").val("");
 });
 
-$('#formCreateUpdateTksk #nama_bank').on('autocomplete.select', function (evt, item) {
-    $('#formCreateUpdateTksk #nama_bank_hide').val(item.text)
+$("#formCreateUpdateTksk #nama_bank").on(
+    "autocomplete.select",
+    function (evt, item) {
+        $("#formCreateUpdateTksk #nama_bank_hide").val(item.text);
 
-    autoComplete = true;
-});
+        autoComplete = true;
+    }
+);
 
 /**
  * Select 2
  */
-$('.select2bs4').select2({
-    theme: 'bootstrap4',
-    width: '100%'
-})
-$('.select2bs4').on('select2:select', function(e) {
-    $(this).removeClass('is-invalid');
+$(".select2bs4").select2({
+    theme: "bootstrap4",
+    width: "100%",
+});
+$(".select2bs4").on("select2:select", function (e) {
+    $(this).removeClass("is-invalid");
 
     autoComplete = true;
 });
@@ -248,312 +259,322 @@ $('.select2bs4').on('select2:select', function(e) {
  */
 
 //  clear error when keydown
-$("#formCreateUpdateTksk input").on('keydown', function () {
-    $(this).removeClass('is-invalid');
-    $(`#formCreateUpdateTksk #${$(this).attr('name')}-error`).html('');
-})
-$("#formCreateUpdateTksk select").on('change', function () {
-    $(this).removeClass('is-invalid');
-    $(`#formCreateUpdateTksk #${$(this).attr('name')}-error`).html('');
-})
+$("#formCreateUpdateTksk input").on("keydown", function () {
+    $(this).removeClass("is-invalid");
+    $(`#formCreateUpdateTksk #${$(this).attr("name")}-error`).html("");
+});
+$("#formCreateUpdateTksk select").on("change", function () {
+    $(this).removeClass("is-invalid");
+    $(`#formCreateUpdateTksk #${$(this).attr("name")}-error`).html("");
+});
 
 // form submit
-$('#formCreateUpdateTksk').validate({
+$("#formCreateUpdateTksk").validate({
     rules: {
         year: {
-            required: true
+            required: true,
         },
         no_induk_anggota: {
-            required: true
+            required: true,
         },
         tempat_tugas_hide: {
-            required: true
+            required: true,
         },
         nama: {
-            required: true
+            required: true,
         },
         nama_ibu_kandung: {
-            required: true
+            required: true,
         },
         nik: {
             required: true,
             minlength: 16,
             maxlength: 16,
-            digits: true
+            digits: true,
         },
         telepon: {
             required: true,
             minlength: 10,
             maxlength: 12,
-            digits: true
+            digits: true,
         },
         tempat_lahir: {
-            required: true
+            required: true,
         },
         tanggal_lahir: {
-            required: true
+            required: true,
         },
         pendidikan_terakhir: {
-            required: true
+            required: true,
         },
         jenis_kelamin: {
-            required: true
+            required: true,
         },
         no_kartu_registrasi: {
-            required: true
+            required: true,
         },
         alamat_jalan: {
-            required: true
+            required: true,
         },
         alamat_rt: {
-            required: true
+            required: true,
         },
         alamat_rw: {
-            required: true
+            required: true,
         },
         alamat_kelurahan_hide: {
-            required: true
+            required: true,
         },
         nama_di_rekening: {
-            required: true
+            required: true,
         },
         no_rekening: {
-            required: true
+            required: true,
         },
         nama_bank_hide: {
-            required: true
+            required: true,
         },
         tahun_pengangkatan_pertama: {
-            required: true
+            required: true,
         },
         nosk_pengangkatan_pertama: {
-            required: true
+            required: true,
         },
         pejabat_pengangkatan_pertama: {
-            required: true
+            required: true,
         },
         tahun_pengangkatan_terakhir: {
-            required: true
+            required: true,
         },
         nosk_pengangkatan_terakhir: {
-            required: true
+            required: true,
         },
         pejabat_pengangkatan_terakhir: {
-            required: true
+            required: true,
         },
         site_id: {
-            required: true
+            required: true,
         },
         status: {
-            required: true
-        }
+            required: true,
+        },
     },
     messages: {
         year: {
-            required: "Data tahun harus disi"
+            required: "Data tahun harus disi",
         },
         no_induk_anggota: {
-            required: "No. Induk Anggota harus diisi"
+            required: "No. Induk Anggota harus diisi",
         },
         tempat_tugas_hide: {
-            required: "wilayah tidak valid"
+            required: "wilayah tidak valid",
         },
         nama: {
-            required: "Nama harus diisi"
+            required: "Nama harus diisi",
         },
         nama_ibu_kandung: {
-            required: "Nama Ibu Kandung harus diisi"
+            required: "Nama Ibu Kandung harus diisi",
         },
         nik: {
             required: "NIK harus diisi",
             minlength: "NIK minimal 16 digit",
             maxlength: "NIK maximal 16 digit",
-            digits: "NIK harus angka"
+            digits: "NIK harus angka",
         },
         telepon: {
             required: "No. HP harus diisi",
             minlength: "No. HP minimal 10 digit",
             maxlength: "No. HP maximal 12 digit",
-            digits: "No. HP harus angka"
+            digits: "No. HP harus angka",
         },
         tempat_lahir: {
-            required: "Tempat Lahir harus diisi"
+            required: "Tempat Lahir harus diisi",
         },
         tanggal_lahir: {
-            required: "Tanggal Lahir harus diisi"
+            required: "Tanggal Lahir harus diisi",
         },
         pendidikan_terakhir: {
-            required: "Pendidikan Terakhir harus diisi"
+            required: "Pendidikan Terakhir harus diisi",
         },
         jenis_kelamin: {
-            required: "Jenis Kelamin harus diisi"
+            required: "Jenis Kelamin harus diisi",
         },
         no_kartu_registrasi: {
-            required: "No. Kartu Registrasi harus diisi"
+            required: "No. Kartu Registrasi harus diisi",
         },
         alamat_jalan: {
-            required: "Alamat Jalan harus diisi"
+            required: "Alamat Jalan harus diisi",
         },
         alamat_rt: {
-            required: "Alamat RT harus diisi"
+            required: "Alamat RT harus diisi",
         },
         alamat_rw: {
-            required: "Alamat RW harus diisi"
+            required: "Alamat RW harus diisi",
         },
         alamat_kelurahan_hide: {
-            required: "Kelurahan tidak valid"
+            required: "Kelurahan tidak valid",
         },
         nama_di_rekening: {
-            required: "Nama Di Rekening harus diisi"
+            required: "Nama Di Rekening harus diisi",
         },
         no_rekening: {
-            required: "No. Rekening harus diisi"
+            required: "No. Rekening harus diisi",
         },
         nama_bank_hide: {
-            required: "Nama Bank tidak valid"
+            required: "Nama Bank tidak valid",
         },
         tahun_pengangkatan_pertama: {
-            required: "Tahun Pengangkatan Pertama harus diisi"
+            required: "Tahun Pengangkatan Pertama harus diisi",
         },
         nosk_pengangkatan_pertama: {
-            required: "No. SK Pengangkatan Pertama harus diisi"
+            required: "No. SK Pengangkatan Pertama harus diisi",
         },
         pejabat_pengangkatan_pertama: {
-            required: "Pejabat Pengangkatan Pertama harus diisi"
+            required: "Pejabat Pengangkatan Pertama harus diisi",
         },
         tahun_pengangkatan_terakhir: {
-            required: "Tahun Pengangkatan Terakhir harus diisi"
+            required: "Tahun Pengangkatan Terakhir harus diisi",
         },
         nosk_pengangkatan_terakhir: {
-            required: "No. SK Pengangkatan Terakhir harus diisi"
+            required: "No. SK Pengangkatan Terakhir harus diisi",
         },
         pejabat_pengangkatan_terakhir: {
-            required: "Pejabat Pengangkatan Terakhir harus diisi"
+            required: "Pejabat Pengangkatan Terakhir harus diisi",
         },
         site_id: {
-            required: "Wilayah harus diisi"
+            required: "Wilayah harus diisi",
         },
         status: {
-            required: "Status harus diisi"
-        }
+            required: "Status harus diisi",
+        },
     },
-    errorElement: 'span',
+    errorElement: "span",
     errorPlacement: function (error, element) {
-        error.addClass('invalid-feedback');
-        element.closest('.form-group').append(error);
+        error.addClass("invalid-feedback");
+        element.closest(".form-group").append(error);
     },
     highlight: function (element, errorClass, validClass) {
-        if ($(element).attr('name') == "site_id") {
-            $('#formCreateUpdateTksk #site').addClass('is-invalid');
-        }
-        else if ($(element).attr('name') == "tempat_tugas_hide") {
-            $('#formCreateUpdateTksk #tempat_tugas').addClass('is-invalid');
-        }
-        else if ($(element).attr('name') == "alamat_kelurahan_hide") {
-            $('#formCreateUpdateTksk #alamat_kelurahan').addClass('is-invalid');
-        }
-        else if ($(element).attr('name') == "nama_bank_hide") {
-            $('#formCreateUpdateTksk #nama_bank').addClass('is-invalid');
-        }
-        else {
-            $(element).addClass('is-invalid');
+        if ($(element).attr("name") == "site_id") {
+            $("#formCreateUpdateTksk #site").addClass("is-invalid");
+        } else if ($(element).attr("name") == "tempat_tugas_hide") {
+            $("#formCreateUpdateTksk #tempat_tugas").addClass("is-invalid");
+        } else if ($(element).attr("name") == "alamat_kelurahan_hide") {
+            $("#formCreateUpdateTksk #alamat_kelurahan").addClass("is-invalid");
+        } else if ($(element).attr("name") == "nama_bank_hide") {
+            $("#formCreateUpdateTksk #nama_bank").addClass("is-invalid");
+        } else {
+            $(element).addClass("is-invalid");
         }
     },
     unhighlight: function (element, errorClass, validClass) {
-        if ($(element).attr('name') == "site_id") {
-            $('#formCreateUpdateTksk #site').removeClass('is-invalid');
+        if ($(element).attr("name") == "site_id") {
+            $("#formCreateUpdateTksk #site").removeClass("is-invalid");
+        } else if ($(element).attr("name") == "tempat_tugas_hide") {
+            $("#formCreateUpdateTksk #tempat_tugas").removeClass("is-invalid");
+        } else if ($(element).attr("name") == "alamat_kelurahan_hide") {
+            $("#formCreateUpdateTksk #alamat_kelurahan").removeClass(
+                "is-invalid"
+            );
+        } else if ($(element).attr("name") == "nama_bank_hide") {
+            $("#formCreateUpdateTksk #nama_bank").removeClass("is-invalid");
+        } else {
+            $(element).removeClass("is-invalid");
         }
-        else if ($(element).attr('name') == "tempat_tugas_hide") {
-            $('#formCreateUpdateTksk #tempat_tugas').removeClass('is-invalid');
-        }
-        else if ($(element).attr('name') == "alamat_kelurahan_hide") {
-            $('#formCreateUpdateTksk #alamat_kelurahan').removeClass('is-invalid');
-        }
-        else if ($(element).attr('name') == "nama_bank_hide") {
-            $('#formCreateUpdateTksk #nama_bank').removeClass('is-invalid');
-        }
-        else {
-            $(element).removeClass('is-invalid');
-        }
-    }
+    },
 });
 
-$(document).on('keydown', function(event) {
+$(document).on("keydown", function (event) {
     if (event.keyCode === 13) {
         event.preventDefault();
 
         if (autoComplete == false) {
-            saveData()
-        }
-        else {
+            saveData();
+        } else {
             autoComplete = false;
         }
     }
 });
 
 function saveData() {
-    if ($('#formCreateUpdateTksk').valid()) {
-        let form   = new FormData(document.querySelector('#formCreateUpdateTksk'));
-        let userId = form.get('id');
+    if ($("#formCreateUpdateTksk").valid()) {
+        let form = new FormData(
+            document.querySelector("#formCreateUpdateTksk")
+        );
+        let userId = form.get("id");
 
         Swal.fire({
-            title: 'ANDA YAKIN?',
+            title: "ANDA YAKIN?",
             text: `pastikan data sudah benar`,
-            icon: 'warning',
+            icon: "warning",
             showCancelButton: true,
-            confirmButtonText: 'iya',
+            confirmButtonText: "iya",
             preConfirm: () => {
                 return $.ajax({
-                    type: userId ? "PUT": "POST",
-                    url: `${BASE_URL}/api/v1/tksk/${userId ? 'update' : 'create'}`,
+                    type: userId ? "PUT" : "POST",
+                    url: `${BASE_URL}/api/v1/tksk/${
+                        userId ? "update" : "create"
+                    }`,
                     data: form,
                     cache: false,
-                    processData:false,
+                    processData: false,
                     contentType: false,
-                    headers		: {
-                        'token': $.cookie("jwt_token"),
+                    headers: {
+                        token: $.cookie("jwt_token"),
                     },
-                }).then(response => {
-                    Swal.fire({
-                        title: 'Sukses!',
-                        text: 'Data berhasil tersimpan.',
-                        icon: 'success'
-                    }).then((result) => {
-                        if (userId == null) {
-                            if (user_level_id == 1) {
-                                $("#formCreateUpdateTksk input").val('');
+                })
+                    .then((response) => {
+                        Swal.fire({
+                            title: "Sukses!",
+                            text: "Data berhasil tersimpan.",
+                            icon: "success",
+                        }).then((result) => {
+                            if (userId == null) {
+                                if (user_level_id == 1) {
+                                    $("#formCreateUpdateTksk input").val("");
+                                } else {
+                                    $("#formCreateUpdateTksk input")
+                                        .not("#site")
+                                        .val("");
+                                }
+                                $("#formCreateUpdateTksk select")
+                                    .val("")
+                                    .change();
+                            } else {
+                                location.reload();
                             }
-                            else {
-                                $("#formCreateUpdateTksk input").not("#site").val('');
+                        });
+                    })
+                    .catch((data) => {
+                        if (data.status == 400) {
+                            Swal.close();
+                            let errors = data.responseJSON.data.errors;
+
+                            for (const key in errors) {
+                                $(`#formCreateUpdateTksk #${key}`).addClass(
+                                    "is-invalid"
+                                );
+                                $(`#formCreateUpdateTksk #${key}-error`).html(
+                                    errors[key][0]
+                                );
                             }
-                            $("#formCreateUpdateTksk select").val('').change();
-                        }
-                        else {
-                            location.reload();
+
+                            showToast(
+                                "data <b>belum valid</b>. mohon periksa kembali!",
+                                "warning"
+                            );
+                        } else if (data.status >= 500) {
+                            Swal.showValidationMessage(
+                                `terjadi kesalahan pada server!`
+                            );
+                        } else {
+                            Swal.showValidationMessage(
+                                data.responseJSON.message
+                            );
                         }
                     });
-                }).catch(data => {
-                    if (data.status == 400) {
-                        Swal.close();
-                        let errors = data.responseJSON.data.errors;
-
-                        for (const key in errors) {
-                            $(`#formCreateUpdateTksk #${key}`).addClass('is-invalid');
-                            $(`#formCreateUpdateTksk #${key}-error`).html(errors[key][0]);
-                        }
-
-                        showToast('data <b>belum valid</b>. mohon periksa kembali!','warning');
-                    }
-                    else if (data.status >= 500) {
-                        Swal.showValidationMessage(`terjadi kesalahan pada server!`)
-                    }
-                    else {
-                        Swal.showValidationMessage(data.responseJSON.message)
-                    }
-                });
             },
-            allowOutsideClick: () => !Swal.isLoading()
-        })
+            allowOutsideClick: () => !Swal.isLoading(),
+        });
     }
 }
 
@@ -562,35 +583,165 @@ function saveData() {
  */
 function verifTKSK(el, event, status, id) {
     Swal.fire({
-        title: 'ANDA YAKIN?',
+        title: "ANDA YAKIN?",
         text: `data tidak akan bisa diubah`,
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonText: 'iya',
+        confirmButtonText: "iya",
         preConfirm: () => {
             return $.ajax({
                 type: "PUT",
                 url: `${BASE_URL}/api/v1/tksk/verif?status=${status}&id=${id}`,
-                headers	: {
-                    'token': $.cookie("jwt_token"),
+                headers: {
+                    token: $.cookie("jwt_token"),
                 },
-            }).then(response => {
-                Swal.fire({
-                  title: 'Sukses!',
-                  text: 'Data berhasil tersimpan.',
-                  icon: 'success'
-                }).then((result) => {
-                    location.reload();
+            })
+                .then((response) => {
+                    Swal.fire({
+                        title: "Sukses!",
+                        text: "Data berhasil tersimpan.",
+                        icon: "success",
+                    }).then((result) => {
+                        location.reload();
+                    });
+                })
+                .catch((data) => {
+                    if (data.status >= 500) {
+                        Swal.showValidationMessage(
+                            `terjadi kesalahan pada server!`
+                        );
+                    } else {
+                        Swal.showValidationMessage(data.responseJSON.message);
+                    }
                 });
-            }).catch(data => {
-                if (data.status >= 500) {
-                    Swal.showValidationMessage(`terjadi kesalahan pada server!`)
-                }
-                else {
-                    Swal.showValidationMessage(data.responseJSON.message)
-                }
-            });
         },
-        allowOutsideClick: () => !Swal.isLoading()
-    })
+        allowOutsideClick: () => !Swal.isLoading(),
+    });
+}
+
+/**
+ * NonAktif
+ * --------------------------
+ */
+$("#formNonAktif").validate({
+    rules: {
+        description: {
+            required: true,
+        },
+    },
+    messages: {
+        description: {
+            required: "Field ini harus diisi.",
+        },
+    },
+    errorElement: "span",
+    errorPlacement: function (error, element) {
+        error.addClass("invalid-feedback");
+        element.closest(".form-group").append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass("is-invalid");
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass("is-invalid");
+    },
+});
+
+function nonAktif() {
+    if ($("#formNonAktif").valid()) {
+        let form = new FormData(document.querySelector("#formNonAktif"));
+        form.append("status", "nonaktif");
+
+        Swal.fire({
+            title: "ANDA YAKIN?",
+            text: `data akan dinon-aktifkan`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "iya",
+            preConfirm: () => {
+                return $.ajax({
+                    type: "PUT",
+                    url: `${BASE_URL}/api/v1/tksk/update_status`,
+                    data: form,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        token: $.cookie("jwt_token"),
+                    },
+                })
+                    .then((response) => {
+                        Swal.fire({
+                            title: "Sukses!",
+                            text: "Data berhasil dinon-aktifkan.",
+                            icon: "success",
+                        }).then((result) => {
+                            location.reload();
+                        });
+                    })
+                    .catch((data) => {
+                        if (data.status >= 500) {
+                            Swal.showValidationMessage(
+                                `terjadi kesalahan pada server!`
+                            );
+                        } else {
+                            Swal.showValidationMessage(
+                                data.responseJSON.message
+                            );
+                        }
+                    });
+            },
+            allowOutsideClick: () => !Swal.isLoading(),
+        });
+    }
+}
+
+/**
+ * Aktifasi
+ * --------------------------
+ */
+function aktifasi() {
+    let form = new FormData();
+    form.append("id", tksk_id);
+    form.append("status", "diterima");
+
+    Swal.fire({
+        title: "ANDA YAKIN?",
+        text: `data akan diaktifkan`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "iya",
+        preConfirm: () => {
+            return $.ajax({
+                type: "PUT",
+                url: `${BASE_URL}/api/v1/tksk/update_status`,
+                data: form,
+                cache: false,
+                processData: false,
+                contentType: false,
+                headers: {
+                    token: $.cookie("jwt_token"),
+                },
+            })
+                .then((response) => {
+                    Swal.fire({
+                        title: "Sukses!",
+                        text: "Data berhasil diaktifkan.",
+                        icon: "success",
+                    }).then((result) => {
+                        location.reload();
+                    });
+                })
+                .catch((data) => {
+                    if (data.status >= 500) {
+                        Swal.showValidationMessage(
+                            `terjadi kesalahan pada server!`
+                        );
+                    } else {
+                        Swal.showValidationMessage(data.responseJSON.message);
+                    }
+                });
+        },
+        allowOutsideClick: () => !Swal.isLoading(),
+    });
 }

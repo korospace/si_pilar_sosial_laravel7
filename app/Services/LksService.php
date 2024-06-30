@@ -15,7 +15,9 @@ interface LksService
 
     public function importLks(LksRequest $request): JsonResponse;
 
+    public function updateLks(LksRequest $request): JsonResponse;
+
     public function verifLks(LksRequest $request): JsonResponse;
 
-    public function updateLks(LksRequest $request): JsonResponse;
+    public function updateStatus(LksRequest $request): JsonResponse;
 }

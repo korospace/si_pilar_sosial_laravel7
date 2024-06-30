@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TkskRequest;
 use App\Models\Education;
+use App\Models\LogStatus;
 use App\Models\Tksk;
 use App\Services\TkskService;
 use Illuminate\Http\Request;
@@ -63,12 +64,20 @@ class TkskController extends Controller
     {
         setlocale(LC_TIME, 'id_ID');
 
+        // get detail
+        $dataTksk = Tksk::where("id", $id)->first();
+        // get status nonaktif
+        $status_nonaktif = LogStatus::where("id_reference", $id)->where("table_reference", "tksk")->where("status","nonaktif")->orderBy("id","desc")->first();
+        // authorize site
+        authorizeSite($request, $dataTksk->site_id);
+
         $data = [
-            'metaTitle' => $request->user->level_id == 1 ? 'Edit TKSK' : 'Detil TKSK',
-            'headTitle' => $request->user->level_id == 1 ? 'Edit TKSK' : 'Detil TKSK',
-            'user'      => $request->user,
-            'tksk'      => Tksk::where("id", $id)->first(),
-            'educations'=> Education::all(),
+            'metaTitle'         => $request->user->level_id == 1 ? 'Edit TKSK' : 'Detil TKSK',
+            'headTitle'         => $request->user->level_id == 1 ? 'Edit TKSK' : 'Detil TKSK',
+            'user'              => $request->user,
+            'tksk'              => $dataTksk,
+            'status_nonaktif'   => $status_nonaktif,
+            'educations'        => Education::all(),
         ];
 
         return view('pages/tksk-create-update', $data);
@@ -155,6 +164,26 @@ class TkskController extends Controller
     }
 
     /**
+     * API - Update TKSK
+     * ---------------------------
+     */
+    public function updateTksk(TkskRequest $request)
+    {
+        try {
+            return $this->tkskService->updateTksk($request);
+        }
+        catch (\Throwable $th) {
+            return response()->json(
+                [
+                    'message' => $th->getMessage(),
+                    'data'    => [],
+                ],
+                is_int($th->getCode()) ? $th->getCode() : 500
+            );
+        }
+    }
+
+    /**
      * API - Verif TKSK
      * ---------------------------
      */
@@ -175,13 +204,13 @@ class TkskController extends Controller
     }
 
     /**
-     * API - Update TKSK
+     * API - Update Status
      * ---------------------------
      */
-    public function updateTksk(TkskRequest $request)
+    public function updateStatus(TkskRequest $request)
     {
         try {
-            return $this->tkskService->updateTksk($request);
+            return $this->tkskService->updateStatus($request);
         }
         catch (\Throwable $th) {
             return response()->json(

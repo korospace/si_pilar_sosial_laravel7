@@ -6,6 +6,7 @@ use App\Http\Requests\LksRequest;
 use App\Models\AkreditasiLks;
 use App\Models\LayananLks;
 use App\Models\Lks;
+use App\Models\LogStatus;
 use App\Services\LksService;
 use Illuminate\Http\Request;
 
@@ -65,13 +66,21 @@ class LksController extends Controller
     {
         setlocale(LC_TIME, 'id_ID');
 
+        // get detail
+        $dataLks = Lks::where("id", $id)->first();
+        // get status nonaktif
+        $status_nonaktif = LogStatus::where("id_reference", $id)->where("table_reference", "lks")->where("status","nonaktif")->orderBy("id","desc")->first();
+        // authorize site
+        authorizeSite($request, $dataLks->site_id);
+
         $data = [
-            'metaTitle'     => $request->user->level_id == 1 ? 'Edit LKS' : 'Detil LKS',
-            'headTitle'     => $request->user->level_id == 1 ? 'Edit LKS' : 'Detil LKS',
-            'user'          => $request->user,
-            'lks'           => Lks::where("id", $id)->first(),
-            'LayananLks'    => LayananLks::all(),
-            'AkreditasiLks' => AkreditasiLks::all(),
+            'metaTitle'         => $request->user->level_id == 1 ? 'Edit LKS' : 'Detil LKS',
+            'headTitle'         => $request->user->level_id == 1 ? 'Edit LKS' : 'Detil LKS',
+            'user'              => $request->user,
+            'lks'               => $dataLks,
+            'status_nonaktif'   => $status_nonaktif,
+            'LayananLks'        => LayananLks::all(),
+            'AkreditasiLks'     => AkreditasiLks::all(),
         ];
 
         return view('pages/lks-create-update', $data);
@@ -158,6 +167,26 @@ class LksController extends Controller
     }
 
     /**
+     * API - Update LKS
+     * ---------------------------
+     */
+    public function updateLks(LksRequest $request)
+    {
+        try {
+            return $this->lksService->updateLks($request);
+        }
+        catch (\Throwable $th) {
+            return response()->json(
+                [
+                    'message' => $th->getMessage(),
+                    'data'    => [],
+                ],
+                is_int($th->getCode()) ? $th->getCode() : 500
+            );
+        }
+    }
+
+    /**
      * API - Verif LKS
      * ---------------------------
      */
@@ -178,13 +207,13 @@ class LksController extends Controller
     }
 
     /**
-     * API - Update LKS
+     * API - Update Status
      * ---------------------------
      */
-    public function updateLks(LksRequest $request)
+    public function updateStatus(LksRequest $request)
     {
         try {
-            return $this->lksService->updateLks($request);
+            return $this->lksService->updateStatus($request);
         }
         catch (\Throwable $th) {
             return response()->json(

@@ -42,12 +42,20 @@
                         @endif
                     </div>
                 </div>
+                @if ($lks != null && $lks->status == "nonaktif" && $status_nonaktif != null)
+                <div class="col-12">
+                    <p class="text-danger">
+                        <small><i>*{{ $status_nonaktif->description }}</i></small>
+                    </p>
+                </div>
+                @endif
             </div>
 
             <div class="row px-2 pb-5">
 				<form id="formCreateUpdateLks" class="col-12" autocomplete="off" style="position: relative;">
                     @if($lks != null)
                     <input type="text" id="id" name="id" value="{{ $lks->id }}" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
+                    <input type="text" id="status_hide" name="status_hide" value="{{ $lks->status }}" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
                     @endif
                     <input type="text" id="level_id" name="level_id" value="{{ $user->level_id }}" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
                     <input type="text" id="region_id" name="region_id" value="{{ $user->site ? $user->site->region_id : '' }}" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
@@ -136,9 +144,36 @@
                                 <span id="jenis_layanan-error" class="invalid-feedback"></span>
                             </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="jenis_lks"><small><b>Jenis LKS</b></small></label>
+                                <select id="jenis_lks" name="jenis_lks" class="custom-select select2bs4" value="{{ $lks != null ? $lks->jenis_lks : '' }}">
+                                    <option value="">-- pilih --</option>
+
+                                    @foreach (['panti','non panti'] as $jenis_lks)
+                                        <option value="{{ $jenis_lks }}" {{ $lks != null && $jenis_lks == $lks->jenis_lks ? 'selected' : '' }}>{{ $jenis_lks }}</option>
+                                    @endforeach
+                                </select>
+                                <span id="jenis_lks-error" class="invalid-feedback"></span>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="jumlah_wbs"><small><b>Jumlah Warga Binaan Sosial</b></small></label>
+                                <input type="integer" class="form-control" id="jumlah_wbs" name="jumlah_wbs" value="{{ $lks != null ? $lks->jumlah_wbs : '' }}">
+                                <span id="jumlah_wbs-error" class="invalid-feedback"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="jumlah_peksos"><small><b>Jumlah Pekerja Sosial</b></small></label>
+                                <input type="integer" class="form-control" id="jumlah_peksos" name="jumlah_peksos" value="{{ $lks != null ? $lks->jumlah_peksos : '' }}">
+                                <span id="jumlah_peksos-error" class="invalid-feedback"></span>
+                            </div>
+                        </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="akreditasi"><small><b>Akreditasi</b></small></label>
@@ -374,24 +409,79 @@
                         </div>
                     </div>
 
-                    @if ($lks == null || $user->level_id == 1)
+                    @if ($lks == null)
                         <button type="button" class="w-100 mt-4 btn btn-success" onclick="saveData()">SIMPAN</button>
-                    @elseif ($user->level_id == 2 && $lks != null && $lks->status == 'diperiksa')
-                        <div class="row">
-                            <div class="col-md-6">
-                                <button type="button" class="w-100 mt-4 btn btn-danger" onclick="verifLKS(this, event, 'ditolak', {{ $lks->id }})">
-                                    TOLAK
-                                </button>
+                    @elseif ($lks != null && $user->level_id == 1)
+                        @if ($lks->status != 'diterima' && $lks->status != 'nonaktif')
+                            <button type="button" class="w-100 mt-4 btn btn-success" onclick="saveData()">SIMPAN</button>
+                        @elseif ($lks->status == 'nonaktif')
+                            <button type="button" class="w-100 mt-4 btn btn-info" onclick="aktifasi()">AKTIFASI</button>
+                        @elseif ($lks->status == 'diterima')
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button type="button" class="w-100 mt-4 btn btn-warning" data-toggle="modal" data-target="#modal-non-aktif">NON AKTIFKAN</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" class="w-100 mt-4 btn btn-success" onclick="saveData()">SIMPAN</button>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <button type="button" class="w-100 mt-4 btn btn-success" onclick="verifLKS(this, event, 'diterima', {{ $lks->id }})">
-                                    TERIMA
-                                </button>
+                        @endif
+                    @elseif ($lks != null && $user->level_id == 2)
+                        @if ($lks->status == 'diterima')
+                            <button type="button" class="w-100 mt-4 btn btn-warning" data-toggle="modal" data-target="#modal-non-aktif">NON AKTIFKAN</button>
+                        @elseif ($lks->status == 'nonaktif')
+                            <button type="button" class="w-100 mt-4 btn btn-info" onclick="aktifasi()">AKTIFASI</button>
+                        @elseif ($lks->status == 'diperiksa')
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button type="button" class="w-100 mt-4 btn btn-danger" onclick="verifLKS(this, event, 'ditolak', {{ $lks->id }})">
+                                        TOLAK
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" class="w-100 mt-4 btn btn-success" onclick="verifLKS(this, event, 'diterima', {{ $lks->id }})">
+                                        TERIMA
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     @endif
                 </form>
             </div>
         </div>
+
+        {{-- modal non-aktif --}}
+        @if ($lks != null && $lks->status == 'diterima' && ($user->level_id == 1 || $user->level_id == 2))
+        <div id="modal-non-aktif" class="modal fade">
+            <div class="modal-dialog">
+                <form id="formNonAktif" class="modal-content" autocomplete="off" style="position: relative;">
+                    @if($lks != null)
+                    <input type="text" id="id" name="id" value="{{ $lks->id }}" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
+                    @endif
+
+                    <div class="modal-header">
+                        <h4 class="modal-title">Non Aktif</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group mb-4">
+                                    <label for="description"><small><b>Deskripsi</b></small></label>
+                                    <textarea id="description" name="description" class="form-control" rows="5" placeholder="Masukan alasan"></textarea>
+                                    <span id="description-error" class="invalid-feedback"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-end">
+                        <button type="button" class="btn btn-success" onclick="nonAktif()">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        @endif
     </div>
 @endsection

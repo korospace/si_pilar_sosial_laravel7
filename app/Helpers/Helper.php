@@ -4,6 +4,7 @@ use Illuminate\Http\UploadedFile;
 use Shuchkin\SimpleXLS;
 use Shuchkin\SimpleXLSX;
 use SimpleCSV as SimpleCSV;
+use Illuminate\Http\Request;
 
 /**
  * Method Parser.
@@ -137,4 +138,19 @@ function MonthToIndonesia($stringDate)
     $tanggal_baru = strtr($stringDate, array_combine($bulan_inggris, $bulan_indonesia));
 
     return $tanggal_baru;
+}
+
+/**
+ * Site Authorization
+ *
+ * @param Illuminate\Http\Request $request
+ * @param string $siteId
+ */
+function authorizeSite(Request $request, string $siteId) : void 
+{
+    if ($request->user->user_level->id != 1) {
+        if ($request->user->site->id != $siteId) {
+            abort(401);
+        }
+    }
 }

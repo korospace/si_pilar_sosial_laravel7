@@ -402,6 +402,14 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('/import', [TkskController::class, 'importTksk'])->middleware(['ApiForSuperadmin']);
 
         /**
+         * Update TKSK
+         *
+         * - url    : /api/v1/tksk/update
+         * - form-data : so much
+         */
+        Route::put('/update', [TkskController::class, 'updateTksk'])->middleware(['ApiForSuperadmin']);
+
+        /**
          * Verif TKSK
          *
          * - url    : /api/v1/tksk/verif
@@ -410,12 +418,12 @@ Route::group(['prefix' => 'v1'], function () {
         Route::put('/verif', [TkskController::class, 'verifTksk'])->middleware(['ApiForVerifier']);
 
         /**
-         * Update TKSK
+         * Update Status
          *
-         * - url    : /api/v1/tksk/update
-         * - form-data : so much
+         * - url    : /api/v1/tksk/update_status
+         * - form-data : id, status, description
          */
-        Route::put('/update', [TkskController::class, 'updateTksk'])->middleware(['ApiForSuperadmin']);
+        Route::put('/update_status', [TkskController::class, 'updateStatus'])->middleware(['ApiForVerifier']);
     });
 
     /**
@@ -457,6 +465,14 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('/import', [LksController::class, 'importLks'])->middleware(['ApiForSuperadmin']);
 
         /**
+         * Update LKS
+         *
+         * - url    : /api/v1/lks/update
+         * - form-data : so much
+         */
+        Route::put('/update', [LksController::class, 'updateLks'])->middleware(['ApiForSuperadmin']);
+
+        /**
          * Verif LKS
          *
          * - url    : /api/v1/lks/verif
@@ -465,12 +481,12 @@ Route::group(['prefix' => 'v1'], function () {
         Route::put('/verif', [LksController::class, 'verifLks'])->middleware(['ApiForVerifier']);
 
         /**
-         * Update LKS
+         * Update Status
          *
-         * - url    : /api/v1/lks/update
-         * - form-data : so much
+         * - url    : /api/v1/psm/update_status
+         * - form-data : id, status, description
          */
-        Route::put('/update', [LksController::class, 'updateLks'])->middleware(['ApiForSuperadmin']);
+        Route::put('/update_status', [LksController::class, 'updateStatus'])->middleware(['ApiForVerifier']);
     });
 
     /**
@@ -512,6 +528,14 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('/import', [KarangTarunaController::class, 'importKarangTaruna'])->middleware(['ApiForSuperadmin']);
 
         /**
+         * Update
+         *
+         * - url    : /api/v1/karang_taruna/update
+         * - form-data : so much
+         */
+        Route::put('/update', [KarangTarunaController::class, 'updateKarangTaruna'])->middleware(['ApiForSuperadmin']);
+
+        /**
          * Verif
          *
          * - url    : /api/v1/karang_taruna/verif
@@ -520,12 +544,12 @@ Route::group(['prefix' => 'v1'], function () {
         Route::put('/verif', [KarangTarunaController::class, 'verifKarangTaruna'])->middleware(['ApiForVerifier']);
 
         /**
-         * Update
+         * Update Status
          *
-         * - url    : /api/v1/karang_taruna/update
-         * - form-data : so much
+         * - url    : /api/v1/karang_taruna/update_status
+         * - form-data : id, status, description
          */
-        Route::put('/update', [KarangTarunaController::class, 'updateKarangTaruna'])->middleware(['ApiForSuperadmin']);
+        Route::put('/update_status', [KarangTarunaController::class, 'updateStatus'])->middleware(['ApiForVerifier']);
     });
 
     /**
@@ -567,6 +591,14 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('/import', [PsmController::class, 'importPsm'])->middleware(['ApiForSuperadmin']);
 
         /**
+         * Update
+         *
+         * - url    : /api/v1/psm/update
+         * - form-data : so much
+         */
+        Route::put('/update', [PsmController::class, 'updatePsm'])->middleware(['ApiForSuperadmin']);
+
+        /**
          * Verif
          *
          * - url    : /api/v1/psm/verif
@@ -575,12 +607,12 @@ Route::group(['prefix' => 'v1'], function () {
         Route::put('/verif', [PsmController::class, 'verifPsm'])->middleware(['ApiForVerifier']);
 
         /**
-         * Update
+         * Update Status
          *
-         * - url    : /api/v1/psm/update
-         * - form-data : so much
+         * - url    : /api/v1/psm/update_status
+         * - form-data : id, status, description
          */
-        Route::put('/update', [PsmController::class, 'updatePsm'])->middleware(['ApiForSuperadmin']);
+        Route::put('/update_status', [PsmController::class, 'updateStatus'])->middleware(['ApiForVerifier']);
     });
 
     /**

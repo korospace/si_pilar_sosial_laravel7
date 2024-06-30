@@ -6,12 +6,12 @@ let autoComplete = false;
  * Select 2
  * ----------------------
  */
-$('.select2bs4').select2({
-    theme: 'bootstrap4',
-    width: '100%'
-})
-$('.select2bs4').on('select2:select', function(e) {
-    $(this).removeClass('is-invalid');
+$(".select2bs4").select2({
+    theme: "bootstrap4",
+    width: "100%",
+});
+$(".select2bs4").on("select2:select", function (e) {
+    $(this).removeClass("is-invalid");
     autoComplete = true;
 });
 
@@ -20,32 +20,30 @@ $('.select2bs4').on('select2:select', function(e) {
  * --------------------
  */
 $(".ac_site").autoComplete({
-    resolver: 'ajax',
-    noResultsText:'No results',
+    resolver: "ajax",
+    noResultsText: "No results",
     minLength: 0,
     events: {
         search: function (qry, callback) {
-            $.ajax(
-                {
-                    url: `${BASE_URL}/api/v1/autocomplete/site`,
-                    data: { 'name': qry},
-                    headers: {
-                        'token': $token,
-                    },
-                }
-            ).done(function (res) {
+            $.ajax({
+                url: `${BASE_URL}/api/v1/autocomplete/site`,
+                data: { name: qry },
+                headers: {
+                    token: $token,
+                },
+            }).done(function (res) {
                 callback(res.data);
             });
         },
     },
 });
 
-$('.ac_site').on('input', function () {
-    $(this).prev().val('')
+$(".ac_site").on("input", function () {
+    $(this).prev().val("");
 });
 
-$('.ac_site').on('autocomplete.select', function (evt, item) {
-    $(this).prev().val(item.id)
+$(".ac_site").on("autocomplete.select", function (evt, item) {
+    $(this).prev().val(item.id);
     autoComplete = true;
 });
 
@@ -57,81 +55,152 @@ function getInfoStatus() {
     $.ajax({
         type: "GET",
         url: `${BASE_URL}/api/v1/karang_taruna/info_status`,
-        headers		: {
-            'token': $token,
+        headers: {
+            token: $token,
         },
-        success:function(data) {
+        success: function (data) {
             let infoStatus = data[0];
 
             for (const key in infoStatus) {
-                $(`#status_${key}`).html(infoStatus[key])
+                $(`#status_${key}`).html(infoStatus[key]);
             }
         },
-        error:function(data) {
+        error: function (data) {
             if (data.status >= 500) {
-                showToast('gagal menampilkan <b>info status</b>','danger');
+                showToast("gagal menampilkan <b>info status</b>", "danger");
             }
-        }
+        },
     });
 }
-getInfoStatus()
+getInfoStatus();
 
 /**
  * Initial Karang Taruna Table
  * ---------------------------
  */
-let filterTahun  = "";
+let filterTahun = "";
 let filterSiteId = "";
-let filterSite   = "";
+let filterSite = "";
 let filterStatus = "";
 
 function initialDataTableKarangTaruna(params) {
-    filterTahun  = $("#modal-filter-karang_taruna select[name='year_filter']").val();
-    filterSiteId = $("#modal-filter-karang_taruna input[name='site_filter_id']").val();
-    filterSite   = $("#modal-filter-karang_taruna input[name='site_filter']").val();
-    filterStatus = $("#modal-filter-karang_taruna select[name='status_filter']").val();
+    filterTahun = $(
+        "#modal-filter-karang_taruna select[name='year_filter']"
+    ).val();
+    filterSiteId = $(
+        "#modal-filter-karang_taruna input[name='site_filter_id']"
+    ).val();
+    filterSite = $(
+        "#modal-filter-karang_taruna input[name='site_filter']"
+    ).val();
+    filterStatus = $(
+        "#modal-filter-karang_taruna select[name='status_filter']"
+    ).val();
 
-    $("#tableKarangTaruna").DataTable({
-        "bDestroy": true,
-        "serverSide": true,
-        "processing": true,
-        "responsive": true,
-        "autoWidth": false,
-        "pageLength": 10,
-        "order": [[0, 'asc']],
-        "ajax": {
-            "type": "POST",
-            "url": `${BASE_URL}/api/v1/karang_taruna/datatable`,
-            "data": function (d) {
-                d.year = filterTahun;
-                d.site_id = filterSiteId;
-                d.status = filterStatus;
-                return d;
+    $("#tableKarangTaruna")
+        .DataTable({
+            bDestroy: true,
+            serverSide: true,
+            processing: true,
+            responsive: true,
+            autoWidth: false,
+            pageLength: 10,
+            order: [[0, "asc"]],
+            ajax: {
+                type: "POST",
+                url: `${BASE_URL}/api/v1/karang_taruna/datatable`,
+                data: function (d) {
+                    d.year = filterTahun;
+                    d.site_id = filterSiteId;
+                    d.status = filterStatus;
+                    d.non_aktif = 0;
+                    return d;
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("token", $token);
+                },
             },
-            "beforeSend": function(xhr){
-                xhr.setRequestHeader('token', $token);
-            }
-        },
-        "columns": [
-            { data: 'no', width: '5%' },
-            { data: 'year', width: '8%' },
-            { data: 'no_urut', width: '8%' },
-            { data: 'nama', width: '15%' },
-            { data: 'nama_ketua' },
-            { data: 'program_unggulan' },
-            { data: 'status', width: '10%' },
-            { data: 'action', width: '10%' },
-        ],
-        "columnDefs": [
-            {
-                "targets": [0,1,2,3,4,5,6,7],
-                "className": "text-center align-middle",
+            columns: [
+                { data: "no", width: "5%" },
+                { data: "year", width: "8%" },
+                { data: "no_urut", width: "8%" },
+                { data: "nama", width: "15%" },
+                { data: "nama_ketua" },
+                { data: "program_unggulan" },
+                { data: "status", width: "10%" },
+                { data: "action", width: "10%" },
+            ],
+            columnDefs: [
+                {
+                    targets: [0, 1, 2, 3, 4, 5, 6, 7],
+                    className: "text-center align-middle",
+                },
+            ],
+        })
+        .buttons()
+        .container()
+        .appendTo("#tableKarangTaruna_wrapper .col-md-6:eq(0)");
+
+    $("#tableKarangTaruna_nonaktif")
+        .DataTable({
+            bDestroy: true,
+            serverSide: true,
+            processing: true,
+            responsive: true,
+            autoWidth: false,
+            pageLength: 10,
+            order: [[0, "asc"]],
+            ajax: {
+                type: "POST",
+                url: `${BASE_URL}/api/v1/karang_taruna/datatable`,
+                data: function (d) {
+                    d.year = filterTahun;
+                    d.site_id = filterSiteId;
+                    d.non_aktif = 1;
+                    return d;
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("token", $token);
+                },
             },
-        ],
-    }).buttons().container().appendTo('#tableKarangTaruna_wrapper .col-md-6:eq(0)');
+            columns: [
+                { data: "no", width: "5%" },
+                { data: "year", width: "8%" },
+                { data: "no_urut", width: "8%" },
+                { data: "nama", width: "15%" },
+                { data: "nama_ketua" },
+                { data: "program_unggulan" },
+                { data: "action", width: "10%" },
+            ],
+            columnDefs: [
+                {
+                    targets: [0, 1, 2, 3, 4, 5, 6],
+                    className: "text-center align-middle",
+                },
+            ],
+        })
+        .buttons()
+        .container()
+        .appendTo("#tableKarangTaruna_nonaktif_wrapper .col-md-6:eq(0)");
 }
 
 initialDataTableKarangTaruna();
+
+/**
+ * Tab On Change
+ * --------------------
+ */
+$(".nav-tabs a").on("shown.bs.tab", function (event) {
+    var href = $(event.target).attr("href");
+
+    if (href == "#div_nonaktif") {
+        $("#formFilterKarangTaruna #status_filter_wraper").hide();
+    } else {
+        $("#formFilterKarangTaruna #status_filter_wraper").show();
+    }
+
+    clear_filter_karang_taruna();
+});
 
 /**
  * Filter
@@ -140,19 +209,20 @@ initialDataTableKarangTaruna();
 // -- run filter karang_taruna --
 function run_filter_karang_taruna() {
     initialDataTableKarangTaruna();
-    update_ket_filter_karang_taruna()
-    $(`#modal-filter-karang_taruna`).modal('hide');
-    $('.select2bs4').select2('close')
+    update_ket_filter_karang_taruna();
+    $(`#modal-filter-karang_taruna`).modal("hide");
+    $(".select2bs4").select2("close");
 }
 // -- clear filter karang_taruna --
 function clear_filter_karang_taruna() {
     if (user_level_id == 1) {
-        $("#modal-filter-karang_taruna input").val('');
+        $("#modal-filter-karang_taruna input").val("");
+    } else {
+        $(
+            "#modal-filter-karang_taruna input:not(#site_filter_id):not(#site_filter)"
+        ).val("");
     }
-    else {
-        $("#modal-filter-karang_taruna input:not(#site_filter_id):not(#site_filter)").val('');
-    }
-    $("#modal-filter-karang_taruna select").val('').change();
+    $("#modal-filter-karang_taruna select").val("").change();
 
     run_filter_karang_taruna();
 }
@@ -161,25 +231,29 @@ function update_ket_filter_karang_taruna() {
     let str_ket = "";
 
     if (filterTahun) {
-        str_ket += "<b>tahun: </b>"+filterTahun
+        str_ket += "<b>tahun: </b>" + filterTahun;
     }
     if (filterSiteId) {
-        str_ket += filterTahun ? " - <b>wilayah: </b>"+filterSite : "<b>wilayah: </b>"+filterSite
+        str_ket += filterTahun
+            ? " - <b>wilayah: </b>" + filterSite
+            : "<b>wilayah: </b>" + filterSite;
     }
     if (filterStatus) {
-        str_ket += filterTahun || filterSiteId ? " - <b>status: </b>"+filterStatus : "<b>status: </b>"+filterStatus
+        str_ket +=
+            filterTahun || filterSiteId
+                ? " - <b>status: </b>" + filterStatus
+                : "<b>status: </b>" + filterStatus;
     }
 
-    $(".ket-filter").html(str_ket)
+    $(".ket-filter").html(str_ket);
 }
 
 // -- form submit
-$("#formFilterKarangTaruna").on('keydown', function(event) {
+$("#formFilterKarangTaruna").on("keydown", function (event) {
     if (event.keyCode === 13) {
         if (autoComplete == false) {
-            run_filter_karang_taruna()
-        }
-        else {
+            run_filter_karang_taruna();
+        } else {
             autoComplete = false;
         }
     }
@@ -190,32 +264,32 @@ $("#formFilterKarangTaruna").on('keydown', function(event) {
  * =========================
  */
 // -- clear form - data
-$("a[data-target='#modal-import-karang_taruna']").on('click', function () {
+$("a[data-target='#modal-import-karang_taruna']").on("click", function () {
     $("#formImportKarangTaruna .alert").hide();
-    $("#formImportKarangTaruna input").val('');
-    $("#formImportKarangTaruna select").val('').change();
-    $("input").removeClass('is-invalid');
-    $("select").removeClass('is-invalid');
-    $("span.invalid-feedback").html('');
-})
+    $("#formImportKarangTaruna input").val("");
+    $("#formImportKarangTaruna select").val("").change();
+    $("input").removeClass("is-invalid");
+    $("select").removeClass("is-invalid");
+    $("span.invalid-feedback").html("");
+});
 
 // -- clear form - alert
-$("#formImportKarangTaruna button.close").on('click', function () {
+$("#formImportKarangTaruna button.close").on("click", function () {
     $("#formImportKarangTaruna .alert").hide();
-})
+});
 
 // -- clear form - error when keydown
-$("#formImportKarangTaruna input").on('keydown', function () {
-    $(this).removeClass('is-invalid');
-    $(`#formImportKarangTaruna #${$(this).attr('name')}-error`).html('');
-})
-$("#formImportKarangTaruna input").on('change', function () {
-    $(this).removeClass('is-invalid');
-    $(`#formImportKarangTaruna #${$(this).attr('name')}-error`).html('');
-})
+$("#formImportKarangTaruna input").on("keydown", function () {
+    $(this).removeClass("is-invalid");
+    $(`#formImportKarangTaruna #${$(this).attr("name")}-error`).html("");
+});
+$("#formImportKarangTaruna input").on("change", function () {
+    $(this).removeClass("is-invalid");
+    $(`#formImportKarangTaruna #${$(this).attr("name")}-error`).html("");
+});
 
 // -- form validation
-$('#formImportKarangTaruna').validate({
+$("#formImportKarangTaruna").validate({
     rules: {
         site_id: {
             required: true,
@@ -238,34 +312,33 @@ $('#formImportKarangTaruna').validate({
             required: "file harus diisi",
         },
     },
-    errorElement: 'span',
+    errorElement: "span",
     errorPlacement: function (error, element) {
-        error.addClass('invalid-feedback');
-        element.closest('.form-group').append(error);
+        error.addClass("invalid-feedback");
+        element.closest(".form-group").append(error);
     },
     highlight: function (element, errorClass, validClass) {
-        if ($(element).attr('name') == "site_id") {
-            $('#formImportKarangTaruna #site').addClass('is-invalid');
+        if ($(element).attr("name") == "site_id") {
+            $("#formImportKarangTaruna #site").addClass("is-invalid");
         } else {
-            $(element).addClass('is-invalid');
+            $(element).addClass("is-invalid");
         }
     },
     unhighlight: function (element, errorClass, validClass) {
-        if ($(element).attr('name') == "site_id") {
-            $('#formImportKarangTaruna #site').removeClass('is-invalid');
+        if ($(element).attr("name") == "site_id") {
+            $("#formImportKarangTaruna #site").removeClass("is-invalid");
         } else {
-            $(element).removeClass('is-invalid');
+            $(element).removeClass("is-invalid");
         }
-    }
+    },
 });
 
 // -- form submit
-$('#formImportKarangTaruna').on('keydown', function(event) {
+$("#formImportKarangTaruna").on("keydown", function (event) {
     if (event.keyCode === 13) {
         if (autoComplete == false) {
-            saveImport()
-        }
-        else {
+            saveImport();
+        } else {
             autoComplete = false;
         }
     }
@@ -274,25 +347,27 @@ $('#formImportKarangTaruna').on('keydown', function(event) {
 function saveImport() {
     $("#formImportKarangTaruna .alert").hide();
 
-    if ($('#formImportKarangTaruna').valid()) {
+    if ($("#formImportKarangTaruna").valid()) {
         showLoadingSpinner();
 
-        let form = new FormData(document.querySelector('#formImportKarangTaruna'));
+        let form = new FormData(
+            document.querySelector("#formImportKarangTaruna")
+        );
 
         $.ajax({
             type: "POST",
             url: `${BASE_URL}/api/v1/karang_taruna/import`,
             data: form,
             cache: false,
-            processData:false,
+            processData: false,
             contentType: false,
-            headers		: {
-                'token': $token,
+            headers: {
+                token: $token,
             },
-            success:function(data) {
+            success: function (data) {
                 hideLoadingSpinner();
-                $("#formImportKarangTaruna input").val('');
-                $("#formImportKarangTaruna select").val('').change();
+                $("#formImportKarangTaruna input").val("");
+                $("#formImportKarangTaruna select").val("").change();
 
                 $("#formImportKarangTaruna .alert span").html(data.message);
                 $("#formImportKarangTaruna .alert").show();
@@ -300,22 +375,28 @@ function saveImport() {
                 initialDataTableKarangTaruna();
                 getInfoStatus();
             },
-            error:function(data) {
+            error: function (data) {
                 hideLoadingSpinner();
 
                 if (data.status == 400) {
                     let errors = data.responseJSON.data.errors;
 
                     for (const key in errors) {
-                        $(`#formImportKarangTaruna #${key}`).addClass('is-invalid');
-                        $(`#formImportKarangTaruna #${key}-error`).css('display', 'inline');
-                        $(`#formImportKarangTaruna #${key}-error`).html(errors[key][0]);
+                        $(`#formImportKarangTaruna #${key}`).addClass(
+                            "is-invalid"
+                        );
+                        $(`#formImportKarangTaruna #${key}-error`).css(
+                            "display",
+                            "inline"
+                        );
+                        $(`#formImportKarangTaruna #${key}-error`).html(
+                            errors[key][0]
+                        );
                     }
+                } else if (data.status >= 500) {
+                    showToast("kesalahan pada <b>server</b>", "danger");
                 }
-                else if (data.status >= 500) {
-                    showToast('kesalahan pada <b>server</b>','danger');
-                }
-            }
+            },
         });
     }
 }

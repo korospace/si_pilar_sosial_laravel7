@@ -4,6 +4,7 @@ namespace App\Services\Impl;
 
 use App\Exceptions\GeneralException;
 use App\Http\Requests\PsmRequest;
+use App\Models\LogStatus;
 use App\Models\Psm;
 use App\Models\Region;
 use App\Models\Site;
@@ -32,6 +33,12 @@ class PsmServiceImpl implements PsmService
             }
             if ($request->status) {
                 $psmRows->where('status', $request->status);
+            }
+            if ($request->non_aktif == "0") {
+                $psmRows->where('status', "!=", "nonaktif");
+            }
+            else if ($request->non_aktif == "1") {
+                $psmRows->where('status', "=", "nonaktif");
             }
 
             $psmRows = $psmRows->select('id', 'year', 'site_id', 'no_urut', 'nama', 'kec_id', 'tempat_tugas_kecamatan', 'kel_id', 'tempat_tugas_kelurahan', 'jenis_kelamin', 'status')->orderBy('id', 'DESC')->with('site')->get();
@@ -118,6 +125,7 @@ class PsmServiceImpl implements PsmService
                     (SELECT COUNT(id) FROM psm WHERE status = 'diterima' $whereSite1) as diterima,
                     (SELECT COUNT(id) FROM psm WHERE status = 'ditolak' $whereSite1) as ditolak,
                     (SELECT COUNT(id) FROM psm WHERE status = 'diperiksa' $whereSite1) as diperiksa,
+                    (SELECT COUNT(id) FROM psm WHERE status = 'nonaktif' $whereSite1) as nonaktif,
                     COUNT(*) as total
                 FROM
                     psm
@@ -248,32 +256,6 @@ class PsmServiceImpl implements PsmService
         }
     }
 
-    public function verifPsm(PsmRequest $request): JsonResponse
-    {
-        try {
-            $psm    = Psm::where("id", $request->id)->first();
-            $siteId = $request->user->site_id;
-            $noUrut = $request->status == 'diterima' ? $this->generateNoUrut($siteId, $psm->tempat_tugas_kecamatan, $psm->tempat_tugas_kelurahan) : null;
-
-            $newPsm = Psm::where('id', $request->id)->update([
-                'no_urut'  => $noUrut,
-                'status'   => $request->status,
-                'verifier' => $request->user->id,
-            ]);
-
-            return response()->json(
-                [
-                    'message' => 'PSM berhasil disimpan',
-                    'data'    => $newPsm
-                ],
-                200
-            );
-        }
-        catch (\Throwable $th) {
-            throw new GeneralException($th->getMessage(), 500);
-        }
-    }
-
     public function updatePsm(PsmRequest $request): JsonResponse
     {
         try {
@@ -330,6 +312,66 @@ class PsmServiceImpl implements PsmService
             );
         }
         catch (\Throwable $th) {
+            throw new GeneralException($th->getMessage(), 500);
+        }
+    }
+
+    public function verifPsm(PsmRequest $request): JsonResponse
+    {
+        try {
+            $psm    = Psm::where("id", $request->id)->first();
+            $siteId = $request->user->site_id;
+            $noUrut = $request->status == 'diterima' ? $this->generateNoUrut($siteId, $psm->tempat_tugas_kecamatan, $psm->tempat_tugas_kelurahan) : null;
+
+            $newPsm = Psm::where('id', $request->id)->update([
+                'no_urut'  => $noUrut,
+                'status'   => $request->status,
+                'verifier' => $request->user->id,
+            ]);
+
+            return response()->json(
+                [
+                    'message' => 'verifikasi PSM berhasil diubah',
+                    'data'    => $newPsm
+                ],
+                200
+            );
+        }
+        catch (\Throwable $th) {
+            throw new GeneralException($th->getMessage(), 500);
+        }
+    }
+
+    public function updateStatus(PsmRequest $request): JsonResponse
+    {
+        try {
+            DB::beginTransaction();
+
+            $newPsm = Psm::where('id', $request->id)->update([
+                'status'   => $request->status,
+                'verifier' => $request->user->id,
+            ]);
+
+            LogStatus::create([
+                "id_reference"      => $request->id,
+                "table_reference"   => "psm",
+                "status"            => $request->status,
+                "description"       => $request->description ? $request->description : "",
+                'verifier'          => $request->user->id,
+            ]);
+
+            DB::commit();
+
+            return response()->json(
+                [
+                    'message' => 'PSM status berhasil diubah',
+                    'data'    => $newPsm
+                ],
+                200
+            );
+        }
+        catch (\Throwable $th) {
+            DB::rollback();
             throw new GeneralException($th->getMessage(), 500);
         }
     }

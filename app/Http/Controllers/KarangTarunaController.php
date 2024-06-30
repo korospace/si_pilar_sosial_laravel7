@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\KarangTarunaRequest;
 use App\Models\KarangTaruna;
+use App\Models\LogStatus;
 use App\Services\KarangTarunaService;
 use Illuminate\Http\Request;
 
@@ -60,12 +61,20 @@ class KarangTarunaController extends Controller
     public function karangTarunaUpdateView(Request $request, $id)
     {
         setlocale(LC_TIME, 'id_ID');
+        
+        // get detail
+        $dataKt = KarangTaruna::where("id", $id)->first();
+        // get status nonaktif
+        $status_nonaktif = LogStatus::where("id_reference", $id)->where("table_reference", "karang_taruna")->where("status","nonaktif")->orderBy("id","desc")->first();
+        // authorize site
+        authorizeSite($request, $dataKt->site_id);
 
         $data = [
-            'metaTitle'     => $request->user->level_id == 1 ? 'Edit KARANG TARUNA' : 'Detil KARANG TARUNA',
-            'headTitle'     => $request->user->level_id == 1 ? 'Edit KARANG TARUNA' : 'Detil KARANG TARUNA',
-            'user'          => $request->user,
-            'karangTaruna'  => KarangTaruna::where("id", $id)->first(),
+            'metaTitle'         => $request->user->level_id == 1 ? 'Edit KARANG TARUNA' : 'Detil KARANG TARUNA',
+            'headTitle'         => $request->user->level_id == 1 ? 'Edit KARANG TARUNA' : 'Detil KARANG TARUNA',
+            'user'              => $request->user,
+            'karangTaruna'      => $dataKt,
+            'status_nonaktif'   => $status_nonaktif,
         ];
 
         return view('pages/karang_taruna-create-update', $data );
@@ -152,6 +161,26 @@ class KarangTarunaController extends Controller
     }
 
     /**
+     * API - Update
+     * ---------------------------
+     */
+    public function updateKarangTaruna(KarangTarunaRequest $request)
+    {
+        try {
+            return $this->ktService->updateKarangTaruna($request);
+        }
+        catch (\Throwable $th) {
+            return response()->json(
+                [
+                    'message' => $th->getMessage(),
+                    'data'    => [],
+                ],
+                is_int($th->getCode()) ? $th->getCode() : 500
+            );
+        }
+    }
+
+    /**
      * API - Verif
      * ---------------------------
      */
@@ -172,13 +201,13 @@ class KarangTarunaController extends Controller
     }
 
     /**
-     * API - Update
+     * API - Update Status
      * ---------------------------
      */
-    public function updateKarangTaruna(KarangTarunaRequest $request)
+    public function updateStatus(KarangTarunaRequest $request)
     {
         try {
-            return $this->ktService->updateKarangTaruna($request);
+            return $this->ktService->updateStatus($request);
         }
         catch (\Throwable $th) {
             return response()->json(

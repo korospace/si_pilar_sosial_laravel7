@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PsmRequest;
 use App\Models\Education;
+use App\Models\LogStatus;
 use App\Models\Psm;
 use App\Services\PsmService;
 use Illuminate\Http\Request;
@@ -63,12 +64,20 @@ class PsmController extends Controller
     {
         setlocale(LC_TIME, 'id_ID');
 
+        // get detail
+        $dataPsm = Psm::where("id", $id)->first();
+        // get status nonaktif
+        $status_nonaktif = LogStatus::where("id_reference", $id)->where("table_reference", "psm")->where("status","nonaktif")->orderBy("id","desc")->first();
+        // authorize site
+        authorizeSite($request, $dataPsm->site_id);
+
         $data = [
-            'metaTitle' => $request->user->level_id == 1 ? 'Edit PSM' : 'Detil PSM',
-            'headTitle' => $request->user->level_id == 1 ? 'Edit PSM' : 'Detil PSM',
-            'user'      => $request->user,
-            'psm'       => Psm::where("id", $id)->first(),
-            'educations'=> Education::all(),
+            'metaTitle'         => $request->user->level_id == 1 ? 'Edit PSM' : 'Detil PSM',
+            'headTitle'         => $request->user->level_id == 1 ? 'Edit PSM' : 'Detil PSM',
+            'user'              => $request->user,
+            'psm'               => $dataPsm,
+            'status_nonaktif'   => $status_nonaktif,
+            'educations'        => Education::all(),
         ];
 
         return view('pages/psm-create-update', $data);
@@ -155,6 +164,26 @@ class PsmController extends Controller
     }
 
     /**
+     * API - Update PSM
+     * ---------------------------
+     */
+    public function updatePsm(PsmRequest $request)
+    {
+        try {
+            return $this->psmService->updatePsm($request);
+        }
+        catch (\Throwable $th) {
+            return response()->json(
+                [
+                    'message' => $th->getMessage(),
+                    'data'    => [],
+                ],
+                is_int($th->getCode()) ? $th->getCode() : 500
+            );
+        }
+    }
+
+    /**
      * API - Verif PSM
      * ---------------------------
      */
@@ -175,13 +204,13 @@ class PsmController extends Controller
     }
 
     /**
-     * API - Update PSM
+     * API - Update Status
      * ---------------------------
      */
-    public function updatePsm(PsmRequest $request)
+    public function updateStatus(PsmRequest $request)
     {
         try {
-            return $this->psmService->updatePsm($request);
+            return $this->psmService->updateStatus($request);
         }
         catch (\Throwable $th) {
             return response()->json(

@@ -15,7 +15,9 @@ interface PsmService
 
     public function importPsm(PsmRequest $request): JsonResponse;
 
+    public function updatePsm(PsmRequest $request): JsonResponse;
+
     public function verifPsm(PsmRequest $request): JsonResponse;
 
-    public function updatePsm(PsmRequest $request): JsonResponse;
+    public function updateStatus(PsmRequest $request): JsonResponse;
 }

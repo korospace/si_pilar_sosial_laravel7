@@ -60,12 +60,6 @@ class PsmRequest extends FormRequest
                 'status'                        => $this->user->level_id == 1 ? 'required|in:diperiksa,diterima,ditolak' : '',
             ];
         }
-        else if ($this->method() == 'PUT' && $this->route()->getActionMethod() == 'verifPsm') {
-            return [
-                'id'                            => 'required|exists:psm,id',
-                'status'                        => 'required|in:diterima,ditolak',
-            ];
-        }
         else if ($this->method() == 'PUT' && $this->route()->getActionMethod() == 'updatePsm') {
             return [
                 'id'                            => 'required|exists:psm,id',
@@ -88,6 +82,19 @@ class PsmRequest extends FormRequest
                 'pendidikan_terakhir'           => 'required|max:255',
                 'kondisi_existing'              => 'required|in:tidak aktif,kurang aktif,aktif,sangat aktif',
                 'status'                        => 'required|in:diperiksa,diterima,ditolak',
+            ];
+        }
+        else if ($this->method() == 'PUT' && $this->route()->getActionMethod() == 'verifPsm') {
+            return [
+                'id'                            => 'required|exists:psm,id',
+                'status'                        => 'required|in:diterima,ditolak',
+            ];
+        }
+        else if ($this->method() == 'PUT' && $this->route()->getActionMethod() == 'updateStatus') {
+            return [
+                'id'                            => 'required|exists:psm,id',
+                'status'                        => 'required|in:diperiksa,diterima,ditolak,nonaktif',
+                'description'                   => '',
             ];
         }
         else {
