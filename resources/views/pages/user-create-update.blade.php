@@ -46,7 +46,7 @@
                     </div>
 
                     <div class="form-group form-group-site">
-                        <label for="site">Site</label>
+                        <label for="site">Wilayah</label>
                         <input type="text" id="site_id" name="site_id" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;" value="{{ $userEdit != null ? $userEdit->site_id : '' }}">
                         <input type="text" class="form-control" id="site" name="site" value="{{ $userEdit != null && $userEdit->site ? $userEdit->site->name : '' }}">
                     </div>

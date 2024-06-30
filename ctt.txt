@@ -8,3 +8,8 @@ BUG
 REFACTOR
 1. pemanggilan lib js/css bisa dipusatkan di layout dashboard
 2. rapihkan kodingan css dan js homepage
+
+{
+    "message": "Failed to authenticate on SMTP server with username \"info-pusdatinjamsos@jakarta.go.id\" using 2 possible authenticators. Authenticator LOGIN returned Expected response code 235 but got code \"535\", with message \"535 5.7.8 Error: authentication failed: authentication failure\r\n\". Authenticator PLAIN returned Expected response code 235 but got code \"535\", with message \"535 5.7.8 Error: authentication failed: authentication failure\r\n\".",
+    "data": []
+}
