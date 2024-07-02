@@ -259,8 +259,14 @@ $("#formFilterTksk").on("keydown", function (event) {
  */
 // -- clear form - data
 $("a[data-target='#modal-import-tksk']").on("click", function () {
+    if (user_level_id == 1) {
+        $("#formImportTksk input").val("");
+    } else if (user_level_id == 3) {
+        $("#formImportTksk input").not("#site").val("");
+        $("#formImportTksk #site").prop("disabled", true);
+    }
+
     $("#formImportTksk .alert").hide();
-    $("#formImportTksk input").val("");
     $("#formImportTksk select").val("").change();
     $("input").removeClass("is-invalid");
     $("select").removeClass("is-invalid");
@@ -291,6 +297,9 @@ $("#formImportTksk").validate({
         year: {
             required: true,
         },
+        status: {
+            required: true,
+        },
         file_tksk: {
             required: true,
         },
@@ -301,6 +310,9 @@ $("#formImportTksk").validate({
         },
         year: {
             required: "tahun harus diisi",
+        },
+        status: {
+            required: "status harus diisi",
         },
         file_tksk: {
             required: "file harus diisi",
@@ -358,7 +370,11 @@ function saveImport() {
             },
             success: function (data) {
                 hideLoadingSpinner();
-                $("#formImportTksk input").val("");
+                if (user_level_id == 1) {
+                    $("#formImportTksk input").val("");
+                } else if (user_level_id == 3) {
+                    $("#formImportTksk input").not("#site").val("");
+                }
                 $("#formImportTksk select").val("").change();
 
                 $("#formImportTksk .alert span").html(data.message);

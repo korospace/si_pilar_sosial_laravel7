@@ -189,7 +189,9 @@ class TkskServiceImpl implements TkskService
         DB::beginTransaction();
 
         try {
-            $file = $request->file('file_tksk');
+            $file   = $request->file('file_tksk');
+            $status = $request->user->level_id == 1 ? $request->status : "diperiksa";
+            $siteId = $request->user->level_id == 1 ? $request->site_id : $request->user->site_id;
 
             $spreadsheet = IOFactory::load($file);
             $worksheet   = $spreadsheet->getActiveSheet();
@@ -202,10 +204,14 @@ class TkskServiceImpl implements TkskService
                 $rowCount++;
 
                 if ($rowCount > 2) {
+                    $noUrut = ($request->user->level_id == 1) ? 
+                        (($status == "diterima") ? $this->generateNoUrut($siteId) : null) : 
+                        null;
+
                     Tksk::create([
-                        'site_id'                       => $request->site_id,
+                        'site_id'                       => $siteId,
                         'year'                          => $request->year,
-                        'no_urut'                       => $this->generateNoUrut($request->site_id),
+                        'no_urut'                       => $noUrut,
                         'no_induk_anggota'              => $row[0],
                         'tempat_tugas'                  => $row[1],
                         'nama'                          => $row[2],
@@ -230,7 +236,7 @@ class TkskServiceImpl implements TkskService
                         'no_rekening'                   => $row[21],
                         'nama_bank'                     => $row[22],
                         'no_kartu_registrasi'           => $row[23],
-                        'status'                        => 'diterima',
+                        'status'                        => $status,
                         'inputter'                      => $request->user->id,
                         'verifier'                      => $request->user->id,
                     ]);

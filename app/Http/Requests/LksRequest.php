@@ -26,15 +26,18 @@ class LksRequest extends FormRequest
      */
     public function rules(): array
     {
+        $user = $this->user;
+
         if ($this->method() == 'GET') {
             return [
             ];
         }
         else if ($this->method() == 'POST' && $this->route()->getActionMethod() == 'importLks') {
             return [
-                'site_id'                      => 'required|exists:sites,id',
-                'year'                         => 'required',
-                'file_lks'                     => 'required|mimes:xls,xlsx',
+                'site_id'                       => $user->level_id == 1 ? 'required|exists:sites,id' : '',
+                'year'                          => 'required|date_format:Y',
+                'status'                        => $user->level_id == 1 ? 'required|in:diperiksa,diterima,ditolak,nonaktif' : '',
+                'file_lks'                      => 'required|mimes:xls,xlsx',
             ];
         }
         else if ($this->method() == 'POST' && $this->route()->getActionMethod() == 'createLks') {

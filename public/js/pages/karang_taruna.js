@@ -265,8 +265,14 @@ $("#formFilterKarangTaruna").on("keydown", function (event) {
  */
 // -- clear form - data
 $("a[data-target='#modal-import-karang_taruna']").on("click", function () {
+    if (user_level_id == 1) {
+        $("#formImportKarangTaruna input").val("");
+    } else if (user_level_id == 3) {
+        $("#formImportKarangTaruna input").not("#site").val("");
+        $("#formImportKarangTaruna #site").prop("disabled", true);
+    }
+
     $("#formImportKarangTaruna .alert").hide();
-    $("#formImportKarangTaruna input").val("");
     $("#formImportKarangTaruna select").val("").change();
     $("input").removeClass("is-invalid");
     $("select").removeClass("is-invalid");
@@ -297,6 +303,9 @@ $("#formImportKarangTaruna").validate({
         year: {
             required: true,
         },
+        status: {
+            required: true,
+        },
         file_karang_taruna: {
             required: true,
         },
@@ -307,6 +316,9 @@ $("#formImportKarangTaruna").validate({
         },
         year: {
             required: "tahun harus diisi",
+        },
+        status: {
+            required: "status harus diisi",
         },
         file_karang_taruna: {
             required: "file harus diisi",
@@ -366,7 +378,11 @@ function saveImport() {
             },
             success: function (data) {
                 hideLoadingSpinner();
-                $("#formImportKarangTaruna input").val("");
+                if (user_level_id == 1) {
+                    $("#formImportKarangTaruna input").val("");
+                } else if (user_level_id == 3) {
+                    $("#formImportKarangTaruna input").not("#site").val("");
+                }
                 $("#formImportKarangTaruna select").val("").change();
 
                 $("#formImportKarangTaruna .alert span").html(data.message);

@@ -36,7 +36,7 @@
                         <i class="fa fa-plus"></i> &nbsp; tambah
                     </a>
                     @endif
-                    @if (in_array($user->level_id, [1]))
+                    @if (in_array($user->level_id, [1,3]))
                     <a href="" class="btn btn-block btn-secondary btn-md btn_import" style="width: max-content;" data-toggle="modal" data-target="#modal-import-tksk">
                         <i class="fa fa-upload"></i> &nbsp; import
                     </a>
@@ -215,8 +215,12 @@
                         <div class="col-12" autocomplete="off" style="position: relative;">
                             <div class="form-group mb-4">
                                 <label for="site"><small><b>Wilayah</b></small></label>
+                                @if (in_array($user->level_id, [1]))
                                 <input type="text" id="site_id" name="site_id" style="position: absolute;z-index: -10;opacity: 0;max-width: 0px;">
                                 <input type="text" class="form-control ac_site" id="site" name="site" data-elementforvalue="#site_id">
+                                @else
+                                <input type="text" class="form-control" id="site" name="" value="{{ $user->site->name }}">
+                                @endif
                             </div>
                             <div class="form-group mb-4">
                                 <label for="year"><small><b>Tahun</b></small></label>
@@ -229,6 +233,19 @@
                                 </select>
                                 <span id="year-error" class="invalid-feedback"></span>
                             </div>
+                            @if (in_array($user->level_id, [1]))
+                            <div class="form-group mb-4">
+                                <label for="status"><small><b>Status</b></small></label>
+                                <select id="status" name="status" class="custom-select select2bs4">
+                                    <option value="">-- pilih --</option>
+
+                                    @foreach (['diperiksa','diterima','ditolak','nonaktif'] as $status)
+                                        <option value="{{ $status }}">{{ $status }}</option>
+                                    @endforeach
+                                </select>
+                                <span id="status-error" class="invalid-feedback"></span>
+                            </div>
+                            @endif
                             <div class="form-group">
                                 <label for="file_tksk"><small><b>File</b></small></label>
                                 <input type="file" class="form-control-file" id="file_tksk" name="file_tksk">

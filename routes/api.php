@@ -399,7 +399,7 @@ Route::group(['prefix' => 'v1'], function () {
          * - url    : /api/v1/tksk/import
          * - form-data : site_id, file_tksk
          */
-        Route::post('/import', [TkskController::class, 'importTksk'])->middleware(['ApiForSuperadmin']);
+        Route::post('/import', [TkskController::class, 'importTksk'])->middleware(['ApiForInputter']);
 
         /**
          * Update TKSK
@@ -462,7 +462,7 @@ Route::group(['prefix' => 'v1'], function () {
          * - url    : /api/v1/lks/import
          * - form-data : site_id, file_lks
          */
-        Route::post('/import', [LksController::class, 'importLks'])->middleware(['ApiForSuperadmin']);
+        Route::post('/import', [LksController::class, 'importLks'])->middleware(['ApiForInputter']);
 
         /**
          * Update LKS
@@ -525,7 +525,7 @@ Route::group(['prefix' => 'v1'], function () {
          * - url    : /api/v1/karang_taruna/import
          * - form-data : site_id, file_karang_taruna
          */
-        Route::post('/import', [KarangTarunaController::class, 'importKarangTaruna'])->middleware(['ApiForSuperadmin']);
+        Route::post('/import', [KarangTarunaController::class, 'importKarangTaruna'])->middleware(['ApiForInputter']);
 
         /**
          * Update
@@ -588,7 +588,7 @@ Route::group(['prefix' => 'v1'], function () {
          * - url    : /api/v1/psm/import
          * - form-data : site_id, file_karang_taruna
          */
-        Route::post('/import', [PsmController::class, 'importPsm'])->middleware(['ApiForSuperadmin']);
+        Route::post('/import', [PsmController::class, 'importPsm'])->middleware(['ApiForInputter']);
 
         /**
          * Update

@@ -256,11 +256,17 @@ $("#formFilterPsm").on("keydown", function (event) {
  */
 // -- clear form - data
 $("a[data-target='#modal-import-psm']").on("click", function () {
+    if (user_level_id == 1) {
+        $("#formImportPsm input").val("");
+    } else if (user_level_id == 3) {
+        $("#formImportPsm input").not("#site").val("");
+        $("#formImportPsm #site").prop("disabled", true);
+    }
+
     $("input").removeClass("is-invalid");
     $("select").removeClass("is-invalid");
     $("span.invalid-feedback").html("");
     $("#formImportPsm .alert").hide();
-    $("#formImportPsm input").val("");
     $("#formImportPsm select").val("").change();
 });
 
@@ -288,6 +294,9 @@ $("#formImportPsm").validate({
         year: {
             required: true,
         },
+        status: {
+            required: true,
+        },
         file_psm: {
             required: true,
         },
@@ -298,6 +307,9 @@ $("#formImportPsm").validate({
         },
         year: {
             required: "tahun harus diisi",
+        },
+        status: {
+            required: "status harus diisi",
         },
         file_psm: {
             required: "file harus diisi",
@@ -355,7 +367,11 @@ function saveImport() {
             },
             success: function (data) {
                 hideLoadingSpinner();
-                $("#formImportPsm input").val("");
+                if (user_level_id == 1) {
+                    $("#formImportPsm input").val("");
+                } else if (user_level_id == 3) {
+                    $("#formImportPsm input").not("#site").val("");
+                }
                 $("#formImportPsm select").val("").change();
 
                 $("#formImportPsm .alert span").html(data.message);

@@ -26,14 +26,17 @@ class TkskRequest extends FormRequest
      */
     public function rules(): array
     {
+        $user = $this->user;
+
         if ($this->method() == 'GET') {
             return [
             ];
         }
         else if ($this->method() == 'POST' && $this->route()->getActionMethod() == 'importTksk') {
             return [
-                'site_id'                       => 'required|exists:sites,id',
+                'site_id'                       => $user->level_id == 1 ? 'required|exists:sites,id' : '',
                 'year'                          => 'required|date_format:Y',
+                'status'                        => $user->level_id == 1 ? 'required|in:diperiksa,diterima,ditolak,nonaktif' : '',
                 'file_tksk'                     => 'required|mimes:xls,xlsx',
             ];
         }

@@ -21,19 +21,19 @@ class HomepageServiceImpl implements HomepageService
             foreach ($listSite as $row) {
                 $newData['tksk'][] = [
                     'title' => $row->name,
-                    'total' => DB::select("SELECT COUNT(*) AS total FROM tksk WHERE site_id = '".$row->id."'")[0]->total,
+                    'total' => DB::select("SELECT COUNT(*) AS total FROM tksk WHERE status = 'diterima' AND site_id = '".$row->id."'")[0]->total,
                 ];
                 $newData['psm'][] = [
                     'title' => $row->name,
-                    'total' => DB::select("SELECT COUNT(*) AS total FROM psm WHERE site_id = '".$row->id."'")[0]->total,
+                    'total' => DB::select("SELECT COUNT(*) AS total FROM psm WHERE status = 'diterima' AND site_id = '".$row->id."'")[0]->total,
                 ];
                 $newData['lks'][] = [
                     'title' => $row->name,
-                    'total' => DB::select("SELECT COUNT(*) AS total FROM lks WHERE site_id = '".$row->id."'")[0]->total,
+                    'total' => DB::select("SELECT COUNT(*) AS total FROM lks WHERE status = 'diterima' AND site_id = '".$row->id."'")[0]->total,
                 ];
                 $newData['karang_taruna'][] = [
                     'title' => $row->name,
-                    'total' => DB::select("SELECT COUNT(*) AS total FROM karang_taruna WHERE site_id = '".$row->id."'")[0]->total,
+                    'total' => DB::select("SELECT COUNT(*) AS total FROM karang_taruna WHERE status = 'diterima' AND site_id = '".$row->id."'")[0]->total,
                 ];
             }
 

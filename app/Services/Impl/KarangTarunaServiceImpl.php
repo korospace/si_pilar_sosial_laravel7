@@ -177,7 +177,9 @@ class KarangTarunaServiceImpl implements KarangTarunaService
         DB::beginTransaction();
 
         try {
-            $file = $request->file('file_karang_taruna');
+            $file   = $request->file('file_karang_taruna');
+            $status = $request->user->level_id == 1 ? $request->status : "diperiksa";
+            $siteId = $request->user->level_id == 1 ? $request->site_id : $request->user->site_id;
 
             $spreadsheet = IOFactory::load($file);
             $worksheet   = $spreadsheet->getActiveSheet();
@@ -190,10 +192,14 @@ class KarangTarunaServiceImpl implements KarangTarunaService
                 $rowCount++;
 
                 if ($rowCount > 2) {
+                    $noUrut = ($request->user->level_id == 1) ? 
+                        (($status == "diterima") ? $this->generateNoUrut($siteId) : null) : 
+                        null;
+
                     KarangTaruna::create([
-                        'site_id'                       => $request->site_id,
+                        'site_id'                       => $siteId,
                         'year'                          => $request->year,
-                        'no_urut'                       => $this->generateNoUrut($request->site_id),
+                        'no_urut'                       => $noUrut,
                         'nama'                          => $row[0],
                         'nama_ketua'                    => $row[1],
                         'alamat_jalan'                  => $row[2],
@@ -209,7 +215,7 @@ class KarangTarunaServiceImpl implements KarangTarunaService
                         'kepengurusan_pejabat'          => $row[12],
                         'keaktifan_status'              => $row[13],
                         'program_unggulan'              => $row[14],
-                        'status'                        => 'diterima',
+                        'status'                        => $status,
                         'inputter'                      => $request->user->id,
                         'verifier'                      => $request->user->id,
                     ]);

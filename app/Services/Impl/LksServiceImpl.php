@@ -199,7 +199,9 @@ class LksServiceImpl implements LksService
         DB::beginTransaction();
 
         try {
-            $file = $request->file('file_lks');
+            $file   = $request->file('file_lks');
+            $status = $request->user->level_id == 1 ? $request->status : "diperiksa";
+            $siteId = $request->user->level_id == 1 ? $request->site_id : $request->user->site_id;
 
             $spreadsheet = IOFactory::load($file);
             $worksheet   = $spreadsheet->getActiveSheet();
@@ -212,10 +214,14 @@ class LksServiceImpl implements LksService
                 $rowCount++;
 
                 if ($rowCount > 2) {
+                    $noUrut = ($request->user->level_id == 1) ? 
+                        (($status == "diterima") ? $this->generateNoUrut($siteId) : null) : 
+                        null;
+
                     Lks::create([
-                        'site_id'                           => $request->site_id,
+                        'site_id'                           => $siteId,
                         'year'                              => $request->year,
-                        'no_urut'                           => $this->generateNoUrut($request->site_id),
+                        'no_urut'                           => $noUrut,
                         'nama'                              => $row[0],
                         'nama_ketua'                        => $row[1],
                         'alamat_jalan'                      => $row[2],
@@ -246,7 +252,7 @@ class LksServiceImpl implements LksService
                         'induk_berusaha_instansi_penerbit'  => $row[24] == "ada" ? $row[27] : null,
                         'akreditasi'                        => $row[28],
                         'akreditasi_tgl'                    => date("d-m-Y", strtotime($row[29])),
-                        'status'                            => 'diterima',
+                        'status'                            => $status,
                         'inputter'                          => $request->user->id,
                         'verifier'                          => $request->user->id,
                     ]);

@@ -194,7 +194,9 @@ class PsmServiceImpl implements PsmService
         DB::beginTransaction();
 
         try {
-            $file = $request->file('file_psm');
+            $file   = $request->file('file_psm');
+            $status = $request->user->level_id == 1 ? $request->status : "diperiksa";
+            $siteId = $request->user->level_id == 1 ? $request->site_id : $request->user->site_id;
 
             $spreadsheet = IOFactory::load($file);
             $worksheet   = $spreadsheet->getActiveSheet();
@@ -203,16 +205,20 @@ class PsmServiceImpl implements PsmService
             $rowCount = 0;
             $rowAdded = 0;
 
-            $site = Site::where("id", $request->site_id)->first();
+            $site = Site::where("id", $siteId)->first();
 
             foreach ($rows as $row) {
                 $rowCount++;
 
                 if ($rowCount > 2) {
+                    $noUrut = ($request->user->level_id == 1) ? 
+                        (($status == "diterima") ? $this->generateNoUrut($siteId, $row[6], $row[7]) : null) : 
+                        null;
+
                     $newPsm = Psm::create([
-                        'site_id'               => $request->site_id,
+                        'site_id'               => $siteId,
                         'year'                  => $request->year,
-                        'no_urut'               => $this->generateNoUrut($request->site_id, $row[6], $row[7]),
+                        'no_urut'               => $noUrut,
                         'nama'                  => $row[1],
                         'nik'                   => $row[2],
                         'tempat_lahir'          => $row[3],
@@ -231,7 +237,7 @@ class PsmServiceImpl implements PsmService
                         'telepon'               => $row[14],
                         'pendidikan_terakhir'   => $row[15],
                         'kondisi_existing'      => $row[16],
-                        'status'                => 'diterima',
+                        'status'                => $status,
                         'inputter'              => $request->user->id,
                         'verifier'              => $request->user->id,
                     ]);

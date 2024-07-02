@@ -4,6 +4,7 @@ BUG
 1. select2 ketika di enter dia ikut ngesubmit form
 2. kelurahan, kecamatan belum terfilter by wilayah
 3. enpoint verify, update status belum di cek sitenya
+4. ada anomali ketika input psm Pulau Harapan, Kepulauan Seribu Utara, JAKARTA UTARA
 
 REFACTOR
 1. pemanggilan lib js/css bisa dipusatkan di layout dashboard
