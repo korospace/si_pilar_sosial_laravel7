@@ -135,7 +135,7 @@ class TkskServiceImpl implements TkskService
     {
         try {
             // Get Rows
-            $rows = Tksk::select('id', 'no_urut', 'year', 'status', 'site_id', 'no_induk_anggota', 'tempat_tugas', 'nama', 'nama_ibu_kandung', 'nik', 'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin','alamat_jalan','alamat_rt','alamat_rw','alamat_kelurahan','telepon','pendidikan_terakhir','tahun_pengangkatan_pertama','nosk_pengangkatan_pertama','pejabat_pengangkatan_pertama','tahun_pengangkatan_terakhir','nosk_pengangkatan_terakhir','pejabat_pengangkatan_terakhir','nama_di_rekening','no_rekening','nama_bank','no_kartu_registrasi',)
+            $rows = Tksk::select('id', 'no_urut', 'year', 'status', 'site_id', 'no_induk_anggota', 'tempat_tugas', 'nama', 'nama_ibu_kandung', 'nik', 'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin','alamat_jalan','alamat_rt','alamat_rw','alamat_kelurahan','telepon','pendidikan_terakhir','tahun_pengangkatan_pertama','nosk_pengangkatan_pertama','pejabat_pengangkatan_pertama','tahun_pengangkatan_terakhir','nosk_pengangkatan_terakhir','pejabat_pengangkatan_terakhir','nama_di_rekening','no_rekening','nama_bank','no_kartu_registrasi')
                 ->orderBy('id', 'ASC')
                 ->with('site')
                 ->get();
