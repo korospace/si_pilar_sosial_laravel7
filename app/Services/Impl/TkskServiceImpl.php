@@ -187,7 +187,7 @@ class TkskServiceImpl implements TkskService
                 [
                     'message' => 'excel berhasil dibuat',
                     'data'    => [
-                        'url' => url('/api/v1/download_excel_tmp') . "?file_name=" . $file_name
+                        'url' => env("APP_URL") . '/api/v1/download_excel_tmp' . "?file_name=" . $file_name
                     ]
                 ],
                 200
