@@ -124,6 +124,26 @@ class TkskController extends Controller
     }
 
     /**
+     * API - Download Excel
+     * ---------------------------
+     */
+    public function downloadExcel(TkskRequest $request)
+    {
+        try {
+            return $this->tkskService->downloadExcel($request);
+        }
+        catch (\Throwable $th) {
+            return response()->json(
+                [
+                    'message' => $th->getMessage(),
+                    'data'    => [],
+                ],
+                is_int($th->getCode()) ? $th->getCode() : 500
+            );
+        }
+    }
+
+    /**
      * API - Create TKSK
      * ---------------------------
      */

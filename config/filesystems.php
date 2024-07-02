@@ -65,6 +65,10 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
         ],
 
+        'excel' => [
+            'driver' => 'local',
+            'root' => env('EXCEL_FOLDER'),
+        ],
     ],
 
     /*

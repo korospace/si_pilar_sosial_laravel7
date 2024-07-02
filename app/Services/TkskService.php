@@ -11,6 +11,8 @@ interface TkskService
 
     public function getTkskInfoStatus(TkskRequest $request): JsonResponse;
 
+    public function downloadExcel(TkskRequest $request): JsonResponse;
+
     public function createTksk(TkskRequest $request): JsonResponse;
 
     public function importTksk(TkskRequest $request): JsonResponse;

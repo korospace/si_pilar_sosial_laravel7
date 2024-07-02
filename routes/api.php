@@ -16,6 +16,7 @@ use App\Http\Controllers\RegionController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\TkskController;
 use App\Http\Controllers\UserController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,7 +31,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'v1'], function () {
-
     /**
      *  Pilar Counter
      *
@@ -386,6 +386,14 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('/info_status', [TkskController::class, 'getTkskInfoStatus']);
 
         /**
+         * Download Excem
+         *
+         * - url    : /api/v1/tksk/download_excel
+         * - params : none
+         */
+        Route::get('/download_excel', [TkskController::class, 'downloadExcel']);
+
+        /**
          * Create New TKSK
          *
          * - url    : /api/v1/tksk/create
@@ -642,5 +650,19 @@ Route::group(['prefix' => 'v1'], function () {
          * - params : name
          */
         Route::get('/bank', [BankController::class, 'getBankAutocomplete']);
+    });
+
+    /**
+     *  Downloads
+     * -------------------------------------------
+     */
+    // Excel Tmp
+    Route::get('download_excel_tmp', function (Request $request) {
+        $file_name      = $request->query('file_name');
+        $full_file_name = env("EXCEL_FOLDER") . "/" . $file_name;
+
+        if (file_exists($full_file_name)) {
+            return response()->download($full_file_name)->deleteFileAfterSend(true);
+        }
     });
 });

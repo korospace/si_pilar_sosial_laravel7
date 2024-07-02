@@ -2,6 +2,7 @@
 
 namespace App\Services\Impl;
 
+use App\Excel\ExcelTksk;
 use App\Exceptions\GeneralException;
 use App\Http\Requests\TkskRequest;
 use App\Models\LogStatus;
@@ -9,6 +10,7 @@ use App\Models\Tksk;
 use App\Services\TkskService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class TkskServiceImpl implements TkskService
@@ -125,6 +127,72 @@ class TkskServiceImpl implements TkskService
             return response()->json($result, 200);
         }
         catch (\Throwable $th) {
+            throw new GeneralException($th->getMessage(), 500);
+        }
+    }
+
+    public function downloadExcel(TkskRequest $request): JsonResponse
+    {
+        try {
+            // Get Rows
+            $rows = Tksk::select('id', 'no_urut', 'year', 'status', 'site_id', 'no_induk_anggota', 'tempat_tugas', 'nama', 'nama_ibu_kandung', 'nik', 'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin','alamat_jalan','alamat_rt','alamat_rw','alamat_kelurahan','telepon','pendidikan_terakhir','tahun_pengangkatan_pertama','nosk_pengangkatan_pertama','pejabat_pengangkatan_pertama','tahun_pengangkatan_terakhir','nosk_pengangkatan_terakhir','pejabat_pengangkatan_terakhir','nama_di_rekening','no_rekening','nama_bank','no_kartu_registrasi',)
+                ->orderBy('id', 'ASC')
+                ->with('site')
+                ->get();
+
+            // Modify Rows
+            $newRows = [];
+            foreach ($rows as $row) {
+                $newRow = [
+                    'no_urut' => str_replace(".", "", $row->site->region_id) . str_pad($row->no_urut, 5, "0", STR_PAD_LEFT),
+                    'year'    => $row->year,
+                    'status'  => $row->status,
+                    'wilayah' => $row->site->name,
+                    'no_induk_anggota' => $row->no_induk_anggota,
+                    'tempat_tugas' => $row->tempat_tugas,
+                    'nama' => $row->nama,
+                    'nama_ibu_kandung' => $row->nama_ibu_kandung,
+                    'nik' => "". $row->nik ."",
+                    'tempat_lahir' => $row->tempat_lahir,
+                    'tanggal_lahir' => $row->tanggal_lahir,
+                    'jenis_kelamin' => $row->jenis_kelamin,
+                    'alamat_jalan' => $row->alamat_jalan,
+                    'alamat_rt' => $row->alamat_rt,
+                    'alamat_rw' => $row->alamat_rw,
+                    'alamat_kelurahan' => $row->alamat_kelurahan,
+                    'telepon' => $row->telepon,
+                    'pendidikan_terakhir' => $row->pendidikan_terakhir,
+                    'tahun_pengangkatan_pertama' => $row->tahun_pengangkatan_pertama,
+                    'nosk_pengangkatan_pertama' => $row->nosk_pengangkatan_pertama,
+                    'pejabat_pengangkatan_pertama' => $row->pejabat_pengangkatan_pertama,
+                    'tahun_pengangkatan_terakhir' => $row->tahun_pengangkatan_terakhir,
+                    'nosk_pengangkatan_terakhir' => $row->nosk_pengangkatan_terakhir,
+                    'pejabat_pengangkatan_terakhir' => $row->pejabat_pengangkatan_terakhir,
+                    'nama_di_rekening' => $row->nama_di_rekening,
+                    'no_rekening' => $row->no_rekening,
+                    'nama_bank' => $row->nama_bank,
+                    'no_kartu_registrasi' => $row->no_kartu_registrasi,
+                ];
+                $newRows[] = $newRow;
+            }
+
+            $data = [
+                'sheet1' => $newRows
+            ];
+
+            $file_name = 'tksk_download_'. date("YmdHis", time()) .'.xlsx';
+            Excel::store(new ExcelTksk($data), $file_name, 'excel'); // see config/filesystems.php
+
+            return response()->json(
+                [
+                    'message' => 'excel berhasil dibuat',
+                    'data'    => [
+                        'url' => url('/api/v1/download_excel_tmp') . "?file_name=" . $file_name
+                    ]
+                ],
+                200
+            );
+        } catch (\Throwable $th) {
             throw new GeneralException($th->getMessage(), 500);
         }
     }

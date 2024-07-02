@@ -41,6 +41,11 @@
                         <i class="fa fa-upload"></i> &nbsp; import
                     </a>
                     @endif
+                    @if (in_array($user->level_id, [1]))
+                    <a href="" id="download_excel" class="btn btn-block btn-info btn-md ml-2" style="width: max-content;">
+                        <i class="fa fa-download"></i> &nbsp; download
+                    </a>
+                    @endif
                 </div>
             </div>
 
