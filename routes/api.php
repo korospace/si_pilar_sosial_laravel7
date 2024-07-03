@@ -457,6 +457,14 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('/info_status', [LksController::class, 'getLksInfoStatus']);
 
         /**
+         * Download Excem
+         *
+         * - url    : /api/v1/lks/download_excel
+         * - params : none
+         */
+        Route::get('/download_excel', [LksController::class, 'downloadExcel']);
+
+        /**
          * Create New LKS
          *
          * - url    : /api/v1/lks/create
@@ -518,6 +526,14 @@ Route::group(['prefix' => 'v1'], function () {
          * - params : none
          */
         Route::get('/info_status', [KarangTarunaController::class, 'getKarangTarunaInfoStatus']);
+
+        /**
+         * Download Excem
+         *
+         * - url    : /api/v1/karang_taruna/download_excel
+         * - params : none
+         */
+        Route::get('/download_excel', [KarangTarunaController::class, 'downloadExcel']);
 
         /**
          * Create New

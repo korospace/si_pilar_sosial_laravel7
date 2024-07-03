@@ -11,6 +11,8 @@ interface KarangTarunaService
 
     public function getKarangTarunaInfoStatus(KarangTarunaRequest $request): JsonResponse;
 
+    public function downloadExcel(KarangTarunaRequest $request): JsonResponse;
+
     public function createKarangTaruna(KarangTarunaRequest $request): JsonResponse;
 
     public function importKarangTaruna(KarangTarunaRequest $request): JsonResponse;

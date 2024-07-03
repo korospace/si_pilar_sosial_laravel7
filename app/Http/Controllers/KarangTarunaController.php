@@ -121,6 +121,26 @@ class KarangTarunaController extends Controller
     }
 
     /**
+     * API - Download Excel
+     * ---------------------------
+     */
+    public function downloadExcel(KarangTarunaRequest $request)
+    {
+        try {
+            return $this->ktService->downloadExcel($request);
+        }
+        catch (\Throwable $th) {
+            return response()->json(
+                [
+                    'message' => $th->getMessage(),
+                    'data'    => [],
+                ],
+                is_int($th->getCode()) ? $th->getCode() : 500
+            );
+        }
+    }
+
+    /**
      * API - Create
      * ---------------------------
      */

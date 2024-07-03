@@ -127,6 +127,26 @@ class LksController extends Controller
     }
 
     /**
+     * API - Download Excel
+     * ---------------------------
+     */
+    public function downloadExcel(LksRequest $request)
+    {
+        try {
+            return $this->lksService->downloadExcel($request);
+        }
+        catch (\Throwable $th) {
+            return response()->json(
+                [
+                    'message' => $th->getMessage(),
+                    'data'    => [],
+                ],
+                is_int($th->getCode()) ? $th->getCode() : 500
+            );
+        }
+    }
+
+    /**
      * API - Create LKS
      * ---------------------------
      */

@@ -2,6 +2,7 @@
 
 namespace App\Services\Impl;
 
+use App\Excel\ExcelLks;
 use App\Exceptions\GeneralException;
 use App\Http\Requests\LksRequest;
 use App\Models\Lks;
@@ -9,6 +10,7 @@ use App\Models\LogStatus;
 use App\Services\LksService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class LksServiceImpl implements LksService
@@ -122,6 +124,78 @@ class LksServiceImpl implements LksService
             return response()->json($result, 200);
         }
         catch (\Throwable $th) {
+            throw new GeneralException($th->getMessage(), 500);
+        }
+    }
+
+    public function downloadExcel(LksRequest $request): JsonResponse
+    {
+        try {
+            // Get Rows
+            $rows = Lks::select('id', 'no_urut', 'year', 'status', 'site_id', 'no_urut','year','status','nama','nama_ketua','alamat_jalan','alamat_rt','alamat_rw','alamat_kelurahan','alamat_kecamatan','no_telp_yayasan','jenis_layanan','jenis_lks','jumlah_wbs','jumlah_peksos','sk_domisili_yayasan_nomor','sk_domisili_yayasan_masaberlaku_mulai','sk_domisili_yayasan_masaberlaku_selesai','sk_domisili_yayasan_instansi_penerbit','tanda_daftar_yayasan_nomor','tanda_daftar_yayasan_masaberlaku_mulai','tanda_daftar_yayasan_masaberlaku_selesai','tanda_daftar_yayasan_instansi_penerbit','izin_kegiatan_yayasan_nomor','izin_kegiatan_yayasan_masaberlaku_mulai','izin_kegiatan_yayasan_masaberlaku_selesai','izin_kegiatan_yayasan_instansi_penerbit','induk_berusaha_status','induk_berusaha_nomor','induk_berusaha_tgl_terbit','induk_berusaha_instansi_penerbit','akreditasi','akreditasi_tgl')
+                ->orderBy('id', 'ASC')
+                ->with('site')
+                ->get();
+
+            // Modify Rows
+            $newRows = [];
+            foreach ($rows as $row) {
+                $newRow = [
+                    'no_urut'                   => $row->no_urut ? str_replace(".", "", $row->site->region_id) . str_pad($row->no_urut, 5, "0", STR_PAD_LEFT) : '-',
+                    'year'                      => $row->year,
+                    'status'                    => $row->status,
+                    'wilayah'                   => $row->site->name,
+                    'nama'                      => $row->nama,
+                    'nama_ketua'                => $row->nama_ketua,
+                    'alamat_jalan'              => $row->alamat_jalan,
+                    'alamat_rt'                 => $row->alamat_rt,
+                    'alamat_rw'                 => $row->alamat_rw,
+                    'alamat_kelurahan'          => $row->alamat_kelurahan,
+                    'alamat_kecamatan'          => $row->alamat_kecamatan,
+                    'no_telp_yayasan'=> $row->no_telp_yayasan,
+                    'jenis_layanan'=> $row->jenis_layanan,
+                    'jenis_lks'=> $row->jenis_lks,
+                    'jumlah_wbs'=> $row->jumlah_wbs,
+                    'jumlah_peksos'=> $row->jumlah_peksos,
+                    'sk_domisili_yayasan_nomor'=> $row->sk_domisili_yayasan_nomor,
+                    'sk_domisili_yayasan_masaberlaku_mulai'=> $row->sk_domisili_yayasan_masaberlaku_mulai,
+                    'sk_domisili_yayasan_masaberlaku_selesai'=> $row->sk_domisili_yayasan_masaberlaku_selesai,
+                    'sk_domisili_yayasan_instansi_penerbit'=> $row->sk_domisili_yayasan_instansi_penerbit,
+                    'tanda_daftar_yayasan_nomor'=> $row->tanda_daftar_yayasan_nomor,
+                    'tanda_daftar_yayasan_masaberlaku_mulai'=> $row->tanda_daftar_yayasan_masaberlaku_mulai,
+                    'tanda_daftar_yayasan_masaberlaku_selesai'=> $row->tanda_daftar_yayasan_masaberlaku_selesai,
+                    'tanda_daftar_yayasan_instansi_penerbit'=> $row->tanda_daftar_yayasan_instansi_penerbit,
+                    'izin_kegiatan_yayasan_nomor'=> $row->izin_kegiatan_yayasan_nomor,
+                    'izin_kegiatan_yayasan_masaberlaku_mulai'=> $row->izin_kegiatan_yayasan_masaberlaku_mulai,
+                    'izin_kegiatan_yayasan_masaberlaku_selesai'=> $row->izin_kegiatan_yayasan_masaberlaku_selesai,
+                    'izin_kegiatan_yayasan_instansi_penerbit'=> $row->izin_kegiatan_yayasan_instansi_penerbit,
+                    'induk_berusaha_status'=> $row->induk_berusaha_status,
+                    'induk_berusaha_nomor'=> $row->induk_berusaha_nomor,
+                    'induk_berusaha_tgl_terbit'=> $row->induk_berusaha_tgl_terbit,
+                    'induk_berusaha_instansi_penerbit'=> $row->induk_berusaha_instansi_penerbit,
+                    'akreditasi'=> $row->akreditasi,
+                    'akreditasi_tgl'=> $row->akreditasi_tgl,
+                ];
+                $newRows[] = $newRow;
+            }
+
+            $data = [
+                'sheet1' => $newRows
+            ];
+
+            $file_name = 'lks_download_'. date("YmdHis", time()) .'.xlsx';
+            Excel::store(new ExcelLks($data), $file_name, 'excel'); // see config/filesystems.php
+
+            return response()->json(
+                [
+                    'message' => 'excel berhasil dibuat',
+                    'data'    => [
+                        'url' => env("APP_URL") . '/api/v1/download_excel_tmp' . "?file_name=" . $file_name
+                    ]
+                ],
+                200
+            );
+        } catch (\Throwable $th) {
             throw new GeneralException($th->getMessage(), 500);
         }
     }

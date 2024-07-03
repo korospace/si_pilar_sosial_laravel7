@@ -11,6 +11,8 @@ interface LksService
 
     public function getLksInfoStatus(LksRequest $request): JsonResponse;
 
+    public function downloadExcel(LksRequest $request): JsonResponse;
+
     public function createLks(LksRequest $request): JsonResponse;
 
     public function importLks(LksRequest $request): JsonResponse;

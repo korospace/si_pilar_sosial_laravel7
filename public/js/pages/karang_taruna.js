@@ -416,3 +416,33 @@ function saveImport() {
         });
     }
 }
+
+/**
+ * Download Excel
+ * =========================
+ */
+$("#download_excel").on("click", function (event) {
+    event.preventDefault();
+    $("#modal-loading").modal("show");
+
+    $.ajax({
+        type: "GET",
+        url: `${BASE_URL}/api/v1/karang_taruna/download_excel`,
+        headers: {
+            token: $token,
+        },
+        success: function (data) {
+            $("#modal-loading").modal("hide");
+
+            let url = data.data.url;
+            window.open(url, "_blank");
+        },
+        error: function (data) {
+            $("#modal-loading").modal("hide");
+
+            if (data.status >= 500) {
+                showToast("kesalahan pada <b>server</b>", "danger");
+            }
+        },
+    });
+});

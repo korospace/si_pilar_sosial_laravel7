@@ -15,7 +15,7 @@ class RegionSeeder extends Seeder
     {
         $type = ['provinsi','kabupaten-kota','kecamatan','kelurahan'];
 
-        $csvFile = fopen(base_path("database/data/regions_permendagri-72-201.csv"), "r");
+        $csvFile = fopen(base_path("database/data/regions_permendagri-72-2019.csv"), "r");
 
         while (($data = fgetcsv($csvFile, 92000, ",")) !== FALSE) {
             $splitId = explode(".", $data['0']);

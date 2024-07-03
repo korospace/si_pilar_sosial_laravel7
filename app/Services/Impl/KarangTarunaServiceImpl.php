@@ -2,6 +2,7 @@
 
 namespace App\Services\Impl;
 
+use App\Excel\ExcelKTaruna;
 use App\Exceptions\GeneralException;
 use App\Http\Requests\KarangTarunaRequest;
 use App\Models\KarangTaruna;
@@ -9,6 +10,7 @@ use App\Models\LogStatus;
 use App\Services\KarangTarunaService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class KarangTarunaServiceImpl implements KarangTarunaService
@@ -122,6 +124,63 @@ class KarangTarunaServiceImpl implements KarangTarunaService
             return response()->json($result, 200);
         }
         catch (\Throwable $th) {
+            throw new GeneralException($th->getMessage(), 500);
+        }
+    }
+
+    public function downloadExcel(KarangTarunaRequest $request): JsonResponse
+    {
+        try {
+            // Get Rows
+            $rows = KarangTaruna::select('id', 'no_urut', 'year', 'status', 'site_id', 'no_urut','year','status','nama','nama_ketua','alamat_jalan','alamat_rt','alamat_rw','alamat_kelurahan','alamat_kecamatan','telepon','kepengurusan_status','kepengurusan_sk_tgl','kepengurusan_periode_tahun','kepengurusan_jumlah','kepengurusan_pejabat','keaktifan_status','program_unggulan')
+                ->orderBy('id', 'ASC')
+                ->with('site')
+                ->get();
+
+            // Modify Rows
+            $newRows = [];
+            foreach ($rows as $row) {
+                $newRow = [
+                    'no_urut'                   => $row->no_urut ? str_replace(".", "", $row->site->region_id) . str_pad($row->no_urut, 5, "0", STR_PAD_LEFT) : '-',
+                    'year'                      => $row->year,
+                    'status'                    => $row->status,
+                    'wilayah'                   => $row->site->name,
+                    'nama'                      => $row->nama,
+                    'nama_ketua'                => $row->nama_ketua,
+                    'alamat_jalan'              => $row->alamat_jalan,
+                    'alamat_rt'                 => $row->alamat_rt,
+                    'alamat_rw'                 => $row->alamat_rw,
+                    'alamat_kelurahan'          => $row->alamat_kelurahan,
+                    'alamat_kecamatan'          => $row->alamat_kecamatan,
+                    'telepon'                   => $row->telepon,
+                    'kepengurusan_status'       => $row->kepengurusan_status,
+                    'kepengurusan_sk_tgl'       => $row->kepengurusan_sk_tgl,
+                    'kepengurusan_periode_tahun'=> $row->kepengurusan_periode_tahun,
+                    'kepengurusan_jumlah'       => $row->kepengurusan_jumlah,
+                    'kepengurusan_pejabat'      => $row->kepengurusan_pejabat,
+                    'keaktifan_status'          => $row->keaktifan_status,
+                    'program_unggulan'          => $row->program_unggulan,
+                ];
+                $newRows[] = $newRow;
+            }
+
+            $data = [
+                'sheet1' => $newRows
+            ];
+
+            $file_name = 'karang_taruna_download_'. date("YmdHis", time()) .'.xlsx';
+            Excel::store(new ExcelKTaruna($data), $file_name, 'excel'); // see config/filesystems.php
+
+            return response()->json(
+                [
+                    'message' => 'excel berhasil dibuat',
+                    'data'    => [
+                        'url' => env("APP_URL") . '/api/v1/download_excel_tmp' . "?file_name=" . $file_name
+                    ]
+                ],
+                200
+            );
+        } catch (\Throwable $th) {
             throw new GeneralException($th->getMessage(), 500);
         }
     }
