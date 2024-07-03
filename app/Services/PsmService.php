@@ -11,6 +11,8 @@ interface PsmService
 
     public function getPsmInfoStatus(PsmRequest $request): JsonResponse;
 
+    public function downloadExcel(PsmRequest $request): JsonResponse;
+
     public function createPsm(PsmRequest $request): JsonResponse;
 
     public function importPsm(PsmRequest $request): JsonResponse;

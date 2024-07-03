@@ -583,6 +583,14 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('/info_status', [PsmController::class, 'getPsmInfoStatus']);
 
         /**
+         * Download Excem
+         *
+         * - url    : /api/v1/psm/download_excel
+         * - params : none
+         */
+        Route::get('/download_excel', [PsmController::class, 'downloadExcel']);
+
+        /**
          * Create New
          *
          * - url    : /api/v1/psm/create

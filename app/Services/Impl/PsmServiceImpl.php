@@ -2,6 +2,7 @@
 
 namespace App\Services\Impl;
 
+use App\Excel\ExcelPsm;
 use App\Exceptions\GeneralException;
 use App\Http\Requests\PsmRequest;
 use App\Models\LogStatus;
@@ -11,6 +12,7 @@ use App\Models\Site;
 use App\Services\PsmService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class PsmServiceImpl implements PsmService
@@ -135,6 +137,71 @@ class PsmServiceImpl implements PsmService
             return response()->json($result, 200);
         }
         catch (\Throwable $th) {
+            throw new GeneralException($th->getMessage(), 500);
+        }
+    }
+
+    public function downloadExcel(PsmRequest $request): JsonResponse
+    {
+        try {
+            // Get Rows
+            $rows = Psm::select('id', 'no_urut', 'year', 'status', 'site_id', 'kec_id', 'kel_id','nama','nik','tempat_lahir','tanggal_lahir','jenis_kelamin','tempat_tugas_kelurahan','tempat_tugas_kecamatan','alamat_jalan','alamat_rt','alamat_rw','tingkatan_diklat','sertifikasi_status','sertifikasi_tahun','telepon','pendidikan_terakhir','kondisi_existing')
+                ->orderBy('id', 'ASC')
+                ->with('site')
+                ->get();
+
+            // Modify Rows
+            $newRows = [];
+            foreach ($rows as $row) {
+                $newRow = [
+                    'no_urut' => $row->no_urut
+                        ?
+                            str_replace(".", "", $row->site->region_id) .
+                            str_replace(".", "", $row->kec_id) .
+                            str_replace(".", "", $row->kel_id) .
+                            str_pad($row->no_urut, 3, "0", STR_PAD_LEFT)
+                        : '-',
+                    'year'    => $row->year,
+                    'status'  => $row->status,
+                    'wilayah' => $row->site->name,
+
+                    'nama'  => $row->nama,
+                    'nik'  => $row->nik,
+                    'tempat_lahir'  => $row->tempat_lahir,
+                    'tanggal_lahir'  => $row->tanggal_lahir,
+                    'jenis_kelamin'  => $row->jenis_kelamin,
+                    'tempat_tugas_kelurahan'  => $row->tempat_tugas_kelurahan,
+                    'tempat_tugas_kecamatan'  => $row->tempat_tugas_kecamatan,
+                    'alamat_jalan'  => $row->alamat_jalan,
+                    'alamat_rt'  => $row->alamat_rt,
+                    'alamat_rw'  => $row->alamat_rw,
+                    'tingkatan_diklat'  => $row->tingkatan_diklat,
+                    'sertifikasi_status'  => $row->sertifikasi_status,
+                    'sertifikasi_tahun'  => $row->sertifikasi_tahun,
+                    'telepon'  => $row->telepon,
+                    'pendidikan_terakhir'  => $row->pendidikan_terakhir,
+                    'kondisi_existing'  => $row->kondisi_existing,
+                ];
+                $newRows[] = $newRow;
+            }
+
+            $data = [
+                'sheet1' => $newRows
+            ];
+
+            $file_name = 'psm_download_'. date("YmdHis", time()) .'.xlsx';
+            Excel::store(new ExcelPsm($data), $file_name, 'excel'); // see config/filesystems.php
+
+            return response()->json(
+                [
+                    'message' => 'excel berhasil dibuat',
+                    'data'    => [
+                        'url' => env("APP_URL") . '/api/v1/download_excel_tmp' . "?file_name=" . $file_name
+                    ]
+                ],
+                200
+            );
+        } catch (\Throwable $th) {
             throw new GeneralException($th->getMessage(), 500);
         }
     }
