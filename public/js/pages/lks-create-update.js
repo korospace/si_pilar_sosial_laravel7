@@ -225,145 +225,145 @@ $("#formCreateUpdateLks").validate({
         site_id: {
             required: true,
         },
-        year: {
-            required: true,
-        },
         status: {
             required: true,
         },
-        nama: {
+        year: {
             required: true,
         },
-        nama_ketua: {
-            required: true,
-        },
-        no_telp_yayasan: {
-            required: true,
-        },
-        jenis_layanan: {
-            required: true,
-        },
-        jenis_lks: {
-            required: true,
-        },
-        jumlah_wbs: {
-            required: true,
-        },
-        jumlah_peksos: {
-            required: true,
-        },
-        sk_domisili_yayasan_nomor: {
-            required: true,
-        },
-        sk_domisili_yayasan_masaberlaku_mulai: {
-            required: true,
-        },
-        sk_domisili_yayasan_masaberlaku_selesai: {
-            required: true,
-        },
-        sk_domisili_yayasan_instansi_penerbit: {
-            required: true,
-        },
-        tanda_daftar_yayasan_nomor: {
-            required: true,
-        },
-        tanda_daftar_yayasan_masaberlaku_mulai: {
-            required: true,
-        },
-        tanda_daftar_yayasan_masaberlaku_selesai: {
-            required: true,
-        },
-        tanda_daftar_yayasan_instansi_penerbit: {
-            required: true,
-        },
-        izin_kegiatan_yayasan_nomor: {
-            required: true,
-        },
-        izin_kegiatan_yayasan_masaberlaku_mulai: {
-            required: true,
-        },
-        izin_kegiatan_yayasan_masaberlaku_selesai: {
-            required: true,
-        },
-        izin_kegiatan_yayasan_instansi_penerbit: {
-            required: true,
-        },
-        induk_berusaha_status: {
-            required: true,
-        },
-        induk_berusaha_nomor: {
-            required: true,
-        },
-        induk_berusaha_tgl_terbit: {
-            required: true,
-        },
-        induk_berusaha_instansi_penerbit: {
-            required: true,
-        },
-        akreditasi: {
-            required: true,
-        },
-        akreditasi_tgl: {
-            required: true,
-        },
-        alamat_jalan: {
-            required: true,
-        },
-        alamat_rt: {
-            required: true,
-        },
-        alamat_rw: {
-            required: true,
-        },
-        alamat_kelurahan_hide: {
-            required: true,
-        },
-        alamat_kecamatan_hide: {
-            required: true,
-        },
-        sk_domisili_yayasan_nomor: {
-            required: true,
-        },
-        sk_domisili_yayasan_tgl_terbit: {
-            required: true,
-        },
-        sk_domisili_yayasan_masa_berlaku: {
-            required: true,
-        },
-        tanda_daftar_yayasan_nomor: {
-            required: true,
-        },
-        tanda_daftar_yayasan_tgl_terbit: {
-            required: true,
-        },
-        tanda_daftar_yayasan_masa_berlaku: {
-            required: true,
-        },
-        izin_kegiatan_yayasan_nomor: {
-            required: true,
-        },
-        izin_kegiatan_yayasan_tgl_terbit: {
-            required: true,
-        },
-        izin_kegiatan_yayasan_masa_berlaku: {
-            required: true,
-        },
-        induk_berusaha_nomor: {
-            required: true,
-        },
-        induk_berusaha_tgl: {
-            required: true,
-        },
+        // nama: {
+        //     required: true,
+        // },
+        // nama_ketua: {
+        //     required: true,
+        // },
+        // no_telp_yayasan: {
+        //     required: true,
+        // },
+        // jenis_layanan: {
+        //     required: true,
+        // },
+        // jenis_lks: {
+        //     required: true,
+        // },
+        // jumlah_wbs: {
+        //     required: true,
+        // },
+        // jumlah_peksos: {
+        //     required: true,
+        // },
+        // sk_domisili_yayasan_nomor: {
+        //     required: true,
+        // },
+        // sk_domisili_yayasan_masaberlaku_mulai: {
+        //     required: true,
+        // },
+        // sk_domisili_yayasan_masaberlaku_selesai: {
+        //     required: true,
+        // },
+        // sk_domisili_yayasan_instansi_penerbit: {
+        //     required: true,
+        // },
+        // tanda_daftar_yayasan_nomor: {
+        //     required: true,
+        // },
+        // tanda_daftar_yayasan_masaberlaku_mulai: {
+        //     required: true,
+        // },
+        // tanda_daftar_yayasan_masaberlaku_selesai: {
+        //     required: true,
+        // },
+        // tanda_daftar_yayasan_instansi_penerbit: {
+        //     required: true,
+        // },
+        // izin_kegiatan_yayasan_nomor: {
+        //     required: true,
+        // },
+        // izin_kegiatan_yayasan_masaberlaku_mulai: {
+        //     required: true,
+        // },
+        // izin_kegiatan_yayasan_masaberlaku_selesai: {
+        //     required: true,
+        // },
+        // izin_kegiatan_yayasan_instansi_penerbit: {
+        //     required: true,
+        // },
+        // induk_berusaha_status: {
+        //     required: true,
+        // },
+        // induk_berusaha_nomor: {
+        //     required: true,
+        // },
+        // induk_berusaha_tgl_terbit: {
+        //     required: true,
+        // },
+        // induk_berusaha_instansi_penerbit: {
+        //     required: true,
+        // },
+        // akreditasi: {
+        //     required: true,
+        // },
+        // akreditasi_tgl: {
+        //     required: true,
+        // },
+        // alamat_jalan: {
+        //     required: true,
+        // },
+        // alamat_rt: {
+        //     required: true,
+        // },
+        // alamat_rw: {
+        //     required: true,
+        // },
+        // alamat_kelurahan_hide: {
+        //     required: true,
+        // },
+        // alamat_kecamatan_hide: {
+        //     required: true,
+        // },
+        // sk_domisili_yayasan_nomor: {
+        //     required: true,
+        // },
+        // sk_domisili_yayasan_tgl_terbit: {
+        //     required: true,
+        // },
+        // sk_domisili_yayasan_masa_berlaku: {
+        //     required: true,
+        // },
+        // tanda_daftar_yayasan_nomor: {
+        //     required: true,
+        // },
+        // tanda_daftar_yayasan_tgl_terbit: {
+        //     required: true,
+        // },
+        // tanda_daftar_yayasan_masa_berlaku: {
+        //     required: true,
+        // },
+        // izin_kegiatan_yayasan_nomor: {
+        //     required: true,
+        // },
+        // izin_kegiatan_yayasan_tgl_terbit: {
+        //     required: true,
+        // },
+        // izin_kegiatan_yayasan_masa_berlaku: {
+        //     required: true,
+        // },
+        // induk_berusaha_nomor: {
+        //     required: true,
+        // },
+        // induk_berusaha_tgl: {
+        //     required: true,
+        // },
     },
     messages: {
         site_id: {
             required: "Field Wilayah harus diisi.",
         },
-        year: {
-            required: "Data tahun harus disi",
-        },
         status: {
             required: "Field Status harus diisi.",
+        },
+        year: {
+            required: "Data tahun harus disi",
         },
         nama: {
             required: "Field Nama harus diisi.",
@@ -616,6 +616,11 @@ function saveData() {
             },
             allowOutsideClick: () => !Swal.isLoading(),
         });
+    } else {
+        showToast(
+            "data <b>belum valid</b>. mohon periksa kembali!",
+            "warning"
+        );
     }
 }
 

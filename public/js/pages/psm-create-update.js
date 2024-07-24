@@ -233,69 +233,69 @@ $("#formCreateUpdatePsm #sertifikasi_status").change();
 // form submit
 $("#formCreateUpdatePsm").validate({
     rules: {
-        year: {
-            required: true,
-        },
         site_id: {
             required: true,
         },
         status: {
             required: true,
         },
-        nama: {
+        year: {
             required: true,
         },
-        nik: {
-            required: true,
-            minlength: 16,
-            maxlength: 16,
-            digits: true,
-        },
-        tempat_lahir: {
-            required: true,
-        },
-        tanggal_lahir: {
-            required: true,
-        },
-        jenis_kelamin: {
-            required: true,
-        },
+        // nama: {
+        //     required: true,
+        // },
+        // nik: {
+        //     required: true,
+        //     minlength: 16,
+        //     maxlength: 16,
+        //     digits: true,
+        // },
+        // tempat_lahir: {
+        //     required: true,
+        // },
+        // tanggal_lahir: {
+        //     required: true,
+        // },
+        // jenis_kelamin: {
+        //     required: true,
+        // },
         tempat_tugas_kelurahan_hide: {
             required: true,
         },
         tempat_tugas_kecamatan_hide: {
             required: true,
         },
-        alamat_jalan: {
-            required: true,
-        },
-        alamat_rt: {
-            required: true,
-        },
-        alamat_rw: {
-            required: true,
-        },
-        tingkatan_diklat: {
-            required: true,
-        },
-        sertifikasi_status: {
-            required: true,
-        },
-        sertifikasi_tahun: {
-            required: true,
-        },
-        telepon: {
-            required: true,
-            minlength: 10,
-            maxlength: 12,
-            digits: true,
-        },
-        pendidikan_terakhir: {
-            required: true,
-        },
-        kondisi_existing: {
-            required: true,
-        },
+        // alamat_jalan: {
+        //     required: true,
+        // },
+        // alamat_rt: {
+        //     required: true,
+        // },
+        // alamat_rw: {
+        //     required: true,
+        // },
+        // tingkatan_diklat: {
+        //     required: true,
+        // },
+        // sertifikasi_status: {
+        //     required: true,
+        // },
+        // sertifikasi_tahun: {
+        //     required: true,
+        // },
+        // telepon: {
+        //     required: true,
+        //     minlength: 10,
+        //     maxlength: 12,
+        //     digits: true,
+        // },
+        // pendidikan_terakhir: {
+        //     required: true,
+        // },
+        // kondisi_existing: {
+        //     required: true,
+        // },
     },
     messages: {
         year: {
@@ -493,6 +493,11 @@ function saveData() {
             },
             allowOutsideClick: () => !Swal.isLoading(),
         });
+    } else {
+        showToast(
+            "data <b>belum valid</b>. mohon periksa kembali!",
+            "warning"
+        );
     }
 }
 

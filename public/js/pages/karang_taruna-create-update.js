@@ -241,60 +241,60 @@ $("#formCreateUpdateKarangTaruna").validate({
         site_id: {
             required: true,
         },
-        year: {
-            required: true,
-        },
         status: {
             required: true,
         },
-        nama: {
+        year: {
             required: true,
         },
-        nama_ketua: {
-            required: true,
-        },
-        telepon: {
-            required: true,
-            minlength: 10,
-            maxlength: 12,
-            digits: true,
-        },
-        keaktifan_status: {
-            required: true,
-        },
-        program_unggulan: {
-            required: true,
-        },
-        alamat_jalan: {
-            required: true,
-        },
-        alamat_rt: {
-            required: true,
-        },
-        alamat_rw: {
-            required: true,
-        },
-        alamat_kelurahan_hide: {
-            required: true,
-        },
-        alamat_kecamatan_hide: {
-            required: true,
-        },
-        kepengurusan_status: {
-            required: true,
-        },
-        kepengurusan_sk_tgl: {
-            required: true,
-        },
-        kepengurusan_periode_tahun: {
-            required: true,
-        },
-        kepengurusan_jumlah: {
-            required: true,
-        },
-        kepengurusan_pejabat: {
-            required: true,
-        },
+        // nama: {
+        //     required: true,
+        // },
+        // nama_ketua: {
+        //     required: true,
+        // },
+        // telepon: {
+        //     required: true,
+        //     minlength: 10,
+        //     maxlength: 12,
+        //     digits: true,
+        // },
+        // keaktifan_status: {
+        //     required: true,
+        // },
+        // program_unggulan: {
+        //     required: true,
+        // },
+        // alamat_jalan: {
+        //     required: true,
+        // },
+        // alamat_rt: {
+        //     required: true,
+        // },
+        // alamat_rw: {
+        //     required: true,
+        // },
+        // alamat_kelurahan_hide: {
+        //     required: true,
+        // },
+        // alamat_kecamatan_hide: {
+        //     required: true,
+        // },
+        // kepengurusan_status: {
+        //     required: true,
+        // },
+        // kepengurusan_sk_tgl: {
+        //     required: true,
+        // },
+        // kepengurusan_periode_tahun: {
+        //     required: true,
+        // },
+        // kepengurusan_jumlah: {
+        //     required: true,
+        // },
+        // kepengurusan_pejabat: {
+        //     required: true,
+        // },
     },
     messages: {
         site_id: {
@@ -490,6 +490,11 @@ function saveData() {
             },
             allowOutsideClick: () => !Swal.isLoading(),
         });
+    } else {
+        showToast(
+            "data <b>belum valid</b>. mohon periksa kembali!",
+            "warning"
+        );
     }
 }
 

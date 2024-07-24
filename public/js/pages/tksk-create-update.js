@@ -271,93 +271,93 @@ $("#formCreateUpdateTksk select").on("change", function () {
 // form submit
 $("#formCreateUpdateTksk").validate({
     rules: {
-        year: {
-            required: true,
-        },
-        no_induk_anggota: {
-            required: true,
-        },
-        tempat_tugas_hide: {
-            required: true,
-        },
-        nama: {
-            required: true,
-        },
-        nama_ibu_kandung: {
-            required: true,
-        },
-        nik: {
-            required: true,
-            minlength: 16,
-            maxlength: 16,
-            digits: true,
-        },
-        telepon: {
-            required: true,
-            minlength: 10,
-            maxlength: 12,
-            digits: true,
-        },
-        tempat_lahir: {
-            required: true,
-        },
-        tanggal_lahir: {
-            required: true,
-        },
-        pendidikan_terakhir: {
-            required: true,
-        },
-        jenis_kelamin: {
-            required: true,
-        },
-        no_kartu_registrasi: {
-            required: true,
-        },
-        alamat_jalan: {
-            required: true,
-        },
-        alamat_rt: {
-            required: true,
-        },
-        alamat_rw: {
-            required: true,
-        },
-        alamat_kelurahan_hide: {
-            required: true,
-        },
-        nama_di_rekening: {
-            required: true,
-        },
-        no_rekening: {
-            required: true,
-        },
-        nama_bank_hide: {
-            required: true,
-        },
-        tahun_pengangkatan_pertama: {
-            required: true,
-        },
-        nosk_pengangkatan_pertama: {
-            required: true,
-        },
-        pejabat_pengangkatan_pertama: {
-            required: true,
-        },
-        tahun_pengangkatan_terakhir: {
-            required: true,
-        },
-        nosk_pengangkatan_terakhir: {
-            required: true,
-        },
-        pejabat_pengangkatan_terakhir: {
-            required: true,
-        },
         site_id: {
             required: true,
         },
         status: {
             required: true,
         },
+        year: {
+            required: true,
+        },
+        // no_induk_anggota: {
+        //     required: true,
+        // },
+        // tempat_tugas_hide: {
+        //     required: true,
+        // },
+        // nama: {
+        //     required: true,
+        // },
+        // nama_ibu_kandung: {
+        //     required: true,
+        // },
+        // nik: {
+        //     required: true,
+        //     minlength: 16,
+        //     maxlength: 16,
+        //     digits: true,
+        // },
+        // telepon: {
+        //     required: true,
+        //     minlength: 10,
+        //     maxlength: 12,
+        //     digits: true,
+        // },
+        // tempat_lahir: {
+        //     required: true,
+        // },
+        // tanggal_lahir: {
+        //     required: true,
+        // },
+        // pendidikan_terakhir: {
+        //     required: true,
+        // },
+        // jenis_kelamin: {
+        //     required: true,
+        // },
+        // no_kartu_registrasi: {
+        //     required: true,
+        // },
+        // alamat_jalan: {
+        //     required: true,
+        // },
+        // alamat_rt: {
+        //     required: true,
+        // },
+        // alamat_rw: {
+        //     required: true,
+        // },
+        // alamat_kelurahan_hide: {
+        //     required: true,
+        // },
+        // nama_di_rekening: {
+        //     required: true,
+        // },
+        // no_rekening: {
+        //     required: true,
+        // },
+        // nama_bank_hide: {
+        //     required: true,
+        // },
+        // tahun_pengangkatan_pertama: {
+        //     required: true,
+        // },
+        // nosk_pengangkatan_pertama: {
+        //     required: true,
+        // },
+        // pejabat_pengangkatan_pertama: {
+        //     required: true,
+        // },
+        // tahun_pengangkatan_terakhir: {
+        //     required: true,
+        // },
+        // nosk_pengangkatan_terakhir: {
+        //     required: true,
+        // },
+        // pejabat_pengangkatan_terakhir: {
+        //     required: true,
+        // },
     },
     messages: {
         year: {
@@ -575,6 +575,11 @@ function saveData() {
             },
             allowOutsideClick: () => !Swal.isLoading(),
         });
+    } else {
+        showToast(
+            "data <b>belum valid</b>. mohon periksa kembali!",
+            "warning"
+        );
     }
 }
 

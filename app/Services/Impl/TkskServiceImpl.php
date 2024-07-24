@@ -201,7 +201,7 @@ class TkskServiceImpl implements TkskService
     {
         try {
             $siteId   = $request->user->level_id === 1 ? $request->site_id : $request->user->site_id;
-            $tglLahir = date("d-m-Y", strtotime(MonthToEnglish($request->tanggal_lahir)));
+            $tglLahir = $request->tanggal_lahir ? date("d-m-Y", strtotime(MonthToEnglish($request->tanggal_lahir))) : "";
             $status   = $request->user->level_id === 1 ? $request->status : 'diperiksa';
             $noUrut   = $request->user->level_id === 1 && $request->status == 'diterima' ? $this->generateNoUrut($siteId) : null;
             $verifier = $request->user->level_id === 1 && $request->status == 'diterima' ? $request->user->id : null;
